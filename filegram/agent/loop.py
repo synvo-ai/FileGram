@@ -1209,28 +1209,18 @@ class AgentLoop:
 
             text_buffer = []
             reasoning_buffer = []
-            first_output_received = False
+            reasoning_header_shown = False
 
             def on_text(delta: str) -> None:
-                nonlocal first_output_received
-                if not first_output_received:
-                    # Clear the "Thinking..." indicator
-                    self.console.print("\r" + " " * 20 + "\r", end="")
-                    first_output_received = True
                 text_buffer.append(delta)
-                self.console.print(delta, end="")
 
             def on_reasoning(delta: str) -> None:
-                nonlocal first_output_received
-                if not first_output_received:
-                    # Clear the "Thinking..." indicator
-                    self.console.print("\r" + " " * 20 + "\r", end="")
-                    first_output_received = True
+                nonlocal reasoning_header_shown
+                if not reasoning_header_shown:
+                    self.console.print("[cyan bold]💭 Thinking[/cyan bold]")
+                    reasoning_header_shown = True
                 reasoning_buffer.append(delta)
-                self._print_reasoning(delta)
-
-            # Show thinking indicator
-            self.console.print("[dim]🤔 Thinking...[/dim]", end="")
+                self.console.print(f"[cyan]{delta}[/cyan]", end="")
 
             llm_start_time = time.time() * 1000
             try:
@@ -1247,9 +1237,14 @@ class AgentLoop:
                 break
             llm_end_time = time.time() * 1000
 
-            # Clear "Thinking..." indicator if no output was received
-            if not first_output_received:
-                self.console.print("\r" + " " * 20 + "\r", end="")
+            # Close thinking block, then print response all at once
+            if reasoning_buffer:
+                self.console.print()
+                self.console.print("[cyan bold]───[/cyan bold]")
+
+            if text_buffer:
+                full_text = "".join(text_buffer)
+                self._get_display().print_text(full_text)
 
             # Record LLM response for behavior tracking
             if self.behavior_collector:
@@ -1264,11 +1259,6 @@ class AgentLoop:
                     has_reasoning=has_reasoning,
                     stop_reason=finish_reason or "unknown",
                 )
-
-            if text_buffer:
-                self.console.print()
-            if reasoning_buffer:
-                self.console.print()  # End reasoning line
 
             assistant_message = Message.assistant(parts)
             self.messages.append(assistant_message)

@@ -31,7 +31,7 @@ class AnthropicConfig:
     """Anthropic Claude configuration."""
 
     api_key: str
-    model: str = "claude-sonnet-4-20250514"
+    model: str = "claude-opus-4-6"
     max_tokens: int = 8192
     temperature: float = 1.0
     enable_thinking: bool = False
@@ -60,13 +60,13 @@ class LLMConfig:
 
     @classmethod
     def from_env(cls) -> "LLMConfig":
-        """Load LLM configuration from environment variables.
+        """Load LLM configuration from environment variables and stored credentials.
 
-        After loading from env vars, checks stored credentials (via auth login)
-        for any providers not yet configured. Environment variables take priority.
+        All parameters (model, temperature, etc.) are read from .env once.
+        Stored credentials only provide api_key / oauth_token.
         """
         # Determine provider from environment
-        provider_str = os.environ.get("SYNVOCODE_LLM_PROVIDER", "azure_openai").lower()
+        provider_str = os.environ.get("SYNVOCODE_LLM_PROVIDER", "anthropic").lower()
         try:
             provider = LLMProvider(provider_str)
         except ValueError:
@@ -74,46 +74,45 @@ class LLMConfig:
 
         config = cls(provider=provider)
 
-        # Load Azure OpenAI config if available
+        # --- Read all parameters from .env (single source of truth) ---
+        anthropic_params = {
+            "model": os.environ.get("ANTHROPIC_MODEL", "claude-opus-4-6"),
+            "max_tokens": int(os.environ.get("ANTHROPIC_MAX_TOKENS", "8192")),
+            "temperature": float(os.environ.get("ANTHROPIC_TEMPERATURE", "1.0")),
+            "enable_thinking": os.environ.get("ANTHROPIC_ENABLE_THINKING", "").lower() in ("1", "true", "yes"),
+            "thinking_budget_tokens": int(os.environ.get("ANTHROPIC_THINKING_BUDGET_TOKENS", "10000")),
+        }
+        openai_params = {
+            "model": os.environ.get("OPENAI_MODEL", "gpt-4o"),
+            "max_tokens": int(os.environ.get("OPENAI_MAX_TOKENS", "8192")),
+            "temperature": float(os.environ.get("OPENAI_TEMPERATURE", "1.0")),
+        }
+        azure_params = {
+            "endpoint": os.environ.get("AZURE_OPENAI_ENDPOINT", "https://haku-chat.openai.azure.com"),
+            "deployment": os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-4.1-mini"),
+            "api_version": os.environ.get("AZURE_OPENAI_API_VERSION", "2025-01-01-preview"),
+        }
+
+        # --- Credentials: env vars first, then stored credentials as fallback ---
         azure_key = os.environ.get("AZURE_OPENAI_API_KEY")
         if azure_key:
-            config.azure_openai = AzureOpenAIConfig(
-                api_key=azure_key,
-                endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", "https://haku-chat.openai.azure.com"),
-                deployment=os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-4.1-mini"),
-                api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2025-01-01-preview"),
-            )
+            config.azure_openai = AzureOpenAIConfig(api_key=azure_key, **azure_params)
 
-        # Load Anthropic config if available
         anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
         if anthropic_key:
-            config.anthropic = AnthropicConfig(
-                api_key=anthropic_key,
-                model=os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-20250514"),
-                max_tokens=int(os.environ.get("ANTHROPIC_MAX_TOKENS", "8192")),
-                temperature=float(os.environ.get("ANTHROPIC_TEMPERATURE", "1.0")),
-                enable_thinking=os.environ.get("ANTHROPIC_ENABLE_THINKING", "").lower() in ("1", "true", "yes"),
-            )
+            config.anthropic = AnthropicConfig(api_key=anthropic_key, **anthropic_params)
 
-        # Load OpenAI config if available
         openai_key = os.environ.get("OPENAI_API_KEY")
         if openai_key:
-            config.openai = OpenAIConfig(
-                api_key=openai_key,
-                model=os.environ.get("OPENAI_MODEL", "gpt-4o"),
-                max_tokens=int(os.environ.get("OPENAI_MAX_TOKENS", "8192")),
-                temperature=float(os.environ.get("OPENAI_TEMPERATURE", "1.0")),
-            )
+            config.openai = OpenAIConfig(api_key=openai_key, **openai_params)
 
-        # Fill in any providers not yet configured from stored credentials
-        config._load_stored_credentials()
+        # Fill missing credentials from stored auth (api_key / oauth only)
+        config._load_stored_credentials(anthropic_params, openai_params, azure_params)
 
-        # If the user didn't explicitly set a provider via env var,
-        # auto-select based on what's actually configured
+        # Auto-select provider if not explicitly set
         if not os.environ.get("SYNVOCODE_LLM_PROVIDER"):
             active = config._get_provider_config(config.provider)
             if active is None:
-                # Current default provider has no credentials — pick the first available
                 for candidate, cfg in [
                     (LLMProvider.ANTHROPIC, config.anthropic),
                     (LLMProvider.OPENAI, config.openai),
@@ -135,8 +134,13 @@ class LLMConfig:
             return self.azure_openai
         return None
 
-    def _load_stored_credentials(self) -> None:
-        """Load stored credentials for providers not configured via env vars."""
+    def _load_stored_credentials(
+        self,
+        anthropic_params: dict,
+        openai_params: dict,
+        azure_params: dict,
+    ) -> None:
+        """Fill missing credentials from stored auth. Parameters come from .env."""
         try:
             from .auth.auth import Auth
 
@@ -147,34 +151,30 @@ class LLMConfig:
         if not stored:
             return
 
-        # Only fill providers that aren't already set from env vars
         if self.anthropic is None and "anthropic" in stored:
             cred = stored["anthropic"]
             cred_type = cred.get("type", "api")
             if cred_type == "oauth" and cred.get("access_token"):
-                # OAuth credential — refresh if needed, then use Bearer token
                 access_token = self._maybe_refresh_oauth(cred, stored)
-                # Use a placeholder api_key (required field); actual auth via oauth_token
                 self.anthropic = AnthropicConfig(
                     api_key="oauth-placeholder",
                     oauth_token=access_token,
+                    **anthropic_params,
                 )
             elif cred.get("key"):
-                self.anthropic = AnthropicConfig(api_key=cred["key"])
+                self.anthropic = AnthropicConfig(api_key=cred["key"], **anthropic_params)
 
         if self.openai is None and "openai" in stored:
             cred = stored["openai"]
             if cred.get("key"):
-                self.openai = OpenAIConfig(api_key=cred["key"])
+                self.openai = OpenAIConfig(api_key=cred["key"], **openai_params)
 
         if self.azure_openai is None and "azure_openai" in stored:
             cred = stored["azure_openai"]
             if cred.get("key"):
                 self.azure_openai = AzureOpenAIConfig(
                     api_key=cred["key"],
-                    endpoint=cred.get("endpoint", "https://haku-chat.openai.azure.com"),
-                    deployment=cred.get("deployment", "gpt-4.1-mini"),
-                    api_version="2025-01-01-preview",
+                    **azure_params,
                 )
 
     @staticmethod
