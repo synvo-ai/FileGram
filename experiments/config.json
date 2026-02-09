@@ -1,0 +1,27 @@
+{
+  "$comment": "Batch experiment config: profiles x tasks = parallel runs",
+
+  "profiles": ["alex", "luna", "sam"],
+
+  "tasks": [
+    {
+      "id": "task1",
+      "name": "Create Config Validator",
+      "prompt": "创建一个 validator.ts 文件，用于验证配置的有效性。需要实现：1. validate() 函数验证完整配置 2. 检查配置字段的类型和必填项 3. 检查目录是否存在，不存在则创建 4. 返回验证结果（成功/失败 + 错误列表）。所有文件都创建在当前目录下。"
+    },
+    {
+      "id": "task2",
+      "name": "Create Profile Analyzer",
+      "prompt": "创建一个 analyzer.ts 文件，分析数据使用情况。需要实现：1. analyzeUsage() 函数，统计各类数据的使用次数 2. 从数据中提取行为特征 3. generateReport() 函数，生成 markdown 格式的分析报告。所有文件都创建在当前目录下。"
+    }
+  ],
+
+  "behavior": {
+    "enabled": true,
+    "output_dir": "data/experiments"
+  },
+
+  "options": {
+    "timeout_s": 300
+  }
+}

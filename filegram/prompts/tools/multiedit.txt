@@ -1,0 +1,22 @@
+Applies multiple edits to a single file in one atomic operation.
+
+Usage:
+- Provide the file path and a list of edits
+- Each edit specifies old_string and new_string
+- All edits are applied sequentially
+- If any edit fails, no changes are made (atomic operation)
+
+This is more efficient than multiple Edit tool calls when making several changes to the same file.
+
+Important notes:
+- Edits are applied sequentially - later edits see the result of earlier edits
+- Make sure old_string values account for any changes made by previous edits
+- All edits must succeed for the file to be modified
+- You must use the Read tool to read the file before editing
+- Preserve exact indentation as it appears in the file
+
+Example use cases:
+- Renaming a variable in multiple places
+- Updating function signatures and their usages
+- Adding imports and using them in code
+- Multiple related refactoring changes

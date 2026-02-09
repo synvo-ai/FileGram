@@ -1,0 +1,14 @@
+- Fetches content from a specified URL and returns it as markdown
+- Takes a URL and optional prompt as input
+- Fetches the URL content, converts HTML to markdown
+- Returns the content for analysis
+- Use this tool when you need to retrieve and analyze web content
+
+Usage notes:
+  - IMPORTANT: If another tool is available that offers better web fetching capabilities or is more targeted to the task, prefer using that tool instead.
+  - The URL must be a fully-formed valid URL
+  - HTTP URLs will be automatically upgraded to HTTPS
+  - This tool is read-only and does not modify any files
+  - Results may be truncated if the content is very large
+  - For GitHub URLs, prefer using git commands via Bash instead (e.g., gh pr view, gh issue view)
+  - When a URL redirects to a different host, the tool will inform you and provide the redirect URL. You should then make a new request with the redirect URL.

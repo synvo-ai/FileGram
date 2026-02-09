@@ -1,0 +1,21 @@
+- Searches the web and returns relevant results
+- Provides up-to-date information for current events and recent data
+- Returns search results with titles, URLs, and snippets
+- Use this tool for accessing information beyond the knowledge cutoff
+
+Usage notes:
+  - Domain filtering is supported to include or block specific websites
+  - Results include links that can be fetched with WebFetch for more details
+  - For programming documentation, prefer official documentation URLs
+  - After answering with search results, include a "Sources:" section with relevant URLs
+
+IMPORTANT - Include sources:
+  - After answering the user's question using search results, include a "Sources:" section
+  - List all relevant URLs from the search results as markdown hyperlinks
+  - Example format:
+
+    [Your answer here]
+
+    Sources:
+    - [Source Title 1](https://example.com/1)
+    - [Source Title 2](https://example.com/2)

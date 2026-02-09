@@ -1,0 +1,1 @@
+"""Tool prompt templates."""

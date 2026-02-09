@@ -1,0 +1,30 @@
+Use this tool when you need to ask the user questions during execution.
+
+This allows you to:
+1. Gather user preferences or requirements
+2. Clarify ambiguous instructions
+3. Get decisions on implementation choices as you work
+4. Offer choices to the user about what direction to take
+
+Usage notes:
+- Provide clear, specific questions that are easy to understand
+- Offer reasonable options when applicable (2-4 options)
+- Use this sparingly - only when truly necessary for task completion
+- Never use this tool for confirmation of obvious actions
+- Don't ask "Is this plan okay?" - just proceed with the task
+
+When providing options:
+- Each option should be a distinct, mutually exclusive choice
+- Add brief descriptions to explain trade-offs
+- Put the recommended option first with "(Recommended)" suffix
+- Users can always provide custom text input beyond listed options
+
+Example good questions:
+- "Which authentication method should we use?" with options like OAuth, JWT, Session
+- "Should we optimize for speed or memory?" for performance decisions
+- "Which testing framework do you prefer?" when multiple valid choices exist
+
+Avoid questions like:
+- "Should I proceed?" - Just proceed
+- "Is this correct?" - Verify yourself
+- "Do you want me to...?" - Just do it if it makes sense
