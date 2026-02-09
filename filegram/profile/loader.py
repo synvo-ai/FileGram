@@ -19,7 +19,7 @@ class BasicInfo:
 
     name: str = "Assistant"
     age: int | None = None
-    role: str = "Coding Assistant"
+    role: str = "Assistant"
     nationality: str | None = None
     language: str = "English"  # Primary response language
 
@@ -37,14 +37,15 @@ class Personality:
 
 @dataclass
 class WorkHabits:
-    """Work habits and coding preferences."""
+    """Work habits and behavioral preferences."""
 
-    coding_style: str = "clean"  # clean, pragmatic, defensive, minimal
-    comment_preference: str = "when_needed"  # minimal, when_needed, detailed
-    testing_approach: str = "balanced"  # minimal, balanced, thorough
-    refactoring_tendency: str = "moderate"  # conservative, moderate, aggressive
-    error_handling: str = "defensive"  # minimal, balanced, defensive
-    documentation: str = "moderate"  # minimal, moderate, comprehensive
+    working_style: str = "methodical"  # methodical, exploratory, pragmatic
+    thoroughness: str = "balanced"  # exhaustive, balanced, minimal
+    documentation: str = "moderate"  # comprehensive, moderate, minimal
+    organization_style: str = "by_type"  # deeply_nested, flat, by_type, by_project, by_date
+    naming_convention: str = "descriptive_long"  # descriptive_long, short_abbreviation, date_prefixed
+    version_strategy: str = "keep_history"  # keep_history, archive_old, overwrite
+    error_handling: str = "defensive"  # defensive, balanced, optimistic
 
     # Custom preferences
     preferences: list[str] = field(default_factory=list)
@@ -102,13 +103,14 @@ class Profile:
         lines.append("")
 
         # Work habits
-        lines.append("## Work Habits & Coding Preferences")
-        lines.append(f"Coding Style: {self.work_habits.coding_style}")
-        lines.append(f"Comments: {self.work_habits.comment_preference}")
-        lines.append(f"Testing: {self.work_habits.testing_approach}")
-        lines.append(f"Refactoring: {self.work_habits.refactoring_tendency}")
-        lines.append(f"Error Handling: {self.work_habits.error_handling}")
+        lines.append("## Work Habits & Behavioral Preferences")
+        lines.append(f"Working Style: {self.work_habits.working_style}")
+        lines.append(f"Thoroughness: {self.work_habits.thoroughness}")
         lines.append(f"Documentation: {self.work_habits.documentation}")
+        lines.append(f"Organization: {self.work_habits.organization_style}")
+        lines.append(f"Naming Convention: {self.work_habits.naming_convention}")
+        lines.append(f"Version Strategy: {self.work_habits.version_strategy}")
+        lines.append(f"Error Handling: {self.work_habits.error_handling}")
 
         if self.work_habits.preferences:
             lines.append("")
@@ -136,7 +138,7 @@ class Profile:
         basic = BasicInfo(
             name=basic_data.get("name", "Assistant"),
             age=basic_data.get("age"),
-            role=basic_data.get("role", "Coding Assistant"),
+            role=basic_data.get("role", "Assistant"),
             nationality=basic_data.get("nationality"),
             language=basic_data.get("language", "English"),
         )
@@ -152,12 +154,13 @@ class Profile:
 
         work_data = data.get("work_habits", {})
         work_habits = WorkHabits(
-            coding_style=work_data.get("coding_style", "clean"),
-            comment_preference=work_data.get("comment_preference", "when_needed"),
-            testing_approach=work_data.get("testing_approach", "balanced"),
-            refactoring_tendency=work_data.get("refactoring_tendency", "moderate"),
-            error_handling=work_data.get("error_handling", "defensive"),
+            working_style=work_data.get("working_style", "methodical"),
+            thoroughness=work_data.get("thoroughness", "balanced"),
             documentation=work_data.get("documentation", "moderate"),
+            organization_style=work_data.get("organization_style", "by_type"),
+            naming_convention=work_data.get("naming_convention", "descriptive_long"),
+            version_strategy=work_data.get("version_strategy", "keep_history"),
+            error_handling=work_data.get("error_handling", "defensive"),
             preferences=work_data.get("preferences", []),
             avoidances=work_data.get("avoidances", []),
         )

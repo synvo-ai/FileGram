@@ -45,6 +45,22 @@ class EventType(str, Enum):
     SESSION_START = "session_start"
     SESSION_END = "session_end"
 
+    # File organization events
+    FILE_BROWSE = "file_browse"
+    FILE_RENAME = "file_rename"
+    FILE_MOVE = "file_move"
+    DIR_CREATE = "dir_create"
+    FILE_DELETE = "file_delete"
+    FILE_COPY = "file_copy"
+    FS_SNAPSHOT = "fs_snapshot"
+
+    # Error events
+    ERROR_ENCOUNTER = "error_encounter"
+    ERROR_RESPONSE = "error_response"
+
+    # Cross-file events
+    CROSS_FILE_REFERENCE = "cross_file_reference"
+
 
 @dataclass
 class EventMetadata:
@@ -145,7 +161,7 @@ class FileWriteEvent(BehaviorEvent):
         content_length: int,
         before_hash: str | None = None,
         after_hash: str | None = None,
-        media_ref: str | None = None,
+        media_ref: str | dict | None = None,
     ) -> FileWriteEvent:
         """Create a file write event."""
         metadata = EventMetadata(
@@ -190,8 +206,9 @@ class FileEditEvent(BehaviorEvent):
         diff_summary: str,
         before_hash: str | None = None,
         after_hash: str | None = None,
-        media_ref_old: str | None = None,
-        media_ref_new: str | None = None,
+        media_ref_old: str | dict | None = None,
+        media_ref_new: str | dict | None = None,
+        media_ref_diff: str | dict | None = None,
     ) -> FileEditEvent:
         """Create a file edit event."""
         metadata = EventMetadata(
@@ -217,6 +234,8 @@ class FileEditEvent(BehaviorEvent):
             data["media_ref_old"] = media_ref_old
         if media_ref_new is not None:
             data["media_ref_new"] = media_ref_new
+        if media_ref_diff is not None:
+            data["media_ref_diff"] = media_ref_diff
         return FileEditEvent(metadata=metadata, data=data)
 
 
@@ -546,6 +565,364 @@ class SessionEndEvent(BehaviorEvent):
         )
 
 
+# ============== File Organization Events ==============
+
+
+@dataclass
+class FileBrowseEvent(BehaviorEvent):
+    """Event for directory browsing operations."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        directory_path: str,
+        files_listed: int,
+        depth: int,
+    ) -> FileBrowseEvent:
+        """Create a file browse event."""
+        metadata = EventMetadata(
+            event_type=EventType.FILE_BROWSE.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        return FileBrowseEvent(
+            metadata=metadata,
+            data={
+                "directory_path": directory_path,
+                "files_listed": files_listed,
+                "depth": depth,
+            },
+        )
+
+
+@dataclass
+class FileRenameEvent(BehaviorEvent):
+    """Event for file rename operations (same directory)."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        old_path: str,
+        new_path: str,
+        naming_pattern_change: str,
+    ) -> FileRenameEvent:
+        """Create a file rename event."""
+        metadata = EventMetadata(
+            event_type=EventType.FILE_RENAME.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        return FileRenameEvent(
+            metadata=metadata,
+            data={
+                "old_path": old_path,
+                "new_path": new_path,
+                "naming_pattern_change": naming_pattern_change,
+            },
+        )
+
+
+@dataclass
+class FileMoveEvent(BehaviorEvent):
+    """Event for file move operations (across directories)."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        old_path: str,
+        new_path: str,
+        destination_directory_depth: int,
+    ) -> FileMoveEvent:
+        """Create a file move event."""
+        metadata = EventMetadata(
+            event_type=EventType.FILE_MOVE.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        return FileMoveEvent(
+            metadata=metadata,
+            data={
+                "old_path": old_path,
+                "new_path": new_path,
+                "destination_directory_depth": destination_directory_depth,
+            },
+        )
+
+
+@dataclass
+class DirCreateEvent(BehaviorEvent):
+    """Event for directory creation."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        dir_path: str,
+        depth: int,
+        sibling_count: int,
+    ) -> DirCreateEvent:
+        """Create a directory creation event."""
+        metadata = EventMetadata(
+            event_type=EventType.DIR_CREATE.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        return DirCreateEvent(
+            metadata=metadata,
+            data={
+                "dir_path": dir_path,
+                "depth": depth,
+                "sibling_count": sibling_count,
+            },
+        )
+
+
+@dataclass
+class FileDeleteEvent(BehaviorEvent):
+    """Event for file deletion."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        file_path: str,
+        file_age_ms: int | None,
+        was_temporary: bool,
+    ) -> FileDeleteEvent:
+        """Create a file delete event."""
+        metadata = EventMetadata(
+            event_type=EventType.FILE_DELETE.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        return FileDeleteEvent(
+            metadata=metadata,
+            data={
+                "file_path": file_path,
+                "file_age_ms": file_age_ms,
+                "was_temporary": was_temporary,
+            },
+        )
+
+
+@dataclass
+class FileCopyEvent(BehaviorEvent):
+    """Event for file copy operations."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        source_path: str,
+        dest_path: str,
+        is_backup: bool,
+    ) -> FileCopyEvent:
+        """Create a file copy event."""
+        metadata = EventMetadata(
+            event_type=EventType.FILE_COPY.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        return FileCopyEvent(
+            metadata=metadata,
+            data={
+                "source_path": source_path,
+                "dest_path": dest_path,
+                "is_backup": is_backup,
+            },
+        )
+
+
+@dataclass
+class FsSnapshotEvent(BehaviorEvent):
+    """Event for filesystem snapshot (directory tree state)."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        file_count_by_type: dict[str, int],
+        max_depth: int,
+        total_files: int,
+        media_ref: str | dict | None = None,
+    ) -> FsSnapshotEvent:
+        """Create a filesystem snapshot event."""
+        metadata = EventMetadata(
+            event_type=EventType.FS_SNAPSHOT.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        data: dict[str, Any] = {
+            "file_count_by_type": file_count_by_type,
+            "max_depth": max_depth,
+            "total_files": total_files,
+        }
+        if media_ref is not None:
+            data["media_ref"] = media_ref
+        return FsSnapshotEvent(metadata=metadata, data=data)
+
+
+# ============== Error Events ==============
+
+
+@dataclass
+class ErrorEncounterEvent(BehaviorEvent):
+    """Event for error encounters during execution."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        error_type: str,
+        context: str,
+        severity: str,  # "low", "medium", "high"
+        tool_name: str | None = None,
+        file_path: str | None = None,
+    ) -> ErrorEncounterEvent:
+        """Create an error encounter event."""
+        metadata = EventMetadata(
+            event_type=EventType.ERROR_ENCOUNTER.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        return ErrorEncounterEvent(
+            metadata=metadata,
+            data={
+                "error_type": error_type,
+                "context": context,
+                "severity": severity,
+                "tool_name": tool_name,
+                "file_path": file_path,
+            },
+        )
+
+
+@dataclass
+class ErrorResponseEvent(BehaviorEvent):
+    """Event for error recovery response."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        strategy: str,  # "retry", "skip", "rethink", "ignore", "fix"
+        latency_ms: int,
+        error_event_id: str | None = None,
+        resolution_successful: bool = False,
+    ) -> ErrorResponseEvent:
+        """Create an error response event."""
+        metadata = EventMetadata(
+            event_type=EventType.ERROR_RESPONSE.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        return ErrorResponseEvent(
+            metadata=metadata,
+            data={
+                "strategy": strategy,
+                "latency_ms": latency_ms,
+                "error_event_id": error_event_id,
+                "resolution_successful": resolution_successful,
+            },
+        )
+
+
+# ============== Cross-File Events ==============
+
+
+@dataclass
+class CrossFileReferenceEvent(BehaviorEvent):
+    """Event for cross-file causal references."""
+
+    @staticmethod
+    def create(
+        session_id: str,
+        profile_id: str,
+        model_provider: str,
+        model_name: str,
+        message_id: str,
+        source_file: str,
+        target_file: str,
+        reference_type: str,  # "import", "read_then_edit", "search_then_read", "sequential_access"
+        interval_ms: int,
+    ) -> CrossFileReferenceEvent:
+        """Create a cross-file reference event."""
+        metadata = EventMetadata(
+            event_type=EventType.CROSS_FILE_REFERENCE.value,
+            session_id=session_id,
+            profile_id=profile_id,
+            model_provider=model_provider,
+            model_name=model_name,
+            message_id=message_id,
+        )
+        return CrossFileReferenceEvent(
+            metadata=metadata,
+            data={
+                "source_file": source_file,
+                "target_file": target_file,
+                "reference_type": reference_type,
+                "interval_ms": interval_ms,
+            },
+        )
+
+
 # ============== Helper Functions ==============
 
 
@@ -587,6 +964,20 @@ __all__ = [
     "CompactionTriggeredEvent",
     "SessionStartEvent",
     "SessionEndEvent",
+    # File organization events
+    "FileBrowseEvent",
+    "FileRenameEvent",
+    "FileMoveEvent",
+    "DirCreateEvent",
+    "FileDeleteEvent",
+    "FileCopyEvent",
+    "FsSnapshotEvent",
+    # Error events
+    "ErrorEncounterEvent",
+    "ErrorResponseEvent",
+    # Cross-file events
+    "CrossFileReferenceEvent",
+    # Helpers
     "compute_file_hash",
     "get_directory_depth",
     "get_file_type",

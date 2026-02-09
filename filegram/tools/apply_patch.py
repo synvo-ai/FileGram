@@ -284,11 +284,41 @@ class ApplyPatchTool(BaseTool):
 
                     changes.append(f"A {file_path.relative_to(context.target_directory)}")
 
+                    # Record behavioral signal with actual content
+                    if context.behavior_collector:
+                        context.behavior_collector.record_file_write(
+                            file_path=str(file_path),
+                            operation="create",
+                            content_length=len(content),
+                            after_content=content,
+                        )
+
                 elif hunk.type == "delete":
                     # Delete file
                     if file_path.exists():
+                        # Capture content before deletion for behavioral recording
+                        before_content = None
+                        if context.behavior_collector:
+                            try:
+                                with open(file_path, encoding="utf-8") as f:
+                                    before_content = f.read()
+                            except Exception:
+                                before_content = None
+
                         os.remove(file_path)
                         changes.append(f"D {file_path.relative_to(context.target_directory)}")
+
+                        # Record behavioral signal with content before deletion
+                        if context.behavior_collector:
+                            context.behavior_collector.record_file_edit(
+                                file_path=str(file_path),
+                                edit_tool="apply_patch",
+                                lines_added=0,
+                                lines_deleted=len(before_content.splitlines()) if before_content else 0,
+                                diff_summary="file deleted",
+                                before_content=before_content,
+                                after_content="",
+                            )
                     else:
                         return self._make_result(
                             tool_use_id,
@@ -307,6 +337,9 @@ class ApplyPatchTool(BaseTool):
 
                     with open(file_path, encoding="utf-8") as f:
                         content = f.read()
+
+                    # Save original content for behavioral recording
+                    before_content = content
 
                     # Apply chunks
                     if hunk.chunks:
@@ -333,39 +366,27 @@ class ApplyPatchTool(BaseTool):
                     else:
                         changes.append(f"M {file_path.relative_to(context.target_directory)}")
 
-            output = "Success. Updated the following files:\n" + "\n".join(changes)
+                    # Record behavioral signal with before/after content
+                    if context.behavior_collector:
+                        # Count lines added/deleted from chunks
+                        lines_added = 0
+                        lines_deleted = 0
+                        if hunk.chunks:
+                            for chunk in hunk.chunks:
+                                lines_added += len(chunk.get("additions", []))
+                                lines_deleted += len(chunk.get("removals", []))
 
-            # Record behavioral signals for each file change
-            if context.behavior_collector:
-                for change in changes:
-                    if change.startswith("A "):
-                        # File added
-                        file_path_str = change[2:].split(" -> ")[0] if " -> " in change else change[2:]
-                        context.behavior_collector.record_file_write(
-                            file_path=str(context.target_directory / file_path_str),
-                            operation="create",
-                            content_length=0,  # Content length not tracked in patch
-                        )
-                    elif change.startswith("M "):
-                        # File modified
-                        file_path_str = change[2:].split(" -> ")[0] if " -> " in change else change[2:]
                         context.behavior_collector.record_file_edit(
-                            file_path=str(context.target_directory / file_path_str),
+                            file_path=str(file_path),
                             edit_tool="apply_patch",
-                            lines_added=0,
-                            lines_deleted=0,
+                            lines_added=lines_added,
+                            lines_deleted=lines_deleted,
                             diff_summary="patch applied",
+                            before_content=before_content,
+                            after_content=content,
                         )
-                    elif change.startswith("D "):
-                        # File deleted - record as edit with special diff_summary
-                        file_path_str = change[2:]
-                        context.behavior_collector.record_file_edit(
-                            file_path=str(context.target_directory / file_path_str),
-                            edit_tool="apply_patch",
-                            lines_added=0,
-                            lines_deleted=0,
-                            diff_summary="file deleted",
-                        )
+
+            output = "Success. Updated the following files:\n" + "\n".join(changes)
 
             return self._make_result(
                 tool_use_id,

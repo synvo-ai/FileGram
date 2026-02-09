@@ -7,6 +7,7 @@ persona modeling and memory pipeline research.
 
 from __future__ import annotations
 
+import json
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -15,10 +16,20 @@ from typing import TYPE_CHECKING, Any
 from .events import (
     CompactionTriggeredEvent,
     ContextSwitchEvent,
+    CrossFileReferenceEvent,
+    DirCreateEvent,
+    ErrorEncounterEvent,
+    ErrorResponseEvent,
+    FileBrowseEvent,
+    FileCopyEvent,
+    FileDeleteEvent,
     FileEditEvent,
+    FileMoveEvent,
     FileReadEvent,
+    FileRenameEvent,
     FileSearchEvent,
     FileWriteEvent,
+    FsSnapshotEvent,
     IterationEndEvent,
     IterationStartEvent,
     LLMResponseEvent,
@@ -94,6 +105,30 @@ class SessionStats:
     # Compaction
     compaction_count: int = 0
 
+    # File organization tracking
+    files_deleted: list[str] = field(default_factory=list)
+    files_renamed: list[tuple[str, str]] = field(default_factory=list)
+    dirs_created: list[str] = field(default_factory=list)
+
+    # Error tracking
+    error_count: int = 0
+    error_recovery_count: int = 0
+
+
+def _detect_naming_pattern(old_name: str, new_name: str) -> str:
+    """Detect naming pattern change between old and new filenames."""
+    if "_" in old_name and "-" in new_name:
+        return "snake_to_kebab"
+    if "-" in old_name and "_" in new_name:
+        return "kebab_to_snake"
+    if "_" in old_name and old_name.lower() != old_name:
+        return "mixed_to_other"
+    if old_name.replace("_", "") == new_name.replace("_", "").lower():
+        return "case_change"
+    if old_name.lower() == new_name.lower():
+        return "case_change"
+    return "other"
+
 
 class BehaviorCollector:
     """
@@ -145,6 +180,13 @@ class BehaviorCollector:
         # File access tracking
         self._file_access: dict[str, FileAccessStats] = {}
 
+        # Cross-file reference tracking
+        self._last_file_operation: tuple[str, str, float] | None = None  # (file_path, op_type, timestamp_ms)
+        self._last_search_files: list[str] = []  # files matched in last search
+
+        # Error tracking state
+        self._pending_error: tuple[str, str, float] | None = None  # (error_event_id, tool_name, timestamp_ms)
+
         # Session statistics
         self.stats = SessionStats()
         self.stats.session_start_time = time.time() * 1000
@@ -173,6 +215,9 @@ class BehaviorCollector:
                 target_directory=str(self.target_directory),
             )
             self.exporter.write_event(event)
+
+            # Capture initial filesystem snapshot
+            self.record_fs_snapshot()
 
     def set_message_id(self, message_id: str) -> None:
         """Set the current message ID for event correlation."""
@@ -215,6 +260,9 @@ class BehaviorCollector:
         self.stats.current_file = file_path
         self.stats.files_read.add(file_path)
 
+        # Detect cross-file reference
+        self._maybe_emit_cross_file_reference(file_path, "read")
+
         # Create and export event
         event = FileReadEvent.create(
             session_id=self.session_id,
@@ -231,6 +279,9 @@ class BehaviorCollector:
             revisit_interval_ms=revisit_interval,
         )
         self.exporter.write_event(event)
+
+        # Track for cross-file detection
+        self._last_file_operation = (file_path, "read", time.time() * 1000)
 
     def record_file_write(
         self,
@@ -294,8 +345,20 @@ class BehaviorCollector:
         # Externalize content to media/
         media_ref_old = None
         media_ref_new = None
+        diff_ref = None
         if before_content is not None and after_content is not None:
-            media_ref_old, media_ref_new = self.exporter.externalize_edit(file_path, before_content, after_content)
+            edit_refs = self.exporter.externalize_edit(file_path, before_content, after_content)
+            if isinstance(edit_refs, dict):
+                media_ref_old = edit_refs.get("before")
+                media_ref_new = edit_refs.get("after")
+                diff_ref = edit_refs.get("diff")
+            else:
+                # Legacy tuple format
+                media_ref_old, media_ref_new = edit_refs
+                diff_ref = None
+
+        # Detect cross-file reference
+        self._maybe_emit_cross_file_reference(file_path, "edit")
 
         # Track stats
         self.stats.files_modified.add(file_path)
@@ -319,8 +382,12 @@ class BehaviorCollector:
             after_hash=after_hash,
             media_ref_old=media_ref_old,
             media_ref_new=media_ref_new,
+            media_ref_diff=diff_ref,
         )
         self.exporter.write_event(event)
+
+        # Track for cross-file detection
+        self._last_file_operation = (file_path, "edit", time.time() * 1000)
 
     def record_file_search(
         self,
@@ -512,6 +579,388 @@ class BehaviorCollector:
         )
         self.exporter.write_event(event)
 
+    # ============== File Organization Events ==============
+
+    def record_file_browse(
+        self,
+        directory_path: str,
+        files_listed: int,
+    ) -> None:
+        """Record a directory browse/listing event."""
+        if not self.enabled:
+            return
+
+        depth = get_directory_depth(directory_path + "/x", str(self.target_directory))
+
+        event = FileBrowseEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            directory_path=directory_path,
+            files_listed=files_listed,
+            depth=depth,
+        )
+        self.exporter.write_event(event)
+
+    def record_file_rename(
+        self,
+        old_path: str,
+        new_path: str,
+    ) -> None:
+        """Record a file rename event (same directory)."""
+        if not self.enabled:
+            return
+
+        # Detect naming pattern change
+        old_name = Path(old_path).stem
+        new_name = Path(new_path).stem
+        naming_pattern_change = _detect_naming_pattern(old_name, new_name)
+
+        self.stats.files_renamed.append((old_path, new_path))
+
+        event = FileRenameEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            old_path=old_path,
+            new_path=new_path,
+            naming_pattern_change=naming_pattern_change,
+        )
+        self.exporter.write_event(event)
+
+    def record_file_move(
+        self,
+        old_path: str,
+        new_path: str,
+    ) -> None:
+        """Record a file move event (across directories)."""
+        if not self.enabled:
+            return
+
+        dest_depth = get_directory_depth(new_path, str(self.target_directory))
+
+        event = FileMoveEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            old_path=old_path,
+            new_path=new_path,
+            destination_directory_depth=dest_depth,
+        )
+        self.exporter.write_event(event)
+
+    def record_dir_create(
+        self,
+        dir_path: str,
+    ) -> None:
+        """Record a directory creation event."""
+        if not self.enabled:
+            return
+
+        depth = get_directory_depth(dir_path + "/x", str(self.target_directory))
+
+        # Count siblings
+        sibling_count = 0
+        parent = Path(dir_path).parent
+        try:
+            if parent.exists():
+                sibling_count = sum(1 for p in parent.iterdir() if p.is_dir()) - 1
+                sibling_count = max(0, sibling_count)
+        except OSError:
+            pass
+
+        self.stats.dirs_created.append(dir_path)
+
+        event = DirCreateEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            dir_path=dir_path,
+            depth=depth,
+            sibling_count=sibling_count,
+        )
+        self.exporter.write_event(event)
+
+    def record_file_delete(
+        self,
+        file_path: str,
+        was_temporary: bool = False,
+    ) -> None:
+        """Record a file deletion event."""
+        if not self.enabled:
+            return
+
+        # Compute file age from access history
+        file_age_ms = None
+        if file_path in self._file_access:
+            first_seen = self._file_access[file_path].last_view_time
+            if first_seen > 0:
+                file_age_ms = int(time.time() * 1000 - first_seen)
+
+        self.stats.files_deleted.append(file_path)
+
+        event = FileDeleteEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            file_path=file_path,
+            file_age_ms=file_age_ms,
+            was_temporary=was_temporary,
+        )
+        self.exporter.write_event(event)
+
+    def record_file_copy(
+        self,
+        source_path: str,
+        dest_path: str,
+        is_backup: bool = False,
+    ) -> None:
+        """Record a file copy event."""
+        if not self.enabled:
+            return
+
+        event = FileCopyEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            source_path=source_path,
+            dest_path=dest_path,
+            is_backup=is_backup,
+        )
+        self.exporter.write_event(event)
+
+    def record_fs_snapshot(self) -> None:
+        """Record a filesystem snapshot of the target directory."""
+        if not self.enabled:
+            return
+
+        file_count_by_type: dict[str, int] = {}
+        max_depth = 0
+        total_files = 0
+        tree: list[str] = []
+
+        try:
+            base = self.target_directory.resolve()
+            for path in sorted(base.rglob("*")):
+                if path.is_file():
+                    total_files += 1
+                    ext = path.suffix.lstrip(".") or "unknown"
+                    file_count_by_type[ext] = file_count_by_type.get(ext, 0) + 1
+
+                # Compute depth
+                try:
+                    rel = path.relative_to(base)
+                    depth = len(rel.parts)
+                    if depth > max_depth:
+                        max_depth = depth
+                    tree.append(str(rel))
+                except ValueError:
+                    pass
+        except OSError:
+            pass
+
+        # Store tree in media
+        media_ref = None
+        if tree:
+            tree_json = json.dumps(tree, indent=2, ensure_ascii=False)
+            media_ref = self.exporter.externalize_write(
+                "fs_snapshot.json",
+                tree_json,
+            )
+
+        event = FsSnapshotEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            file_count_by_type=file_count_by_type,
+            max_depth=max_depth,
+            total_files=total_files,
+            media_ref=media_ref,
+        )
+        self.exporter.write_event(event)
+
+    # ============== Error Events ==============
+
+    def record_error_encounter(
+        self,
+        error_type: str,
+        context: str,
+        severity: str = "medium",
+        tool_name: str | None = None,
+        file_path: str | None = None,
+    ) -> str:
+        """Record an error encounter event.
+
+        Returns:
+            The event_id of the error event (for linking to error_response).
+        """
+        if not self.enabled:
+            return ""
+
+        self.stats.error_count += 1
+
+        event = ErrorEncounterEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            error_type=error_type,
+            context=context,
+            severity=severity,
+            tool_name=tool_name,
+            file_path=file_path,
+        )
+        self.exporter.write_event(event)
+
+        # Track pending error for response detection
+        self._pending_error = (event.metadata.event_id, tool_name or "", time.time() * 1000)
+
+        return event.metadata.event_id
+
+    def record_error_response(
+        self,
+        strategy: str,
+        latency_ms: int,
+        error_event_id: str | None = None,
+        resolution_successful: bool = False,
+    ) -> None:
+        """Record an error recovery response event."""
+        if not self.enabled:
+            return
+
+        self.stats.error_recovery_count += 1
+
+        event = ErrorResponseEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            strategy=strategy,
+            latency_ms=latency_ms,
+            error_event_id=error_event_id,
+            resolution_successful=resolution_successful,
+        )
+        self.exporter.write_event(event)
+
+        # Clear pending error
+        self._pending_error = None
+
+    def check_error_recovery(
+        self,
+        tool_name: str,
+        success: bool,
+    ) -> None:
+        """Check if a tool call resolves a pending error and emit ERROR_RESPONSE."""
+        if not self.enabled or self._pending_error is None:
+            return
+
+        error_event_id, error_tool_name, error_time_ms = self._pending_error
+        now = time.time() * 1000
+        latency_ms = int(now - error_time_ms)
+
+        if success:
+            # Determine recovery strategy
+            if tool_name == error_tool_name:
+                strategy = "retry"
+            else:
+                strategy = "rethink"
+            self.record_error_response(
+                strategy=strategy,
+                latency_ms=latency_ms,
+                error_event_id=error_event_id,
+                resolution_successful=True,
+            )
+
+    # ============== Cross-File Events ==============
+
+    def _maybe_emit_cross_file_reference(
+        self,
+        current_file: str,
+        current_op: str,
+    ) -> None:
+        """Check if current operation creates a cross-file reference."""
+        if self._last_file_operation is None:
+            return
+
+        last_file, last_op, last_time = self._last_file_operation
+        if last_file == current_file:
+            return
+
+        now = time.time() * 1000
+        interval_ms = int(now - last_time)
+
+        # Only link operations within 30 seconds
+        if interval_ms > 30_000:
+            return
+
+        # Determine reference type
+        if last_op == "read" and current_op == "edit":
+            ref_type = "read_then_edit"
+        elif last_op == "search" and current_op == "read":
+            ref_type = "search_then_read"
+        elif last_op == "read" and current_op == "read":
+            ref_type = "sequential_access"
+        else:
+            ref_type = "sequential_access"
+
+        # Check if this was a search-driven access
+        if current_file in self._last_search_files:
+            ref_type = "search_then_read"
+            self._last_search_files.clear()
+
+        event = CrossFileReferenceEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            source_file=last_file,
+            target_file=current_file,
+            reference_type=ref_type,
+            interval_ms=interval_ms,
+        )
+        self.exporter.write_event(event)
+
+    def record_cross_file_reference(
+        self,
+        source_file: str,
+        target_file: str,
+        reference_type: str,
+        interval_ms: int,
+    ) -> None:
+        """Record an explicit cross-file reference event."""
+        if not self.enabled:
+            return
+
+        event = CrossFileReferenceEvent.create(
+            session_id=self.session_id,
+            profile_id=self.profile_id,
+            model_provider=self.model_provider,
+            model_name=self.model_name,
+            message_id=self._current_message_id,
+            source_file=source_file,
+            target_file=target_file,
+            reference_type=reference_type,
+            interval_ms=interval_ms,
+        )
+        self.exporter.write_event(event)
+
     # ============== Session Events ==============
 
     def finalize(self) -> dict[str, Any]:
@@ -520,6 +969,9 @@ class BehaviorCollector:
             return {}
 
         self.stats.session_end_time = time.time() * 1000
+
+        # Capture final filesystem snapshot
+        self.record_fs_snapshot()
 
         # Calculate summary
         total_duration_ms = int(self.stats.session_end_time - self.stats.session_start_time)
@@ -560,6 +1012,11 @@ class BehaviorCollector:
             "total_input_tokens": self.stats.total_input_tokens,
             "total_output_tokens": self.stats.total_output_tokens,
             "context_switch_count": self.stats.context_switch_count,
+            "files_deleted": self.stats.files_deleted,
+            "files_renamed": [(old, new) for old, new in self.stats.files_renamed],
+            "dirs_created": self.stats.dirs_created,
+            "error_count": self.stats.error_count,
+            "error_recovery_count": self.stats.error_recovery_count,
         }
 
         # Write summary.json

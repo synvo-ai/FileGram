@@ -1,7 +1,10 @@
 """Bash tool for executing shell commands."""
 
 import asyncio
+import re
+import shlex
 import subprocess
+from pathlib import Path
 from typing import Any
 
 from ..models.tool import ToolResult
@@ -11,6 +14,94 @@ from .base import BaseTool, ToolContext
 
 # Load description from txt file (like OpenCode's static import)
 DESCRIPTION = load_tool_prompt("bash")
+
+# Patterns for filesystem command detection
+_LS_PATTERN = re.compile(r"^\s*(?:ls|dir)\b(.*)$", re.MULTILINE)
+_MV_PATTERN = re.compile(r"^\s*mv\s+(.+)$", re.MULTILINE)
+_MKDIR_PATTERN = re.compile(r"^\s*mkdir\s+(.+)$", re.MULTILINE)
+_RM_PATTERN = re.compile(r"^\s*rm\s+(.+)$", re.MULTILINE)
+_CP_PATTERN = re.compile(r"^\s*cp\s+(.+)$", re.MULTILINE)
+
+_TEMP_EXTENSIONS = {".tmp", ".temp", ".bak", ".swp", ".swo", ".pyc", ".o", ".log"}
+_BACKUP_EXTENSIONS = {".bak", ".backup", ".orig", ".old", ".save"}
+
+
+def _safe_shlex_split(args_str: str) -> list[str]:
+    """Split command arguments, falling back on whitespace split."""
+    try:
+        return shlex.split(args_str)
+    except ValueError:
+        return args_str.split()
+
+
+def _extract_paths(args_str: str) -> list[str]:
+    """Extract non-flag arguments (file paths) from an argument string."""
+    parts = _safe_shlex_split(args_str)
+    return [p for p in parts if not p.startswith("-")]
+
+
+def _record_fs_events(command: str, context: ToolContext, output: str) -> None:
+    """Parse a bash command and record filesystem behavioral events."""
+    collector = context.behavior_collector
+    if collector is None or not collector.enabled:
+        return
+
+    # ls / dir → FILE_BROWSE
+    for match in _LS_PATTERN.finditer(command):
+        args = match.group(1).strip()
+        paths = _extract_paths(args)
+        dir_path = paths[0] if paths else str(context.target_directory)
+        # Estimate files listed from output line count
+        lines = [line for line in output.split("\n") if line.strip()] if output else []
+        collector.record_file_browse(
+            directory_path=dir_path,
+            files_listed=len(lines),
+        )
+
+    # mv → FILE_RENAME or FILE_MOVE
+    for match in _MV_PATTERN.finditer(command):
+        paths = _extract_paths(match.group(1))
+        if len(paths) >= 2:
+            old_path = paths[-2]
+            new_path = paths[-1]
+            old_dir = str(Path(old_path).parent)
+            new_dir = str(Path(new_path).parent)
+            if old_dir == new_dir or new_dir == ".":
+                collector.record_file_rename(old_path=old_path, new_path=new_path)
+            else:
+                collector.record_file_move(old_path=old_path, new_path=new_path)
+
+    # mkdir → DIR_CREATE
+    for match in _MKDIR_PATTERN.finditer(command):
+        paths = _extract_paths(match.group(1))
+        for dir_path in paths:
+            collector.record_dir_create(dir_path=dir_path)
+
+    # rm → FILE_DELETE
+    for match in _RM_PATTERN.finditer(command):
+        args = match.group(1)
+        paths = _extract_paths(args)
+        for file_path in paths:
+            ext = Path(file_path).suffix.lower()
+            was_temporary = ext in _TEMP_EXTENSIONS
+            collector.record_file_delete(
+                file_path=file_path,
+                was_temporary=was_temporary,
+            )
+
+    # cp → FILE_COPY
+    for match in _CP_PATTERN.finditer(command):
+        paths = _extract_paths(match.group(1))
+        if len(paths) >= 2:
+            source = paths[-2]
+            dest = paths[-1]
+            dest_ext = Path(dest).suffix.lower()
+            is_backup = dest_ext in _BACKUP_EXTENSIONS
+            collector.record_file_copy(
+                source_path=source,
+                dest_path=dest,
+                is_backup=is_backup,
+            )
 
 
 class BashTool(BaseTool):
@@ -97,6 +188,13 @@ class BashTool(BaseTool):
                 output = f"Exit code: {process.returncode}\n{output}"
 
             truncated_output = truncate_output(output, context.max_output_chars)
+
+            # Record filesystem events on successful commands
+            if process.returncode == 0:
+                try:
+                    _record_fs_events(command, context, output)
+                except Exception:
+                    pass  # Best-effort: never fail the tool due to event recording
 
             return self._make_result(
                 tool_use_id,

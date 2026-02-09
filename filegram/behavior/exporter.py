@@ -11,6 +11,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from .media_store import MediaStore
+
 if TYPE_CHECKING:
     from .events import BehaviorEvent
 
@@ -67,6 +69,12 @@ class BehaviorExporter:
         with open(self.events_file, "w", encoding="utf-8") as f:
             json.dump(self._events, f, indent=2, ensure_ascii=False)
 
+    def _get_media_store(self) -> MediaStore:
+        """Lazily initialize and return the MediaStore for this session."""
+        if not hasattr(self, "_media_store") or self._media_store is None:
+            self._media_store = MediaStore(self.session_dir)
+        return self._media_store
+
     def write_event(self, event: BehaviorEvent) -> None:
         """
         Write a single event immediately to JSON file.
@@ -122,34 +130,30 @@ class BehaviorExporter:
 
         return filename
 
-    def externalize_write(self, file_path: str, content: str) -> str:
-        """
-        Externalize a file write operation to media.
+    def externalize_write(self, file_path: str, content: str) -> str | dict:
+        """Externalize a file write operation to media.
 
-        Args:
-            file_path: Path of the written file
-            content: Content that was written
-
-        Returns:
-            The media filename reference
+        Returns structured MediaRef dict (CAS) or falls back to legacy string.
         """
+        store = self._get_media_store()
+        ref = store.store_blob(content, file_path)
+        if ref is not None:
+            return ref.to_dict()
+        # Fallback to legacy format for binary/skipped content
         return self.write_media("write", file_path, content, heading="创建文件")
 
-    def externalize_edit(self, file_path: str, before: str, after: str) -> tuple[str, str]:
-        """
-        Externalize a file edit operation to media (before and after states).
+    def externalize_edit(self, file_path: str, before: str, after: str) -> dict:
+        """Externalize a file edit operation to media.
 
-        Args:
-            file_path: Path of the edited file
-            before: Content before the edit
-            after: Content after the edit
-
-        Returns:
-            Tuple of (old_ref, new_ref) media filenames
+        Returns dict with before/after/diff MediaRef dicts.
         """
-        old_ref = self.write_media("old", file_path, before, heading="编辑前")
-        new_ref = self.write_media("new", file_path, after, heading="编辑后")
-        return old_ref, new_ref
+        store = self._get_media_store()
+        snapshot = store.store_snapshot(file_path, before, after)
+        return {
+            "before": snapshot.before_blob.to_dict() if snapshot.before_blob else None,
+            "after": snapshot.after_blob.to_dict() if snapshot.after_blob else None,
+            "diff": snapshot.diff.to_dict() if snapshot.diff else None,
+        }
 
     # ============== Summary Generation ==============
 
@@ -283,6 +287,58 @@ class BehaviorExporter:
                 dur = event.get("duration_ms", 0)
                 lines.append(f"- Session ended ({total_iters} iterations, {total_tools} tools, {dur}ms)")
 
+            # File organization events
+            elif event_type == "file_browse":
+                dir_path = event.get("directory_path", "?")
+                count = event.get("files_listed", 0)
+                lines.append(f"- Browse `{dir_path}` ({count} files)")
+
+            elif event_type == "file_rename":
+                old = event.get("old_path", "?")
+                new = event.get("new_path", "?")
+                lines.append(f"- Rename `{old}` → `{new}`")
+
+            elif event_type == "file_move":
+                old = event.get("old_path", "?")
+                new = event.get("new_path", "?")
+                lines.append(f"- Move `{old}` → `{new}`")
+
+            elif event_type == "dir_create":
+                dp = event.get("dir_path", "?")
+                lines.append(f"- Create dir `{dp}`")
+
+            elif event_type == "file_delete":
+                fp = event.get("file_path", "?")
+                lines.append(f"- Delete `{fp}`")
+
+            elif event_type == "file_copy":
+                src = event.get("source_path", "?")
+                dst = event.get("dest_path", "?")
+                lines.append(f"- Copy `{src}` → `{dst}`")
+
+            elif event_type == "fs_snapshot":
+                total = event.get("total_files", 0)
+                lines.append(f"- FS Snapshot ({total} files)")
+
+            # Error events
+            elif event_type == "error_encounter":
+                sev = event.get("severity", "?")
+                err_type = event.get("error_type", "?")
+                ctx = event.get("context", "?")
+                lines.append(f"- Error [{sev}]: {err_type} in {ctx}")
+
+            elif event_type == "error_response":
+                strat = event.get("strategy", "?")
+                lat = event.get("latency_ms", 0)
+                lines.append(f"- Error response: {strat} ({lat}ms)")
+
+            # Cross-file events
+            elif event_type == "cross_file_reference":
+                src = event.get("source_file", "?")
+                tgt = event.get("target_file", "?")
+                rtype = event.get("reference_type", "?")
+                lines.append(f"- Cross-ref: `{src}` → `{tgt}` ({rtype})")
+
         lines.append("")
 
         with open(self.summary_md_file, "w", encoding="utf-8") as f:
@@ -292,6 +348,13 @@ class BehaviorExporter:
     def event_count(self) -> int:
         """Return the number of events written."""
         return len(self._events)
+
+    @property
+    def media_stats(self) -> dict:
+        """Return media storage statistics."""
+        if hasattr(self, "_media_store") and self._media_store is not None:
+            return self._media_store.get_stats()
+        return {}
 
 
 __all__ = ["BehaviorExporter"]

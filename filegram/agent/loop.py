@@ -893,6 +893,22 @@ class AgentLoop:
                     error_message=result.output[:200] if result.is_error else None,
                 )
 
+                # Record error/recovery events
+                if result.is_error:
+                    file_path = tool_use.arguments.get("file_path") or tool_use.arguments.get("path")
+                    self.behavior_collector.record_error_encounter(
+                        error_type="tool_error",
+                        context=result.output[:200],
+                        severity="medium",
+                        tool_name=tool_use.name,
+                        file_path=file_path,
+                    )
+                else:
+                    self.behavior_collector.check_error_recovery(
+                        tool_name=tool_use.name,
+                        success=True,
+                    )
+
             # Handle plan mode state changes
             if tool_use.name == "plan_enter" and not result.is_error:
                 self.console.print("\n[bold cyan]📝 Entered PLAN MODE[/bold cyan]\n")
