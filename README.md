@@ -1,23 +1,34 @@
 # FileGram
 
-Behavioral data generation engine for **FileGram** — a multimodal memory framework that grounds memory in file evolution and access patterns.
+**File System Memory as Behavioral Engrams for Personalized Agentic Reasoning**
 
-FileGram uses profiled code agents to simulate realistic human work behavior. The core loop: **Task + Profile + Environment -> Agent execution -> Bottom-up file-level signals -> Memory modeling**.
+This repository contains the **FileGram** behavioral data generation pipeline and the **FileGramOS** bottom-up memory framework. FileGram treats file-level behavioral traces as *engrams* — persistent memory traces grounded in file evolution and access patterns — rather than explicit user statements.
+
+> **Paper**: *FileGram: File System Memory as Behavioral Engrams for Personalized Agentic Reasoning* (ECCV 2026 submission)
 
 ---
 
-## Table of Contents
+## Overview
 
-- [Quick Start](#quick-start)
-- [Vision](#vision)
-- [Architecture](#architecture)
-- [Memory Signal Mapping](#memory-signal-mapping)
-- [Profile System](#profile-system)
-- [Data Output Format](#data-output-format)
-- [Experiment Runner](#experiment-runner)
-- [Project Structure](#project-structure)
-- [Development Setup](#development-setup)
-- [License](#license)
+The FileGram project is a three-part framework for file-system behavioral memory:
+
+| Component | What It Does | Status |
+|-----------|-------------|--------|
+| **FileGram** | Persona-driven behavioral data generation pipeline | This repo |
+| **FileGramBench** | Multimodal file-system memory benchmark | In progress |
+| **FileGramOS** | Bottom-up memory framework (procedural / semantic / episodic) | In progress |
+
+### Core Idea
+
+Current memory systems for LLM agents are *interaction-driven*: they store and retrieve explicit dialogue records. But in OS-level settings, the most valuable personal signals — work habits, exploration strategies, project structure preferences — are never stated explicitly. They are distributed across **behavioral traces** in the file system.
+
+FileGram takes a **bottom-up** approach:
+
+```
+File-level behavioral signals  -->  Structured memory channels  -->  Personalized reasoning
+(file reads, writes, edits,        (procedural, semantic,           (query-time composition
+ searches, tool sequences)          episodic)                        and interpretation)
+```
 
 ---
 
@@ -51,19 +62,9 @@ filegram -d /path/to/project -i
 
 ---
 
-## Vision
-
-These signals feed three memory types in the downstream FileGramOS pipeline:
-
-| Memory Type | What It Models | Signal Source |
-|-------------|---------------|---------------|
-| **Procedural** | How you do things — tool preferences, exploration strategies, workflow patterns | File operation sequences, tool call ordering, search patterns |
-| **Semantic** | What changed and why — file content evolution, changelogs | File write/edit diffs, before/after hashes, diff summaries |
-| **Episodic** | What happened over time — long-range behavioral consistency | Cross-session patterns, iteration timing, decision rhythm |
-
----
-
 ## Architecture
+
+### Data Generation Pipeline (FileGram)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -103,112 +104,75 @@ These signals feed three memory types in the downstream FileGramOS pipeline:
 │      ├── 0001_write.md  #   Write content snapshots          │
 │      ├── 0002_old.md    #   Edit before-state                │
 │      └── 0003_new.md    #   Edit after-state                 │
-│                                                              │
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────────┐
-│              FileGramOS Memory Pipeline                       │
-│                                                              │
-│  signals → procedural memory (file operation patterns)       │
-│          → semantic memory   (file changelogs & evolution)   │
-│          → episodic memory   (cross-session behavior)        │
-│          → personalized user model                           │
 └─────────────────────────────────────────────────────────────┘
 ```
 
+### Memory Pipeline (FileGramOS)
+
+FileGramOS decomposes file-level signals into three complementary memory channels, deferring semantic abstraction to query time:
+
+```
+Raw event stream
+       │
+       ├──→ Procedural Memory   (how the user works)
+       │     • File access graph: exploration strategy, revisit patterns
+       │     • Tool transition model: P(tool_k+1 | tool_k), error recovery
+       │     • Information-seeking profile: search strategies, query complexity
+       │
+       ├──→ Semantic Memory     (what changed and why)
+       │     • File changelog: ordered mutation history with content fingerprints
+       │     • Causal edit chains: cross-file read→write dependencies
+       │
+       └──→ Episodic Memory     (behavioral consistency over time)
+              • Work rhythm signature: iterations, tool density, error tolerance
+              • Decision-making profile: reasoning density, token efficiency
+              • Behavioral stability metrics: cross-session fingerprint similarity
+```
+
+**Deferred semantic abstraction**: Memory channels store structured representations, not natural language summaries. Interpretation occurs at query time — preserving temporal fidelity, enabling query adaptivity, and maintaining conflict awareness when user behavior evolves.
+
 ---
 
-## Memory Signal Mapping
+## Behavioral Event Schema
 
-### Procedural Memory Signals
+The behavioral collector captures **11 event types** organized into five categories. Each event is recorded as a structured object with common metadata (unique ID, millisecond timestamp, session ID, profile ID, model provider) and type-specific fields.
+
+### File Access (Procedural)
 
 | Event Type | Key Fields | What It Reveals |
 |-----------|-----------|-----------------|
 | `file_read` | `file_path`, `view_count`, `revisit_interval_ms`, `view_range` | Exploration strategy — breadth-first vs depth-first, which files get re-read |
-| `file_search` | `search_type`, `query`, `files_matched`, `files_opened_after` | Information seeking behavior — what patterns are searched, grep vs glob preference |
-| `tool_call` | `tool_name`, `sequence_position`, `execution_time_ms`, `retry_count` | Tool preference and workflow — which tools used in what order, error recovery |
-| `context_switch` | `from_file`, `to_file`, `trigger`, `switch_count` | Navigation patterns — how the agent moves between files |
-| `iteration_end` | `tools_called`, `duration_ms`, `has_tool_error` | Work rhythm — tool density per iteration, error tolerance |
+| `file_search` | `search_type`, `query`, `files_matched`, `files_opened_after` | Information seeking — search strategy preference, query-to-action patterns |
 
-### Semantic Memory Signals
+### File Mutation (Semantic)
 
 | Event Type | Key Fields | What It Reveals |
 |-----------|-----------|-----------------|
 | `file_write` | `file_path`, `operation`, `content_length`, `before_hash`, `after_hash` | Content creation — new files vs overwrites, file size patterns |
-| `file_edit` | `edit_tool`, `lines_added/deleted/modified`, `diff_summary`, `before_hash`, `after_hash` | Content evolution — incremental refinement vs large rewrites, edit tool preference |
+| `file_edit` | `edit_tool`, `lines_added/deleted/modified`, `diff_summary`, `before_hash`, `after_hash` | Content evolution — incremental refinement vs large rewrites |
 
-### Episodic Memory Signals
+### Workflow Structure (Procedural)
 
 | Event Type | Key Fields | What It Reveals |
 |-----------|-----------|-----------------|
-| `llm_response` | `response_time_ms`, `input_tokens`, `output_tokens`, `has_reasoning`, `stop_reason` | Decision-making rhythm — reasoning density, token efficiency |
-| `iteration_start/end` | `iteration_number`, `duration_ms` | Session pacing — how many iterations to reach a solution |
-| `compaction_triggered` | `reason`, `messages_before/after`, `tokens_saved` | Context management — when the agent hits limits |
-| `session_start/end` | session-level timing | Overall session structure |
+| `tool_call` | `tool_name`, `sequence_position`, `execution_time_ms`, `retry_count` | Tool preference and workflow ordering, error recovery patterns |
+| `context_switch` | `from_file`, `to_file`, `trigger`, `switch_count` | Navigation patterns between files |
+| `iteration_start/end` | `iteration_number`, `duration_ms`, `tools_called`, `has_tool_error` | Work rhythm — tool density per iteration |
 
----
+### Cognitive Indicators (Episodic)
 
-## Profile System
+| Event Type | Key Fields | What It Reveals |
+|-----------|-----------|-----------------|
+| `llm_response` | `response_time_ms`, `input/output_tokens`, `has_reasoning`, `stop_reason` | Decision-making rhythm, reasoning density |
+| `compaction_triggered` | `reason`, `messages_before/after`, `tokens_saved` | Context management behavior |
 
-Profiles live in `filegram/profile/profiles/*.yaml` and define agent personas that produce differentiated behavioral data.
+### Session Boundaries (Episodic)
 
-### Current Profiles
+| Event Type | Key Fields | What It Reveals |
+|-----------|-----------|-----------------|
+| `session_start/end` | session-level timing | Overall session structure and temporal segmentation |
 
-| Profile | Persona | Key Behavioral Traits |
-|---------|---------|----------------------|
-| **alex** | The Meticulous Craftsman (Chinese, 28) | Detail-oriented, thorough docs, Chinese comments, defensive error handling |
-| **luna** | The Creative Explorer (Japanese, 25) | Enthusiastic, aggressive refactoring, tries new patterns, balanced verbosity |
-| **sam** | The Pragmatic Problem Solver (American, 32) | Ship fast, minimal comments, concise, 80/20 focus |
-
-### Profile Fields
-
-```yaml
-basic:
-  name: Alex
-  age: 28
-  role: Senior Software Engineer
-  nationality: Chinese
-  language: Chinese
-
-personality:
-  traits: [detail-oriented, patient, methodical]
-  tone: professional
-  humor_level: low
-  emoji_usage: minimal
-  verbosity: detailed
-
-work_habits:
-  coding_style: clean
-  comment_preference: detailed
-  testing_approach: thorough
-  refactoring_tendency: moderate
-  error_handling: defensive
-  documentation: comprehensive
-  preferences: [...]
-  avoidances: [...]
-
-greeting: |
-  First-person introduction in character
-
-system_prompt_addition: |
-  Identity reinforcement injected into system prompt
-```
-
-### Data Quality Goal
-
-Running the **same task** with **different profiles** should produce measurably differentiated behavioral data:
-- Alex reads more files before writing, adds more comments, writes longer docs
-- Luna tries creative patterns, refactors aggressively, uses friendly tone
-- Sam writes minimal code fast, skips docs, uses pragmatic tool choices
-
----
-
-## Data Output Format
-
-### events.json
-
-JSON array of events. Each event has common metadata + type-specific data fields:
+### Event Example
 
 ```json
 {
@@ -230,21 +194,87 @@ JSON array of events. Each event has common metadata + type-specific data fields
 }
 ```
 
-### Active Event Types (11 implemented)
+---
 
-| Event Type | Key Data Fields |
-|-----------|-----------------|
-| `file_read` | file_path, view_count, revisit_interval_ms, view_range, content_length |
-| `file_write` | file_path, operation (create/overwrite), content_length, before/after_hash |
-| `file_edit` | file_path, edit_tool, lines_added/deleted/modified, diff_summary, before/after_hash |
-| `file_search` | search_type (grep/glob), query, files_matched, files_opened_after |
-| `tool_call` | tool_name, tool_parameters, execution_time_ms, success, error_type, retry_count, sequence_position |
-| `iteration_start` | iteration_number |
-| `iteration_end` | iteration_number, duration_ms, tools_called, has_tool_error |
-| `llm_response` | response_time_ms, input/output_tokens, has_reasoning, stop_reason |
-| `context_switch` | from_file, to_file, trigger, switch_count |
-| `compaction_triggered` | reason, messages_before/after, tokens_saved |
-| `session_start/end` | (metadata only) |
+## Profile System
+
+Profiles define agent personas that produce **differentiated behavioral data** on identical tasks. They live in `filegram/profile/profiles/*.yaml`.
+
+### Profiles
+
+| Profile | Persona | Behavioral Axis |
+|---------|---------|----------------|
+| **alex** | The Meticulous Craftsman (Chinese, 28) | Thoroughness — extensive reading before writing, comprehensive docs, defensive error handling |
+| **luna** | The Creative Explorer (Japanese, 25) | Creativity — aggressive refactoring, novel pattern exploration, balanced verbosity |
+| **sam** | The Pragmatic Problem Solver (American, 32) | Pragmatism — minimal exploration, fast write cycles, concise output, 80/20 focus |
+
+### Profile Schema
+
+```yaml
+basic:
+  name: Alex
+  age: 28
+  role: Senior Software Engineer
+  nationality: Chinese
+  language: Chinese
+
+personality:
+  traits: [detail-oriented, patient, methodical]
+  tone: professional          # professional | friendly | casual
+  humor_level: low            # low | moderate | high
+  emoji_usage: minimal        # none | minimal | moderate | heavy
+  verbosity: detailed         # concise | balanced | detailed
+
+work_habits:
+  coding_style: clean         # clean | pragmatic | creative
+  comment_preference: detailed
+  testing_approach: thorough
+  refactoring_tendency: moderate
+  error_handling: defensive
+  documentation: comprehensive
+  preferences: [...]
+  avoidances: [...]
+
+greeting: |
+  First-person introduction in character
+
+system_prompt_addition: |
+  Identity reinforcement injected into system prompt
+```
+
+### Profile Differentiation Validation
+
+Profiles are validated by measuring cross-profile divergence on behavioral statistics:
+- **Read-to-write ratio**: How much exploration before action
+- **Mean revisit interval**: Re-reading frequency
+- **Tool transition entropy**: Workflow variability
+- **Edit granularity distribution**: Incremental vs bulk changes
+
+Profiles that fail to produce statistically distinguishable traces are revised before benchmark construction.
+
+---
+
+## FileGramBench
+
+FileGramBench evaluates whether memory systems can extract, maintain, and reason over behavioral patterns embedded in file-level signals. Tasks are organized along two axes:
+
+### Memory Type Axis
+
+| Category | What It Tests | Example |
+|----------|-------------|---------|
+| **Procedural** | Workflow pattern reconstruction | Predict next-file access, infer tool preferences, recognize exploration strategies |
+| **Semantic** | Content evolution tracking | Summarize a file's edit history, detect version conflicts, infer edit intent from diffs |
+| **Episodic** | Cross-session behavioral consistency | Attribute session to profile, predict work rhythm, detect behavioral drift |
+
+### Reasoning Capability Axis
+
+| Capability | Description |
+|-----------|-------------|
+| **Temporal reasoning** | Ordering events and reasoning over time |
+| **Cross-file inference** | Maintaining coherence across related files |
+| **Conflict resolution** | Handling contradictory information across versions/sessions |
+| **Selective context usage** | Leveraging relevant personal context while ignoring noise |
+| **Profile attribution** | Identifying behavioral signatures |
 
 ---
 
@@ -317,13 +347,11 @@ data/
             ├── summary.json    # Session statistics
             ├── summary.md      # Markdown conversation log
             └── media/          # Externalized file content
-
-playground/         # Workspace directories for agent tasks
 ```
 
 ---
 
-## Development Setup
+## Setup
 
 ### Prerequisites
 
@@ -335,56 +363,6 @@ playground/         # Workspace directories for agent tasks
 ```bash
 uv pip install -e .
 ```
-
-### Linting & Formatting
-
-This project uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting, and [detect-secrets](https://github.com/Yelp/detect-secrets) for preventing API key leaks. Both are automated via [pre-commit](https://pre-commit.com/).
-
-#### One-time setup
-
-```bash
-# Install dev tools
-uv pip install pre-commit detect-secrets
-
-# Generate secrets baseline (marks existing non-sensitive patterns)
-detect-secrets scan > .secrets.baseline
-
-# Install git hooks (runs checks automatically on every commit)
-pre-commit install
-```
-
-#### What happens on `git commit`
-
-After setup, every `git commit` automatically runs:
-
-1. **ruff check** — Lint errors, import sorting, naming conventions (auto-fixes where possible)
-2. **ruff format** — Code formatting (Black-compatible)
-3. **detect-secrets** — Blocks commits containing hardcoded API keys, tokens, or passwords
-
-If any check fails, the commit is blocked. Fix the issues and commit again.
-
-#### Manual usage
-
-```bash
-# Lint (with auto-fix)
-ruff check . --fix
-
-# Format
-ruff format .
-
-# Check for secrets
-detect-secrets scan
-```
-
-#### Configuration
-
-- Ruff config: `pyproject.toml` under `[tool.ruff]`
-- Pre-commit hooks: `.pre-commit-config.yaml`
-- Secrets baseline: `.secrets.baseline`
-
----
-
-## Configuration
 
 ### Environment Variables
 
@@ -402,18 +380,23 @@ Copy `.env.example` to `.env` and fill in your API keys.
 | `OPENAI_MODEL` | OpenAI model (default: `gpt-4o`) |
 | `EXA_API_KEY` | Exa API key (for web/code search) |
 
-See `.env.example` for the full list of configuration options.
+See `.env.example` for the full list.
 
----
+### Linting & Formatting
 
-## Key Conventions
+This project uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting, and [detect-secrets](https://github.com/Yelp/detect-secrets) for preventing API key leaks. Both are automated via [pre-commit](https://pre-commit.com/).
 
-- Tools inherit from `BaseTool` in `tools/base.py`; all `execute()` methods are async
-- Tools access BehaviorCollector via `ToolContext` for event recording
-- Profiles are YAML files in `profile/profiles/`
-- Skills are `SKILL.md` files with YAML frontmatter
-- Prompt templates are `.txt` files in `prompts/`
-- Use dataclasses for models, not Pydantic (except config)
+```bash
+# One-time setup
+uv pip install pre-commit detect-secrets
+detect-secrets scan > .secrets.baseline
+pre-commit install
+
+# Manual usage
+ruff check . --fix    # Lint
+ruff format .         # Format
+detect-secrets scan   # Check for secrets
+```
 
 ---
 
