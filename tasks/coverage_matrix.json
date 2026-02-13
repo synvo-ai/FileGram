@@ -1,0 +1,625 @@
+{
+  "meta": {
+    "description": "Task-Dimension coverage matrix for FileGram behavioral data generation",
+    "total_tasks": 54,
+    "dimensions": {
+      "A": { "name": "Information Consumption", "name_zh": "信息消费模式", "measures": "How the agent explores and reads files — sequential vs breadth-first vs targeted", "key_signals": ["file_read order", "view_count", "revisit_interval_ms", "file_search patterns"] },
+      "B": { "name": "Production Style", "name_zh": "生产风格", "measures": "How the agent creates output — detailed vs minimal vs creative", "key_signals": ["file_write content_length", "file_edit lines_added/deleted", "output file count", "documentation depth"] },
+      "C": { "name": "Organization Behavior", "name_zh": "组织行为", "measures": "How the agent structures files and directories — nested vs flat vs by-type", "key_signals": ["dir_create depth", "file_rename patterns", "file_move destination_depth", "fs_snapshot tree structure"] },
+      "D": { "name": "Iteration Strategy", "name_zh": "迭代策略", "measures": "How the agent refines work — incremental edits vs large rewrites vs ship-fast", "key_signals": ["file_edit frequency", "lines_added vs lines_deleted ratio", "version file creation", "error_response strategy"] },
+      "E": { "name": "Work Rhythm", "name_zh": "工作节奏", "measures": "How the agent paces work — phased planning vs bursty vs sprint", "key_signals": ["iteration_start/end timing", "tool_call sequence_position", "context_switch frequency", "llm_response patterns"] },
+      "F": { "name": "Cross-Modal Behavior", "name_zh": "跨模态行为", "measures": "How the agent handles non-text files — visual-heavy vs text-only vs balanced", "key_signals": ["file_read on image/media files", "cross_file_reference between media and text", "chart/image descriptions in output"] }
+    }
+  },
+
+  "tasks": {
+    "U-01": {
+      "name": "项目文件夹快速摘要",
+      "name_en": "Project folder quick summary",
+      "type": "understand",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "A": "浏览策略差异：全部扫描 vs 只看关键文件 vs 按类型分组",
+        "B": "输出风格差异：一段话摘要 vs 结构化报告 vs 附带文件清单"
+      }
+    },
+    "U-02": {
+      "name": "法律案件材料梳理",
+      "name_en": "Legal case materials review",
+      "type": "understand",
+      "workspace": "client_case",
+      "dimensions": {
+        "A": "阅读顺序：按时间 vs 按文件类型 vs 按重要性",
+        "B": "输出格式：叙述体 vs 表格 vs 时间线",
+        "E": "工作节奏：先全部读完再写 vs 边读边记 vs 分阶段处理"
+      }
+    },
+    "U-03": {
+      "name": "学术研究进展评估",
+      "name_en": "Academic research progress assessment",
+      "type": "understand",
+      "workspace": "research_project",
+      "dimensions": {
+        "A": "是否深入查看代码/数据文件还是只看文档",
+        "B": "报告结构：按主题 vs 按时间线 vs SWOT分析",
+        "F": "是否查看和引用图片/演示文稿等非文本文件"
+      }
+    },
+    "U-04": {
+      "name": "文件夹健康检查",
+      "name_en": "Folder health check",
+      "type": "understand",
+      "workspace": "client_case",
+      "dimensions": {
+        "A": "检查范围：采样 vs 全量扫描",
+        "C": "关注点偏好：命名规范 vs 目录结构 vs 重复文件 vs 过期文件"
+      }
+    },
+    "U-05": {
+      "name": "通讯录和联系人分析",
+      "name_en": "Contact network analysis",
+      "type": "understand",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "A": "信息来源：只看邮件 vs 同时看日历/文档署名",
+        "B": "输出粒度：只列人名 vs 附带关系描述和互动频率"
+      }
+    },
+    "U-06": {
+      "name": "项目风险速览",
+      "name_en": "Project risk quick scan",
+      "type": "understand",
+      "workspace": "client_case",
+      "dimensions": {
+        "A": "扫描策略：全量浏览 vs 只看关键文件（合同、日程）",
+        "B": "风险分类方式和是否提出应对建议",
+        "E": "速览节奏：快速一遍 vs 反复确认 vs 分领域逐步排查"
+      }
+    },
+    "U-07": {
+      "name": "工作习惯画像",
+      "name_en": "Work habit profiling",
+      "type": "understand",
+      "workspace": "mixed_desktop",
+      "dimensions": {
+        "A": "分析方法：逐文件检查 vs 统计分析 vs 模式搜索",
+        "B": "报告深度：表面观察 vs 深入行为推理",
+        "E": "元分析的工作节奏：系统性收集再分析 vs 直觉驱动"
+      }
+    },
+    "U-08": {
+      "name": "信息缺口分析",
+      "name_en": "Information gap analysis",
+      "type": "understand",
+      "workspace": "research_project",
+      "dimensions": {
+        "A": "检查策略：逐文件交叉引用 vs 按类别检查覆盖度",
+        "C": "对缺口的组织性建议：结构化补充方案 vs 简单列表"
+      }
+    },
+    "C-01": {
+      "name": "会议纪要模板",
+      "name_en": "Meeting minutes template",
+      "type": "create",
+      "workspace": "empty",
+      "dimensions": {
+        "B": "模板详细程度：简洁 vs 详尽，格式选择",
+        "C": "目录组织：扁平 vs 嵌套，文件颗粒度"
+      }
+    },
+    "C-02": {
+      "name": "个人知识库搭建",
+      "name_en": "Personal knowledge base setup",
+      "type": "create",
+      "workspace": "empty",
+      "dimensions": {
+        "B": "笔记格式和详细程度",
+        "C": "分类方式：按主题 vs PARA vs Zettelkasten，目录深度",
+        "D": "是否迭代调整初始设计，添加标签/元数据"
+      }
+    },
+    "C-03": {
+      "name": "项目提案撰写",
+      "name_en": "Project proposal writing",
+      "type": "create",
+      "workspace": "empty",
+      "dimensions": {
+        "B": "文档结构：单文件 vs 多文件，详细程度",
+        "E": "工作节奏：先规划大纲再填充 vs 直接开始写"
+      }
+    },
+    "C-04": {
+      "name": "数据分析报告",
+      "name_en": "Data analysis report",
+      "type": "create",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "B": "分析深度：描述性统计 vs 深入洞察",
+        "C": "是否创建多个辅助文件和目录",
+        "F": "可视化描述方式和图表引用"
+      }
+    },
+    "C-05": {
+      "name": "新员工入职手册",
+      "name_en": "New employee onboarding handbook",
+      "type": "create",
+      "workspace": "empty",
+      "dimensions": {
+        "B": "内容风格：正式 vs 友好，文件数量和颗粒度",
+        "C": "目录组织方式和文件拆分策略"
+      }
+    },
+    "C-06": {
+      "name": "客户沟通模板库",
+      "name_en": "Client communication template library",
+      "type": "create",
+      "workspace": "empty",
+      "dimensions": {
+        "B": "模板格式和占位符详细程度",
+        "C": "是否按沟通阶段分目录",
+        "D": "模板创建后是否迭代修改和添加变体"
+      }
+    },
+    "C-07": {
+      "name": "调研问卷设计",
+      "name_en": "Survey questionnaire design",
+      "type": "create",
+      "workspace": "empty",
+      "dimensions": {
+        "B": "问卷结构和详细程度：大纲 vs 完整可用",
+        "E": "工作节奏：先设计框架再填充 vs 直接写完整版"
+      }
+    },
+    "C-08": {
+      "name": "活动策划方案",
+      "name_en": "Event planning proposal",
+      "type": "create",
+      "workspace": "empty",
+      "dimensions": {
+        "B": "方案详细程度和文件数量",
+        "C": "文件组织：单文件 vs 多文件分模块",
+        "F": "是否创建可视化辅助（场地布局、流程图描述）"
+      }
+    },
+    "C-09": {
+      "name": "周报系统搭建",
+      "name_en": "Weekly report system setup",
+      "type": "create",
+      "workspace": "empty",
+      "dimensions": {
+        "B": "模板复杂度和汇总文件设计",
+        "C": "归档方式：按日期 vs 按人员 vs 单文件追加",
+        "E": "搭建节奏：先设计整体再填充 vs 逐步迭代"
+      }
+    },
+    "C-10": {
+      "name": "竞品情报模板",
+      "name_en": "Competitive intelligence template",
+      "type": "create",
+      "workspace": "empty",
+      "dimensions": {
+        "B": "模板格式：表格为主 vs 叙述为主",
+        "F": "是否包含可视化描述（雷达图、象限图）"
+      }
+    },
+    "O-01": {
+      "name": "混乱文件夹整理",
+      "name_en": "Messy folder cleanup",
+      "type": "organize",
+      "workspace": "mixed_desktop",
+      "dimensions": {
+        "C": "分类维度、目录深度、命名规范选择",
+        "A": "扫描策略：全量查看 vs 按类型分批"
+      }
+    },
+    "O-02": {
+      "name": "版本管理策略",
+      "name_en": "Version management strategy",
+      "type": "organize",
+      "workspace": "research_project",
+      "dimensions": {
+        "C": "版本目录组织：扁平+命名 vs 子文件夹归档",
+        "D": "版本保留策略：全部保留 vs 只留最新+归档旧版"
+      }
+    },
+    "O-03": {
+      "name": "跨项目文件归档",
+      "name_en": "Cross-project file archiving",
+      "type": "organize",
+      "workspace": "mixed_desktop",
+      "dimensions": {
+        "C": "每个项目文件夹的内部结构设计",
+        "E": "归档节奏：先全部分类再建目录 vs 逐个处理"
+      }
+    },
+    "O-04": {
+      "name": "命名规范化改造",
+      "name_en": "File naming standardization",
+      "type": "organize",
+      "workspace": "client_case",
+      "dimensions": {
+        "C": "命名规范选择：日期前缀 vs 项目前缀 vs 类型前缀",
+        "A": "文件审查方式：逐个检查 vs 模式匹配",
+        "D": "重命名策略：一次性批量 vs 分批迭代"
+      }
+    },
+    "O-05": {
+      "name": "重复文件清理",
+      "name_en": "Duplicate file cleanup",
+      "type": "organize",
+      "workspace": "mixed_desktop",
+      "dimensions": {
+        "C": "清理后的组织方案",
+        "A": "检测方式：文件名对比 vs 内容采样 vs 全量对比"
+      }
+    },
+    "O-06": {
+      "name": "项目交接文件整理",
+      "name_en": "Project handover file organization",
+      "type": "organize",
+      "workspace": "client_case",
+      "dimensions": {
+        "C": "交接目录结构：按类型 vs 按阶段 vs 按优先级",
+        "B": "交接文档详细程度",
+        "E": "工作节奏：先整理再写文档 vs 边整理边记录"
+      }
+    },
+    "S-01": {
+      "name": "多源信息综述",
+      "name_en": "Multi-source information review",
+      "type": "synthesize",
+      "workspace": "research_project",
+      "dimensions": {
+        "A": "阅读策略：全部通读 vs 快速扫描摘要",
+        "B": "综述结构和引用方式",
+        "E": "综述工作节奏：先全部读完再写 vs 边读边综合"
+      }
+    },
+    "S-02": {
+      "name": "竞品分析报告",
+      "name_en": "Competitive analysis report",
+      "type": "synthesize",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "A": "分析维度选择和信息提取范围",
+        "B": "报告深度：快速概要 vs 深度分析",
+        "F": "是否创建对比表格和可视化描述"
+      }
+    },
+    "S-03": {
+      "name": "会议决策汇总",
+      "name_en": "Meeting decisions summary",
+      "type": "synthesize",
+      "workspace": "client_case",
+      "dimensions": {
+        "A": "信息提取方式：逐个阅读 vs 关键词搜索",
+        "B": "汇总格式和是否创建跟踪表"
+      }
+    },
+    "S-04": {
+      "name": "跨部门知识地图",
+      "name_en": "Cross-department knowledge map",
+      "type": "synthesize",
+      "workspace": "mixed_desktop",
+      "dimensions": {
+        "A": "分析深度和跨文件关联能力",
+        "B": "呈现方式：文本 vs 结构化文档 vs 多文件",
+        "C": "知识地图的组织结构"
+      }
+    },
+    "S-05": {
+      "name": "年度工作回顾",
+      "name_en": "Annual work review compilation",
+      "type": "synthesize",
+      "workspace": "client_case",
+      "dimensions": {
+        "A": "信息提取策略：全量阅读 vs 按时间采样 vs 只看关键文件",
+        "B": "回顾的详细程度和文档长度",
+        "E": "长周期综合的工作节奏：时间线式 vs 主题聚合式"
+      }
+    },
+    "S-06": {
+      "name": "多源矛盾核查",
+      "name_en": "Multi-source contradiction check",
+      "type": "synthesize",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "A": "对比策略：逐文件两两对比 vs 按主题跨文件",
+        "D": "是否修正原文件中的明显错误 vs 只出报告"
+      }
+    },
+    "S-07": {
+      "name": "客户需求整合",
+      "name_en": "Client requirements consolidation",
+      "type": "synthesize",
+      "workspace": "client_case",
+      "dimensions": {
+        "A": "需求提取方式：逐文件 vs 按客户分组 vs 关键词搜索",
+        "B": "优先级排序标准和文档详细程度",
+        "C": "综合文档的组织结构"
+      }
+    },
+    "S-08": {
+      "name": "行业趋势简报",
+      "name_en": "Industry trend briefing",
+      "type": "synthesize",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "A": "趋势识别方法：定量数据驱动 vs 定性主题分析",
+        "B": "简报格式和详细程度",
+        "F": "是否引用和解读图表，是否描述新的可视化"
+      }
+    },
+    "I-01": {
+      "name": "报告修订（简洁化）",
+      "name_en": "Report revision (condensation)",
+      "type": "iterate",
+      "workspace": "research_project",
+      "dimensions": {
+        "D": "修改策略：直接删减 vs 重写 vs 创建精简版保留原版",
+        "B": "一页摘要的呈现方式和风格"
+      }
+    },
+    "I-02": {
+      "name": "文档国际化",
+      "name_en": "Document internationalization",
+      "type": "iterate",
+      "workspace": "client_case",
+      "dimensions": {
+        "D": "翻译策略：全部翻译 vs 只翻译关键文件",
+        "B": "多语言版本的质量和风格"
+      }
+    },
+    "I-03": {
+      "name": "纠错和事实核查",
+      "name_en": "Error correction and fact-checking",
+      "type": "iterate",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "D": "修改方式：原地修改 vs 创建新版本",
+        "A": "审查方式：逐段检查 vs 只看数据部分"
+      }
+    },
+    "I-04": {
+      "name": "受众适配改写",
+      "name_en": "Audience adaptation rewrite",
+      "type": "iterate",
+      "workspace": "research_project",
+      "dimensions": {
+        "D": "改写策略：复用原文结构 vs 完全重写",
+        "B": "三个版本的风格差异化程度",
+        "E": "三版本的工作节奏：批量完成 vs 逐个精修"
+      }
+    },
+    "I-05": {
+      "name": "格式统一化",
+      "name_en": "Format standardization",
+      "type": "iterate",
+      "workspace": "mixed_desktop",
+      "dimensions": {
+        "D": "修改策略：逐文件修改 vs 批量处理",
+        "C": "格式标准选择和是否同时调整目录结构"
+      }
+    },
+    "I-06": {
+      "name": "评审意见整合修订",
+      "name_en": "Review feedback integration revision",
+      "type": "iterate",
+      "workspace": "research_project",
+      "dimensions": {
+        "D": "修改幅度：保守修改 vs 大幅重写",
+        "A": "阅读方式：先读所有意见再修改 vs 逐条读改",
+        "E": "修订节奏：一轮完成 vs 多轮迭代"
+      }
+    },
+    "I-07": {
+      "name": "数据更新与报告刷新",
+      "name_en": "Data update and report refresh",
+      "type": "iterate",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "D": "更新策略：原地修改 vs 创建新版本",
+        "B": "是否创建数据变化摘要文件",
+        "F": "图表更新详细程度和可视化描述"
+      }
+    },
+    "I-08": {
+      "name": "反馈驱动的模板优化",
+      "name_en": "Feedback-driven template optimization",
+      "type": "iterate",
+      "workspace": "client_case",
+      "dimensions": {
+        "D": "修改幅度：微调 vs 大幅重构",
+        "C": "是否保留旧版本模板，版本管理方式",
+        "E": "优化节奏：按反馈优先级 vs 按模板顺序"
+      }
+    },
+    "M-01": {
+      "name": "周报更新",
+      "name_en": "Weekly report update",
+      "type": "maintain",
+      "workspace": "client_case",
+      "dimensions": {
+        "D": "是否严格沿用上周格式 vs 调整改进",
+        "E": "维护节奏：快速更新 vs 仔细回顾上周遗留",
+        "B": "内容增减策略和标注方式"
+      }
+    },
+    "M-02": {
+      "name": "知识库内容更新",
+      "name_en": "Knowledge base content update",
+      "type": "maintain",
+      "workspace": "research_project",
+      "dimensions": {
+        "D": "是否调整原有分类结构 vs 只添加新内容",
+        "E": "更新节奏：批量添加 vs 逐条归位",
+        "C": "是否对已有笔记做关联标注，索引更新方式"
+      }
+    },
+    "M-03": {
+      "name": "季度复盘追踪",
+      "name_en": "Quarterly review tracking",
+      "type": "maintain",
+      "workspace": "client_case",
+      "dimensions": {
+        "D": "是否修改追踪表格式 vs 只更新数据",
+        "E": "复盘工作节奏：数据驱动 vs 叙述性"
+      }
+    },
+    "M-04": {
+      "name": "会议纪要归档与跟进",
+      "name_en": "Meeting minutes archiving and follow-up",
+      "type": "maintain",
+      "workspace": "client_case",
+      "dimensions": {
+        "D": "归档后是否回溯标注纪要中的决策",
+        "E": "归档节奏：先全部归档再提取 vs 逐份处理",
+        "C": "归档目录结构设计和追踪表格式"
+      }
+    },
+    "M-05": {
+      "name": "联系人信息维护",
+      "name_en": "Contact information maintenance",
+      "type": "maintain",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "D": "是否保留旧版联系人列表 vs 直接覆盖",
+        "E": "维护节奏：逐封邮件阅读 vs 批量搜索模式",
+        "A": "信息提取方式：逐封邮件 vs 搜索人名模式"
+      }
+    },
+    "M-06": {
+      "name": "项目进度同步更新",
+      "name_en": "Project progress sync update",
+      "type": "maintain",
+      "workspace": "client_case",
+      "dimensions": {
+        "D": "更新方式：原地修改计划 vs 创建更新附录",
+        "E": "同步节奏：快速更新 vs 仔细分析偏差原因",
+        "B": "备忘录风格和是否创建风险登记表"
+      }
+    },
+    "MM-01": {
+      "name": "图文并茂的产品说明",
+      "name_en": "Illustrated product documentation",
+      "type": "multimodal",
+      "workspace": "media_project",
+      "dimensions": {
+        "B": "说明详细程度和文档结构",
+        "F": "图片引用和图文结合方式",
+        "C": "文件组织：按功能分 vs 按流程分"
+      }
+    },
+    "MM-02": {
+      "name": "数据可视化方案设计",
+      "name_en": "Data visualization design review",
+      "type": "multimodal",
+      "workspace": "media_project",
+      "dimensions": {
+        "B": "改进建议的具体程度和替代方案",
+        "F": "图表分析深度：逐张分析 vs 整体评估"
+      }
+    },
+    "MM-03": {
+      "name": "演示文稿内容整理",
+      "name_en": "Presentation content review",
+      "type": "multimodal",
+      "workspace": "research_project",
+      "dimensions": {
+        "A": "分析深度和是否重新组织演示顺序",
+        "B": "备注详细程度和建议数量",
+        "F": "图片-页面映射和新增图表建议"
+      }
+    },
+    "MM-04": {
+      "name": "多媒体资产清单",
+      "name_en": "Multimedia asset inventory",
+      "type": "multimodal",
+      "workspace": "media_project",
+      "dimensions": {
+        "A": "检查方式：全部查看 vs 采样",
+        "C": "分类方案和目录结构设计",
+        "F": "媒体文件描述详细程度和跨模态关联标注"
+      }
+    },
+    "MM-05": {
+      "name": "图文一致性审查",
+      "name_en": "Image-text consistency audit",
+      "type": "multimodal",
+      "workspace": "media_project",
+      "dimensions": {
+        "A": "审查方式：逐个核对 vs 先列清单再对比",
+        "F": "图文匹配分析深度和孤立图片处理",
+        "D": "是否修正原文档 vs 只出审查报告"
+      }
+    },
+    "MM-06": {
+      "name": "照片分类与标注",
+      "name_en": "Photo categorization and annotation",
+      "type": "multimodal",
+      "workspace": "media_project",
+      "dimensions": {
+        "C": "分类维度和目录结构深度",
+        "F": "标注详细程度：一句话 vs 结构化描述",
+        "A": "浏览方式：全部查看 vs 采样分类"
+      }
+    },
+    "MM-07": {
+      "name": "图文报告生成",
+      "name_en": "Visual report generation from data",
+      "type": "multimodal",
+      "workspace": "investment_desk",
+      "dimensions": {
+        "B": "报告结构和分析深度",
+        "F": "可视化描述方式和图表引用数量",
+        "E": "工作节奏：先写文字再配图 vs 先整理图再写分析"
+      }
+    },
+    "MM-08": {
+      "name": "素材库建设与使用指南",
+      "name_en": "Media library setup and usage guide",
+      "type": "multimodal",
+      "workspace": "media_project",
+      "dimensions": {
+        "C": "素材库目录结构和分类方案",
+        "F": "素材描述详细程度和跨模态索引",
+        "B": "使用指南的详细程度和命名规范设计"
+      }
+    }
+  },
+
+  "by_dimension": {
+    "A": ["U-01", "U-02", "U-03", "U-04", "U-05", "U-06", "U-07", "U-08", "O-01", "O-04", "O-05", "S-01", "S-02", "S-03", "S-04", "S-05", "S-06", "S-07", "S-08", "I-03", "I-06", "M-05", "MM-03", "MM-04", "MM-05", "MM-06"],
+    "B": ["U-01", "U-02", "U-03", "U-05", "U-06", "U-07", "C-01", "C-02", "C-03", "C-04", "C-05", "C-06", "C-07", "C-08", "C-09", "C-10", "S-01", "S-02", "S-03", "S-04", "S-05", "S-07", "S-08", "I-01", "I-02", "I-04", "I-07", "O-06", "M-01", "M-06", "MM-01", "MM-02", "MM-03", "MM-07", "MM-08"],
+    "C": ["U-04", "U-08", "C-01", "C-02", "C-04", "C-05", "C-06", "C-08", "C-09", "O-01", "O-02", "O-03", "O-04", "O-05", "O-06", "S-04", "S-07", "I-05", "I-08", "M-02", "M-04", "MM-01", "MM-04", "MM-06", "MM-08"],
+    "D": ["C-02", "C-06", "O-02", "O-04", "S-06", "I-01", "I-02", "I-03", "I-04", "I-05", "I-06", "I-07", "I-08", "M-01", "M-02", "M-03", "M-04", "M-05", "M-06", "MM-05"],
+    "E": ["U-02", "U-06", "U-07", "C-03", "C-07", "C-09", "O-03", "O-06", "S-01", "S-05", "I-04", "I-06", "I-08", "M-01", "M-02", "M-03", "M-04", "M-05", "M-06", "MM-07"],
+    "F": ["U-03", "C-04", "C-08", "C-10", "S-02", "S-08", "I-07", "MM-01", "MM-02", "MM-03", "MM-04", "MM-05", "MM-06", "MM-07", "MM-08"]
+  },
+
+  "by_type": {
+    "understand": ["U-01", "U-02", "U-03", "U-04", "U-05", "U-06", "U-07", "U-08"],
+    "create": ["C-01", "C-02", "C-03", "C-04", "C-05", "C-06", "C-07", "C-08", "C-09", "C-10"],
+    "organize": ["O-01", "O-02", "O-03", "O-04", "O-05", "O-06"],
+    "synthesize": ["S-01", "S-02", "S-03", "S-04", "S-05", "S-06", "S-07", "S-08"],
+    "iterate": ["I-01", "I-02", "I-03", "I-04", "I-05", "I-06", "I-07", "I-08"],
+    "maintain": ["M-01", "M-02", "M-03", "M-04", "M-05", "M-06"],
+    "multimodal": ["MM-01", "MM-02", "MM-03", "MM-04", "MM-05", "MM-06", "MM-07", "MM-08"]
+  },
+
+  "by_workspace": {
+    "investment_desk": ["U-01", "U-05", "C-04", "S-02", "S-06", "S-08", "I-03", "I-07", "M-05", "MM-07"],
+    "client_case": ["U-02", "U-04", "U-06", "O-04", "O-06", "S-03", "S-05", "S-07", "I-02", "I-08", "M-01", "M-03", "M-04", "M-06"],
+    "research_project": ["U-03", "U-08", "O-02", "S-01", "I-01", "I-04", "I-06", "M-02", "MM-03"],
+    "mixed_desktop": ["U-07", "O-01", "O-03", "O-05", "S-04", "I-05"],
+    "media_project": ["MM-01", "MM-02", "MM-04", "MM-05", "MM-06", "MM-08"],
+    "empty": ["C-01", "C-02", "C-03", "C-05", "C-06", "C-07", "C-08", "C-09", "C-10"]
+  },
+
+  "summary": {
+    "total_tasks": 54,
+    "by_dimension_count": { "A": 26, "B": 35, "C": 25, "D": 20, "E": 20, "F": 15 },
+    "by_type_count": { "understand": 8, "create": 10, "organize": 6, "synthesize": 8, "iterate": 8, "maintain": 6, "multimodal": 8 },
+    "by_workspace_count": { "investment_desk": 10, "client_case": 14, "research_project": 9, "mixed_desktop": 6, "media_project": 6, "empty": 9 }
+  }
+}

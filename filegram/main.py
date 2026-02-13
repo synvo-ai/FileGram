@@ -101,7 +101,7 @@ def parse_args() -> argparse.Namespace:
         "--profile",
         type=str,
         default=None,
-        help="Agent profile to load (e.g., alex, sam, luna)",
+        help="Agent profile to load (e.g., p1_methodical, p3_efficient_executor)",
     )
 
     parser.add_argument(
@@ -161,7 +161,14 @@ async def run_agent(
         if task is not None:
             await agent.run(task)
 
-        # Enter interactive mode after initial task (unless --one-shot is specified)
+        # In one-shot mode, finalize behavioral signals before exiting
+        if one_shot:
+            summary = agent.finalize_behavior()
+            if summary:
+                console.print(f"[dim]Behavioral data saved to data/behavior/sessions/{agent.session_id}/[/dim]")
+            return 0
+
+        # Enter interactive mode after initial task
         if not one_shot:
             # Use ConsoleApp for enhanced interactive experience
             app = ConsoleApp(

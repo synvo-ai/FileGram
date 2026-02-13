@@ -1,0 +1,960 @@
+[
+  {
+    "task_id": "U-01",
+    "name": "项目文件夹快速摘要",
+    "name_en": "Project folder quick summary",
+    "type": "understand",
+    "dimensions": ["A", "B"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这个文件夹包含一位投资分析师的工作文件，包括研究报告、财务数据、邮件和笔记。请浏览文件夹内容，了解这位分析师正在跟踪哪些公司、关注哪些议题，然后写一份简短的工作概况摘要。",
+    "prompt_en": "This folder contains an investment analyst's work files, including research reports, financial data, emails, and notes. Browse the folder contents to understand which companies the analyst is tracking and what topics they focus on, then write a brief work overview summary.",
+    "behavioral_freedom": [
+      "浏览策略：全部扫描 vs 只看关键文件 vs 按文件类型分类查看",
+      "输出详细程度：一段话 vs 结构化报告",
+      "是否列出具体文件清单"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "U-02",
+    "name": "法律案件材料梳理",
+    "name_en": "Legal case materials review",
+    "type": "understand",
+    "dimensions": ["A", "B", "E"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹包含一位律师的案件相关材料，包括法律文书、客户邮件、日历安排和语音备忘录信息。请阅读并理解这些材料，写一份案件概要，说明：涉及哪些案件/客户？目前进展到什么阶段？有哪些即将到期的事项？",
+    "prompt_en": "This folder contains case-related materials for a lawyer, including legal documents, client emails, calendar entries, and voice memo notes. Read and understand these materials, then write a case summary covering: Which cases/clients are involved? What stage are they at? What upcoming deadlines exist?",
+    "behavioral_freedom": [
+      "阅读顺序：按时间 vs 按文件类型 vs 按重要性",
+      "输出格式：叙述体 vs 表格 vs 时间线",
+      "是否标注信息来源文件"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "U-03",
+    "name": "学术研究进展评估",
+    "name_en": "Academic research progress assessment",
+    "type": "understand",
+    "dimensions": ["A", "B", "F"],
+    "workspace_bundle": "research_project",
+    "prompt_zh": "这个文件夹属于一位学术研究者，包含论文、演示文稿、代码笔记和教学材料。请浏览这些文件，判断这位研究者的主要研究方向、当前进展、以及可能面临的挑战。写一份研究进展评估报告。",
+    "prompt_en": "This folder belongs to an academic researcher and contains papers, presentations, code notes, and teaching materials. Browse these files to determine the researcher's main research directions, current progress, and potential challenges. Write a research progress assessment report.",
+    "behavioral_freedom": [
+      "是否查看代码/数据文件还是只看文档",
+      "报告结构：按主题分类 vs 按时间线 vs SWOT分析",
+      "是否引用具体论文/文件"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "U-04",
+    "name": "文件夹健康检查",
+    "name_en": "Folder health check",
+    "type": "understand",
+    "dimensions": ["A", "C"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹包含大量工作文件。请检查文件夹的组织状况：有没有命名不规范的文件？有没有疑似重复的文件？有没有放错位置的文件？有没有过期或不再需要的临时文件？写一份「文件系统健康检查报告」。",
+    "prompt_en": "This folder contains a large number of work files. Check the folder's organizational health: Are there files with inconsistent naming? Suspected duplicates? Misplaced files? Expired or unnecessary temporary files? Write a 'file system health check report'.",
+    "behavioral_freedom": [
+      "检查范围：采样 vs 全量扫描",
+      "关注点：命名 vs 结构 vs 重复 vs 过期",
+      "报告风格：简洁清单 vs 详细分析"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "U-05",
+    "name": "通讯录和联系人分析",
+    "name_en": "Contact network analysis",
+    "type": "understand",
+    "dimensions": ["A", "B"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这个文件夹中散落着各种邮件、会议记录和工作文件。请从中识别出这位用户经常联系的人和组织，推断他们之间的关系（同事、客户、合作伙伴等），整理成一份联系人关系图谱。",
+    "prompt_en": "This folder contains scattered emails, meeting notes, and work files. Identify the people and organizations the user frequently contacts, infer their relationships (colleagues, clients, partners, etc.), and compile a contact relationship map.",
+    "behavioral_freedom": [
+      "信息来源：只看邮件 vs 同时看日历/文档中的署名",
+      "输出格式：列表 vs 分组 vs 关系图描述",
+      "粒度：只列人名 vs 附带关系描述和互动频率"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "U-06",
+    "name": "项目风险速览",
+    "name_en": "Project risk quick scan",
+    "type": "understand",
+    "dimensions": ["A", "B", "E"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹包含一个正在进行的项目的各种文件：合同、沟通记录、进度表和备忘录。请快速浏览这些文件，识别其中潜在的风险因素（如逾期、预算问题、沟通断裂、条款冲突等），写一份风险评估简报。",
+    "prompt_en": "This folder contains various files for an ongoing project: contracts, communications, schedules, and memos. Quickly browse these files to identify potential risk factors (such as overdue items, budget issues, communication gaps, clause conflicts, etc.) and write a risk assessment brief.",
+    "behavioral_freedom": [
+      "扫描策略：全量浏览 vs 只看关键文件（合同、日程）",
+      "风险分类方式：按严重程度 vs 按类型 vs 按时间紧迫度",
+      "是否提出应对建议"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "U-07",
+    "name": "工作习惯画像",
+    "name_en": "Work habit profiling",
+    "type": "understand",
+    "dimensions": ["A", "B", "E"],
+    "workspace_bundle": "mixed_desktop",
+    "prompt_zh": "这个文件夹是某位知识工作者的工作目录。请通过分析文件的类型分布、命名模式、修改时间规律和内容特征，推测这位用户的工作习惯：他/她倾向于怎样组织文件？什么时间段最活跃？偏好什么类型的内容？写一份工作习惯分析报告。",
+    "prompt_en": "This folder is a knowledge worker's work directory. By analyzing the file type distribution, naming patterns, modification time patterns, and content characteristics, infer this user's work habits: How do they tend to organize files? When are they most active? What content types do they prefer? Write a work habit analysis report.",
+    "behavioral_freedom": [
+      "分析方法：逐文件检查 vs 统计分析 vs 模式搜索",
+      "报告深度：表面观察 vs 深入行为推理",
+      "是否创建辅助统计文件"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "U-08",
+    "name": "信息缺口分析",
+    "name_en": "Information gap analysis",
+    "type": "understand",
+    "dimensions": ["A", "C"],
+    "workspace_bundle": "research_project",
+    "prompt_zh": "这个文件夹是一位研究者的项目资料。请审视文件的完整性：有没有被引用但不存在的文件？有没有应该有但缺失的文件类型（如数据、参考文献、会议记录）？文件之间的引用关系是否完整？写一份信息缺口分析报告，指出缺少什么、建议补充什么。",
+    "prompt_en": "This folder contains a researcher's project materials. Examine the completeness of the files: Are there referenced but missing files? Are there file types that should exist but are absent (e.g., data, references, meeting notes)? Are cross-file references complete? Write an information gap analysis report noting what's missing and what should be added.",
+    "behavioral_freedom": [
+      "检查策略：逐文件交叉引用 vs 按类别检查覆盖度",
+      "报告组织方式：按严重程度 vs 按文件类型 vs 按主题",
+      "是否提供模板/示例来填补缺口"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-01",
+    "name": "会议纪要模板",
+    "name_en": "Meeting minutes template",
+    "type": "create",
+    "dimensions": ["B", "C"],
+    "workspace_bundle": "empty",
+    "prompt_zh": "请为一个 10 人团队创建一套会议管理文件：1. 会议纪要模板（可复用）2. 一份示例会议纪要（基于虚构的产品评审会议）3. 会议跟进事项追踪表。把这些文件组织在合理的目录结构中。",
+    "prompt_en": "Create a set of meeting management files for a 10-person team: 1. A reusable meeting minutes template 2. A sample meeting minutes (based on a fictional product review meeting) 3. A meeting follow-up action tracking sheet. Organize these files in a sensible directory structure.",
+    "behavioral_freedom": [
+      "文件格式选择：Markdown vs 纯文本 vs 其他",
+      "目录结构：扁平 vs 嵌套",
+      "模板详细程度：简洁 vs 详尽",
+      "是否添加使用说明"
+    ],
+    "expected_file_ops": 6,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-02",
+    "name": "个人知识库搭建",
+    "name_en": "Personal knowledge base setup",
+    "type": "create",
+    "dimensions": ["B", "C", "D"],
+    "workspace_bundle": "empty",
+    "prompt_zh": "请搭建一个个人知识管理系统的文件结构。要求：1. 设计目录组织方案（分类逻辑自定）2. 创建一个「如何使用这个知识库」的说明文件 3. 在三个不同分类下各创建一篇示例笔记 4. 创建一个索引文件，链接到所有笔记。主题和分类完全由你决定。",
+    "prompt_en": "Build a personal knowledge management system file structure. Requirements: 1. Design a directory organization scheme (classification logic is your choice) 2. Create a 'how to use this knowledge base' guide 3. Create one sample note under each of three different categories 4. Create an index file linking to all notes. Topics and categories are entirely your choice.",
+    "behavioral_freedom": [
+      "分类方式：按主题 vs 按项目 vs PARA方法 vs Zettelkasten",
+      "笔记格式和详细程度",
+      "目录深度",
+      "是否添加标签系统/元数据"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-03",
+    "name": "项目提案撰写",
+    "name_en": "Project proposal writing",
+    "type": "create",
+    "dimensions": ["B", "E"],
+    "workspace_bundle": "empty",
+    "prompt_zh": "请撰写一份项目提案。项目主题：为一家中型公司设计内部培训体系。提案应包含：背景分析、目标设定、方案概述、时间规划、预算估算。格式和详细程度由你自行决定。",
+    "prompt_en": "Write a project proposal. Topic: Designing an internal training system for a mid-sized company. The proposal should include: background analysis, goal setting, solution overview, timeline, and budget estimate. Format and level of detail are your choice.",
+    "behavioral_freedom": [
+      "文档结构：单文件 vs 多文件",
+      "是否创建补充材料（数据表、图表描述）",
+      "详细程度：概要 vs 完整方案",
+      "工作节奏：先规划再写 vs 直接开始"
+    ],
+    "expected_file_ops": 6,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-04",
+    "name": "数据分析报告",
+    "name_en": "Data analysis report",
+    "type": "create",
+    "dimensions": ["B", "C", "F"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这个文件夹里有一份销售数据文件。请基于这些数据：1. 分析数据中的关键趋势和异常 2. 创建一份分析报告，包含你的发现和建议 3. 如果你认为有帮助，可以创建辅助文件（数据汇总表、图表描述等）。报告面向非技术背景的管理层。",
+    "prompt_en": "This folder contains a sales data file. Based on this data: 1. Analyze key trends and anomalies 2. Create an analysis report with your findings and recommendations 3. Optionally create supporting files (data summary tables, chart descriptions, etc.). The report targets non-technical management.",
+    "behavioral_freedom": [
+      "分析深度：描述性统计 vs 深入洞察",
+      "是否创建多个辅助文件",
+      "可视化描述方式",
+      "报告语气和术语水平"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-05",
+    "name": "新员工入职手册",
+    "name_en": "New employee onboarding handbook",
+    "type": "create",
+    "dimensions": ["B", "C"],
+    "workspace_bundle": "empty",
+    "prompt_zh": "请为一家小型科技公司创建新员工入职资料包，包括：1. 公司简介（虚构即可）2. 入职流程指南 3. 常用工具和系统说明 4. 团队成员介绍模板 5. FAQ 文档。文件如何组织、内容多详细，由你决定。",
+    "prompt_en": "Create a new employee onboarding package for a small tech company, including: 1. Company overview (fictional is fine) 2. Onboarding process guide 3. Common tools and systems guide 4. Team member introduction template 5. FAQ document. How to organize files and how detailed the content should be is your choice.",
+    "behavioral_freedom": [
+      "文件数量和颗粒度",
+      "目录组织方式",
+      "内容风格：正式 vs 友好",
+      "是否添加清单/checklist"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-06",
+    "name": "客户沟通模板库",
+    "name_en": "Client communication template library",
+    "type": "create",
+    "dimensions": ["B", "C", "D"],
+    "workspace_bundle": "empty",
+    "prompt_zh": "请创建一套客户沟通模板库，包括：1. 初次接触邮件模板 2. 项目进度更新模板 3. 问题升级通知模板 4. 项目结案感谢信模板 5. 一份模板使用指南。每个模板应包含占位符说明和使用场景描述。请设计合理的文件组织方式。",
+    "prompt_en": "Create a client communication template library including: 1. Initial contact email template 2. Project progress update template 3. Issue escalation notification template 4. Project closure thank-you letter template 5. A template usage guide. Each template should include placeholder descriptions and usage scenarios. Design a sensible file organization.",
+    "behavioral_freedom": [
+      "模板格式：纯文本 vs Markdown vs 带样式标记",
+      "是否按沟通阶段分目录",
+      "占位符详细程度",
+      "是否添加语气变体（正式/友好）"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-07",
+    "name": "调研问卷设计",
+    "name_en": "Survey questionnaire design",
+    "type": "create",
+    "dimensions": ["B", "E"],
+    "workspace_bundle": "empty",
+    "prompt_zh": "你的团队正在进行一项关于远程办公满意度的内部调研。请设计完整的调研方案：1. 调研背景和目标说明 2. 问卷内容（问题、选项、评分标准）3. 数据收集计划 4. 预期的分析框架。所有内容的组织方式和详细程度由你决定。",
+    "prompt_en": "Your team is conducting an internal survey on remote work satisfaction. Design a complete survey plan: 1. Survey background and objectives 2. Questionnaire content (questions, options, scoring criteria) 3. Data collection plan 4. Expected analysis framework. Organization and level of detail are your choice.",
+    "behavioral_freedom": [
+      "问卷结构：按主题分 vs 按类型分（选择/开放）",
+      "是否创建分析模板",
+      "详细程度：大纲 vs 完整可用的问卷",
+      "工作节奏：先设计框架再填充 vs 直接写"
+    ],
+    "expected_file_ops": 6,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-08",
+    "name": "活动策划方案",
+    "name_en": "Event planning proposal",
+    "type": "create",
+    "dimensions": ["B", "C", "F"],
+    "workspace_bundle": "empty",
+    "prompt_zh": "请为一家 50 人的公司策划年度团建活动。创建完整的策划方案，包括：活动主题和形式、时间地点安排、预算明细、人员分工、物料清单、应急预案。如果你认为有帮助，可以创建补充文件（时间线、平面图描述、签到表模板等）。",
+    "prompt_en": "Plan an annual team-building event for a 50-person company. Create a complete planning proposal including: event theme and format, time and venue arrangements, budget breakdown, personnel assignments, materials checklist, and contingency plans. Create supplementary files if helpful (timeline, floor plan descriptions, sign-in sheet templates, etc.).",
+    "behavioral_freedom": [
+      "文件数量：单文件完整方案 vs 多文件分模块",
+      "是否创建可视化辅助描述（场地布局、流程图）",
+      "预算精细程度",
+      "是否添加往年参考或最佳实践"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-09",
+    "name": "周报系统搭建",
+    "name_en": "Weekly report system setup",
+    "type": "create",
+    "dimensions": ["B", "C", "E"],
+    "workspace_bundle": "empty",
+    "prompt_zh": "请为一个 5 人小组搭建一套周报管理系统：1. 设计周报模板（包含本周完成、下周计划、问题与风险等板块）2. 创建前两周的示例周报（虚构内容）3. 设计一种归档和检索方案。考虑如何让历史周报方便查阅和回顾。",
+    "prompt_en": "Build a weekly report management system for a 5-person team: 1. Design a weekly report template (with sections for completed items, next week's plan, issues and risks, etc.) 2. Create sample reports for the past two weeks (fictional content) 3. Design an archiving and retrieval system. Consider how to make historical reports easy to browse and review.",
+    "behavioral_freedom": [
+      "归档方式：按日期目录 vs 按人员目录 vs 单文件追加",
+      "模板复杂度",
+      "是否创建汇总/看板文件",
+      "命名和版本管理策略"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "C-10",
+    "name": "竞品情报模板",
+    "name_en": "Competitive intelligence template",
+    "type": "create",
+    "dimensions": ["B", "F"],
+    "workspace_bundle": "empty",
+    "prompt_zh": "请创建一套竞品分析工具包：1. 竞品信息收集模板（公司概况、产品特性、价格策略等）2. 竞品对比矩阵模板 3. 用三家虚构公司填写示例 4. 一份分析总结模板。考虑如何用图表描述或表格让对比更直观。",
+    "prompt_en": "Create a competitive analysis toolkit: 1. Competitor information collection template (company overview, product features, pricing strategy, etc.) 2. Competitor comparison matrix template 3. Fill in examples with three fictional companies 4. An analysis summary template. Consider how to use chart descriptions or tables to make comparisons more intuitive.",
+    "behavioral_freedom": [
+      "模板格式：表格为主 vs 叙述为主",
+      "对比维度选择和数量",
+      "是否包含可视化描述（雷达图、象限图描述）",
+      "文件组织：按竞品分 vs 按分析维度分"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "O-01",
+    "name": "混乱文件夹整理",
+    "name_en": "Messy folder cleanup",
+    "type": "organize",
+    "dimensions": ["C", "A"],
+    "workspace_bundle": "mixed_desktop",
+    "prompt_zh": "这个文件夹里混杂着各种文件：文档、图片、旧版本、临时文件，全部堆在一起没有分类。请把它们整理成合理的目录结构。你可以重命名文件、创建子文件夹、删除明显的垃圾文件。整理完后写一份简短的说明，解释你的组织逻辑。",
+    "prompt_en": "This folder is a mess of mixed files: documents, images, old versions, and temporary files all piled together without organization. Reorganize them into a sensible directory structure. You may rename files, create subfolders, and delete obvious junk files. After organizing, write a brief explanation of your organizational logic.",
+    "behavioral_freedom": [
+      "分类维度：按类型 vs 按项目 vs 按日期",
+      "目录深度：扁平 vs 多层嵌套",
+      "命名规范：描述性长名 vs 简短缩写 vs 日期前缀",
+      "是否保留旧版本"
+    ],
+    "expected_file_ops": 15,
+    "status": "candidate"
+  },
+  {
+    "task_id": "O-02",
+    "name": "版本管理策略",
+    "name_en": "Version management strategy",
+    "type": "organize",
+    "dimensions": ["C", "D"],
+    "workspace_bundle": "research_project",
+    "prompt_zh": "这个文件夹包含一份报告的多个版本（draft_v1、draft_v2、draft_final、draft_final_revised 等），还有相关的参考资料和评审意见。请：1. 理清版本关系 2. 设计并实施一个清晰的版本管理方案 3. 写一个版本历史文件，记录每个版本的变更摘要。",
+    "prompt_en": "This folder contains multiple versions of a report (draft_v1, draft_v2, draft_final, draft_final_revised, etc.) along with reference materials and review comments. Please: 1. Clarify the version relationships 2. Design and implement a clear version management scheme 3. Write a version history file documenting change summaries for each version.",
+    "behavioral_freedom": [
+      "保留所有版本 vs 只保留最新 + 归档旧版",
+      "版本标记方式：编号 vs 日期 vs 语义化",
+      "目录组织：扁平 + 命名区分 vs 子文件夹",
+      "变更记录详细程度"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "O-03",
+    "name": "跨项目文件归档",
+    "name_en": "Cross-project file archiving",
+    "type": "organize",
+    "dimensions": ["C", "E"],
+    "workspace_bundle": "mixed_desktop",
+    "prompt_zh": "这些文件来自三个不同的研究项目，但目前全部混在同一个文件夹里。请根据文件内容判断它们分别属于哪个项目，然后将它们分类归档。每个项目文件夹应有清晰的内部结构。创建一份归档说明文件。",
+    "prompt_en": "These files come from three different research projects but are currently all mixed together in one folder. Determine which project each file belongs to based on its content, then sort and archive them. Each project folder should have a clear internal structure. Create an archiving notes file.",
+    "behavioral_freedom": [
+      "项目识别方式：逐个阅读 vs 关键词搜索 vs 文件名推断",
+      "目录结构设计",
+      "对无法分类文件的处理",
+      "归档说明的详细程度"
+    ],
+    "expected_file_ops": 15,
+    "status": "candidate"
+  },
+  {
+    "task_id": "O-04",
+    "name": "命名规范化改造",
+    "name_en": "File naming standardization",
+    "type": "organize",
+    "dimensions": ["C", "A", "D"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹中的文件命名混乱：有的用中文、有的用英文、有的带日期有的不带、有的有版本号有的用 final/revised 等描述词。请：1. 设计一套统一的命名规范 2. 按照规范重命名所有文件 3. 创建一份命名规范说明文件和一份新旧文件名对照表。",
+    "prompt_en": "Files in this folder have inconsistent naming: some use Chinese, some English, some have dates while others don't, some use version numbers while others use descriptors like 'final' or 'revised'. Please: 1. Design a unified naming convention 2. Rename all files according to the convention 3. Create a naming convention guide and an old-to-new filename mapping table.",
+    "behavioral_freedom": [
+      "命名规范选择：日期前缀 vs 项目前缀 vs 类型前缀",
+      "是否按类型或项目同时重新分目录",
+      "处理特殊字符和空格的方式",
+      "对照表格式和详细程度"
+    ],
+    "expected_file_ops": 15,
+    "status": "candidate"
+  },
+  {
+    "task_id": "O-05",
+    "name": "重复文件清理",
+    "name_en": "Duplicate file cleanup",
+    "type": "organize",
+    "dimensions": ["C", "A"],
+    "workspace_bundle": "mixed_desktop",
+    "prompt_zh": "这个文件夹里有很多看起来相似或重复的文件——相同内容但不同文件名、同一文件的多个备份、以及近似但有微小差异的版本。请：1. 找出所有疑似重复的文件 2. 决定每组重复中保留哪个版本 3. 清理冗余文件 4. 写一份清理日志，记录删除了什么、为什么。",
+    "prompt_en": "This folder contains many files that appear similar or duplicate — same content with different names, multiple backups of the same file, and near-identical versions with minor differences. Please: 1. Identify all suspected duplicates 2. Decide which version to keep from each group 3. Clean up redundant files 4. Write a cleanup log documenting what was removed and why.",
+    "behavioral_freedom": [
+      "检测方式：文件名对比 vs 内容采样对比 vs 全量对比",
+      "保留策略：保留最新 vs 保留最完整 vs 保留命名最规范的",
+      "是否将删除文件先移到回收站/archive",
+      "清理日志的详细程度"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "O-06",
+    "name": "项目交接文件整理",
+    "name_en": "Project handover file organization",
+    "type": "organize",
+    "dimensions": ["C", "B", "E"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "你即将把一个项目交接给同事。这个文件夹包含项目的所有工作文件，但组织比较随意。请整理成适合交接的状态：1. 建立清晰的目录结构 2. 确保重要文件容易找到 3. 创建一份交接清单，说明每个部分的内容和当前状态 4. 标注需要后续关注的事项。",
+    "prompt_en": "You are handing over a project to a colleague. This folder contains all project work files, but the organization is casual. Prepare it for handover: 1. Establish a clear directory structure 2. Ensure important files are easy to find 3. Create a handover checklist describing each section's content and current status 4. Flag items needing follow-up attention.",
+    "behavioral_freedom": [
+      "目录结构设计：按文件类型 vs 按项目阶段 vs 按优先级",
+      "交接文档详细程度",
+      "是否创建 README 文件",
+      "工作节奏：先整理再写文档 vs 边整理边记录"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "S-01",
+    "name": "多源信息综述",
+    "name_en": "Multi-source information review",
+    "type": "synthesize",
+    "dimensions": ["A", "B", "E"],
+    "workspace_bundle": "research_project",
+    "prompt_zh": "这个文件夹中有多篇研究论文和笔记。请阅读这些材料，撰写一份文献综述，总结：1. 这些论文分别研究什么问题？2. 它们之间有什么共同点和分歧？3. 当前研究的空白和未来方向是什么？",
+    "prompt_en": "This folder contains multiple research papers and notes. Read these materials and write a literature review summarizing: 1. What does each paper study? 2. What are the commonalities and disagreements between them? 3. What are the current research gaps and future directions?",
+    "behavioral_freedom": [
+      "阅读策略：全部通读 vs 快速扫描摘要",
+      "综述结构：按主题 vs 按时间 vs 按方法",
+      "引用方式",
+      "是否创建辅助文件（对比表、时间线）"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "S-02",
+    "name": "竞品分析报告",
+    "name_en": "Competitive analysis report",
+    "type": "synthesize",
+    "dimensions": ["A", "B", "F"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这个文件夹包含几家公司的财务报告、新闻和分析笔记。请综合这些信息，写一份竞品分析报告，对比这些公司在关键指标上的表现，并给出你的投资建议。",
+    "prompt_en": "This folder contains financial reports, news, and analysis notes for several companies. Synthesize this information to write a competitive analysis report comparing these companies on key metrics and providing your investment recommendations.",
+    "behavioral_freedom": [
+      "分析维度选择",
+      "是否创建对比表格",
+      "报告深度：快速概要 vs 深度分析",
+      "建议措辞：明确 vs 谨慎"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "S-03",
+    "name": "会议决策汇总",
+    "name_en": "Meeting decisions summary",
+    "type": "synthesize",
+    "dimensions": ["A", "B"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹包含过去一个月的会议纪要和相关邮件。请从中提取所有已做出的决策、待办事项和未解决的问题，整合成一份「月度决策与行动项汇总」。标注每个事项的来源和责任人（如有）。",
+    "prompt_en": "This folder contains meeting minutes and related emails from the past month. Extract all decisions made, action items, and unresolved issues, and compile them into a 'Monthly Decisions and Action Items Summary'. Note the source and responsible person for each item (if available).",
+    "behavioral_freedom": [
+      "信息提取方式：逐个阅读 vs 关键词搜索",
+      "汇总格式：按时间 vs 按主题 vs 按责任人",
+      "是否标注优先级",
+      "是否创建跟踪表"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "S-04",
+    "name": "跨部门知识地图",
+    "name_en": "Cross-department knowledge map",
+    "type": "synthesize",
+    "dimensions": ["A", "B", "C"],
+    "workspace_bundle": "mixed_desktop",
+    "prompt_zh": "这个文件夹包含来自不同部门的工作文件（法务、研究、投资分析）。请分析这些文件，绘制一份「知识地图」：1. 每个部门在做什么？2. 部门之间有哪些交叉领域？3. 有哪些知识可以共享或复用？用你认为最清晰的方式呈现。",
+    "prompt_en": "This folder contains work files from different departments (legal, research, investment analysis). Analyze these files and create a 'knowledge map': 1. What is each department working on? 2. What are the cross-cutting areas between departments? 3. What knowledge can be shared or reused? Present it in whatever way you find clearest.",
+    "behavioral_freedom": [
+      "分析深度",
+      "呈现方式：文本描述 vs 结构化文档 vs 多文件",
+      "是否给出具体建议"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "S-05",
+    "name": "年度工作回顾",
+    "name_en": "Annual work review compilation",
+    "type": "synthesize",
+    "dimensions": ["A", "B", "E"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹包含一整年的工作文件：报告、邮件、会议记录、项目文档。请从中综合提炼出一份年度工作回顾，包括：主要项目和成果、关键里程碑时间线、遇到的挑战和解决方案、以及对来年的展望。",
+    "prompt_en": "This folder contains a full year's work files: reports, emails, meeting notes, and project documents. Synthesize an annual work review including: major projects and accomplishments, key milestone timeline, challenges encountered and solutions, and outlook for the coming year.",
+    "behavioral_freedom": [
+      "信息提取策略：全量阅读 vs 按时间采样 vs 只看关键文件",
+      "回顾结构：按时间 vs 按项目 vs 按主题",
+      "是否创建时间线或数据图表描述",
+      "详细程度和文档长度"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "S-06",
+    "name": "多源矛盾核查",
+    "name_en": "Multi-source contradiction check",
+    "type": "synthesize",
+    "dimensions": ["A", "D"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这个文件夹中有多份来自不同来源的分析报告和数据文件。请仔细对比这些文件，找出其中的数据矛盾、观点分歧和不一致之处。为每个矛盾点写清楚：哪些文件冲突、具体内容是什么、你建议如何解决。整理成一份「矛盾清单与建议」文档。",
+    "prompt_en": "This folder contains multiple analysis reports and data files from different sources. Carefully compare these files to identify data contradictions, opinion disagreements, and inconsistencies. For each conflict, document: which files conflict, what exactly conflicts, and your recommended resolution. Compile into a 'Contradiction Checklist and Recommendations' document.",
+    "behavioral_freedom": [
+      "对比策略：逐文件两两对比 vs 按主题跨文件对比",
+      "矛盾分类方式：按严重程度 vs 按数据类型 vs 按来源",
+      "是否修正原文件中的明显错误",
+      "建议的具体程度"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "S-07",
+    "name": "客户需求整合",
+    "name_en": "Client requirements consolidation",
+    "type": "synthesize",
+    "dimensions": ["A", "B", "C"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹里有来自多个客户的需求描述、沟通邮件和会议记录。请综合分析这些需求：1. 提取每个客户的核心诉求 2. 找出不同客户之间的共性需求 3. 识别相互矛盾的需求 4. 创建一份整合后的需求优先级排序文档。",
+    "prompt_en": "This folder contains requirement descriptions, communication emails, and meeting notes from multiple clients. Analyze these requirements comprehensively: 1. Extract each client's core needs 2. Identify common requirements across clients 3. Flag contradictory requirements 4. Create a consolidated requirements priority ranking document.",
+    "behavioral_freedom": [
+      "需求提取方式：逐文件阅读 vs 按客户分组 vs 关键词搜索",
+      "优先级排序标准：频率 vs 影响 vs 紧迫度",
+      "是否创建需求矩阵或对比表",
+      "文档结构和详细程度"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "S-08",
+    "name": "行业趋势简报",
+    "name_en": "Industry trend briefing",
+    "type": "synthesize",
+    "dimensions": ["A", "B", "F"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这个文件夹包含多份行业报告、新闻摘要、数据图表和分析笔记。请综合这些材料，撰写一份行业趋势简报：1. 识别 3-5 个关键趋势 2. 用数据支撑每个趋势 3. 分析趋势对业务的潜在影响 4. 如果有图表，请在简报中引用并解读。",
+    "prompt_en": "This folder contains multiple industry reports, news summaries, data charts, and analysis notes. Synthesize these materials into an industry trend briefing: 1. Identify 3-5 key trends 2. Support each trend with data 3. Analyze potential business impact of each trend 4. If there are charts, reference and interpret them in the briefing.",
+    "behavioral_freedom": [
+      "趋势识别方法：定量数据驱动 vs 定性主题分析",
+      "简报格式：叙述体 vs 要点式 vs 混合",
+      "是否创建趋势对比图表描述",
+      "详细程度和受众定位"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "I-01",
+    "name": "报告修订（简洁化）",
+    "name_en": "Report revision (condensation)",
+    "type": "iterate",
+    "dimensions": ["D", "B"],
+    "workspace_bundle": "research_project",
+    "prompt_zh": "这个文件夹里有一份之前写的项目报告。收到的反馈是：\"报告太长了，管理层没时间看。请将核心发现压缩到一页以内，删除技术细节，突出结论和建议。\"请根据这个反馈修改报告。",
+    "prompt_en": "This folder contains a previously written project report. The feedback received is: 'The report is too long; management doesn't have time to read it. Please condense core findings to one page or less, remove technical details, and highlight conclusions and recommendations.' Revise the report based on this feedback.",
+    "behavioral_freedom": [
+      "修改策略：直接删减 vs 重写 vs 创建精简版保留原版",
+      "是否保留原文件",
+      "一页摘要的呈现方式"
+    ],
+    "expected_file_ops": 6,
+    "status": "candidate"
+  },
+  {
+    "task_id": "I-02",
+    "name": "文档国际化",
+    "name_en": "Document internationalization",
+    "type": "iterate",
+    "dimensions": ["D", "B"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹中的文档目前都是中文的。团队现在有了国际成员，需要提供英文版本。请：1. 为每个重要文档创建英文版本 2. 建立一个合理的多语言文件组织方案 3. 创建一个翻译状态追踪文件。",
+    "prompt_en": "The documents in this folder are currently all in Chinese. The team now has international members and needs English versions. Please: 1. Create English versions of each important document 2. Establish a reasonable multilingual file organization scheme 3. Create a translation status tracking file.",
+    "behavioral_freedom": [
+      "翻译策略：全部翻译 vs 只翻译关键文件",
+      "多语言组织：并列目录 vs 文件名后缀 vs 子文件夹",
+      "追踪方式：简单列表 vs 详细状态表"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "I-03",
+    "name": "纠错和事实核查",
+    "name_en": "Error correction and fact-checking",
+    "type": "iterate",
+    "dimensions": ["D", "A"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这份分析报告提交后，同事指出其中有几处数据引用错误，还有一些过时的信息。请：1. 仔细审查报告中的所有数据引用 2. 标记和修正发现的错误 3. 写一份勘误说明，记录所有修改。",
+    "prompt_en": "After submitting this analysis report, a colleague pointed out several data citation errors and some outdated information. Please: 1. Carefully review all data citations in the report 2. Mark and correct errors found 3. Write an errata note documenting all modifications.",
+    "behavioral_freedom": [
+      "审查方式：逐段检查 vs 只看数据部分",
+      "修改方式：原地修改 vs 创建新版本",
+      "勘误详细程度"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "I-04",
+    "name": "受众适配改写",
+    "name_en": "Audience adaptation rewrite",
+    "type": "iterate",
+    "dimensions": ["D", "B", "E"],
+    "workspace_bundle": "research_project",
+    "prompt_zh": "这个文件夹里有一份面向专业人士的详细技术报告。现在需要为三种不同受众各准备一个版本：1. 给管理层的执行摘要（一页，突出结论和商业影响）2. 给客户的简介（友好语气，避免术语）3. 给团队内部的备忘录（保留技术细节，补充行动计划）。",
+    "prompt_en": "This folder contains a detailed technical report for professionals. You need to prepare versions for three different audiences: 1. Executive summary for management (one page, highlighting conclusions and business impact) 2. Client-friendly overview (warm tone, avoid jargon) 3. Internal team memo (retain technical details, add action plan).",
+    "behavioral_freedom": [
+      "工作顺序：先改哪个版本",
+      "是否复用原文结构还是完全重写",
+      "文件组织：同目录 vs 按受众分目录",
+      "工作节奏：批量完成 vs 逐个精修"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "I-05",
+    "name": "格式统一化",
+    "name_en": "Format standardization",
+    "type": "iterate",
+    "dimensions": ["D", "C"],
+    "workspace_bundle": "mixed_desktop",
+    "prompt_zh": "这个文件夹中有多份文档，但格式不统一：有的用 Markdown，有的用纯文本，标题层级混乱，列表格式各异，有些有目录有些没有。请将所有文档统一为一致的格式。要求：选择一种格式标准、逐个文件调整、并创建一份格式规范说明供以后参考。",
+    "prompt_en": "This folder contains multiple documents with inconsistent formatting: some use Markdown, some plain text, heading levels are chaotic, list formats vary, some have tables of contents and others don't. Standardize all documents to a consistent format. Requirements: Choose a format standard, adjust each file, and create a format specification guide for future reference.",
+    "behavioral_freedom": [
+      "格式标准选择：Markdown vs 其他",
+      "修改策略：逐文件修改 vs 批量处理",
+      "是否同时调整内容结构",
+      "规范文档的详细程度"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "I-06",
+    "name": "评审意见整合修订",
+    "name_en": "Review feedback integration revision",
+    "type": "iterate",
+    "dimensions": ["D", "A", "E"],
+    "workspace_bundle": "research_project",
+    "prompt_zh": "这个文件夹包含一份报告初稿和三位评审者的意见（以文本文件形式）。请：1. 阅读所有评审意见 2. 识别评审者之间的共识和分歧 3. 根据意见修订报告 4. 创建一份修订说明，解释你如何处理每条意见（采纳/部分采纳/未采纳及原因）。",
+    "prompt_en": "This folder contains a report draft and feedback from three reviewers (as text files). Please: 1. Read all review comments 2. Identify consensus and disagreements among reviewers 3. Revise the report based on the feedback 4. Create a revision note explaining how you handled each comment (accepted/partially accepted/rejected with reasons).",
+    "behavioral_freedom": [
+      "阅读顺序：先读所有意见再修改 vs 逐条读改",
+      "冲突处理：优先多数意见 vs 按理由判断",
+      "修改幅度：保守修改 vs 大幅重写",
+      "修订说明详细程度"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "I-07",
+    "name": "数据更新与报告刷新",
+    "name_en": "Data update and report refresh",
+    "type": "iterate",
+    "dimensions": ["D", "B", "F"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这个文件夹中有一份上季度的分析报告和一份新到的本季度数据文件。请：1. 对比新旧数据的变化 2. 更新报告中的所有数据引用 3. 修改分析结论（如果数据变化需要）4. 如果有图表描述，也要相应更新 5. 在报告中标注哪些部分做了更新。",
+    "prompt_en": "This folder contains a last quarter analysis report and newly arrived current quarter data. Please: 1. Compare changes between old and new data 2. Update all data references in the report 3. Revise analysis conclusions (if data changes warrant it) 4. Update chart descriptions accordingly if present 5. Mark which sections were updated in the report.",
+    "behavioral_freedom": [
+      "对比方式：逐项对比 vs 只关注关键指标",
+      "更新策略：原地修改 vs 创建新版本",
+      "是否创建数据变化摘要文件",
+      "图表更新详细程度"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "I-08",
+    "name": "反馈驱动的模板优化",
+    "name_en": "Feedback-driven template optimization",
+    "type": "iterate",
+    "dimensions": ["D", "C", "E"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹中有一套文档模板和一份用户反馈汇总（包括「表头太复杂」、「缺少某些字段」、「格式在手机上看不方便」等意见）。请根据反馈逐一优化模板，并记录每次修改的理由。创建一份更新日志文件，标注版本变化。",
+    "prompt_en": "This folder contains a set of document templates and a user feedback summary (including comments like 'headers too complex', 'missing certain fields', 'format not mobile-friendly', etc.). Optimize the templates one by one based on the feedback, and document the rationale for each change. Create a changelog file noting version changes.",
+    "behavioral_freedom": [
+      "优化顺序：按反馈优先级 vs 按模板顺序",
+      "修改幅度：微调 vs 大幅重构",
+      "是否保留旧版本模板",
+      "更新日志的格式和详细程度"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "M-01",
+    "name": "周报更新",
+    "name_en": "Weekly report update",
+    "type": "maintain",
+    "dimensions": ["D", "E", "B"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "文件夹里有上周的工作周报和本周的会议纪要、项目进展更新。请基于上周周报的格式和风格，撰写本周的周报。保持格式一致，更新进展，标注新增和变更的事项。",
+    "prompt_en": "The folder contains last week's work report and this week's meeting notes and project progress updates. Based on last week's report format and style, write this week's report. Maintain format consistency, update progress, and flag new and changed items.",
+    "behavioral_freedom": [
+      "是否严格沿用上周格式",
+      "内容增减策略",
+      "是否回顾和标注上周遗留事项"
+    ],
+    "expected_file_ops": 6,
+    "status": "candidate"
+  },
+  {
+    "task_id": "M-02",
+    "name": "知识库内容更新",
+    "name_en": "Knowledge base content update",
+    "type": "maintain",
+    "dimensions": ["D", "E", "C"],
+    "workspace_bundle": "research_project",
+    "prompt_zh": "你之前搭建了一个个人知识库（参考之前任务的输出）。现在有三条新的信息需要归入知识库：1. 一段新的学习笔记 2. 一个新的项目经验总结 3. 一条重要的参考链接和说明。请将这些内容添加到知识库的合适位置，并更新索引文件。",
+    "prompt_en": "You previously built a personal knowledge base (referring to earlier task output). Now three new pieces of information need to be added: 1. A new learning note 2. A new project experience summary 3. An important reference link with description. Add these to the appropriate places in the knowledge base and update the index file.",
+    "behavioral_freedom": [
+      "是否调整原有分类结构",
+      "新笔记的详细程度",
+      "索引更新方式",
+      "是否对已有笔记做关联标注"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "M-03",
+    "name": "季度复盘追踪",
+    "name_en": "Quarterly review tracking",
+    "type": "maintain",
+    "dimensions": ["D", "E"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹有过去三个月的月度工作报告和一份目标追踪表。请基于这些材料撰写季度复盘：1. 更新目标追踪表的完成状态 2. 总结季度成果和不足 3. 提出下季度的调整建议。",
+    "prompt_en": "This folder has monthly work reports from the past three months and a goal tracking sheet. Based on these materials, write a quarterly review: 1. Update the goal tracking sheet's completion status 2. Summarize quarterly achievements and shortcomings 3. Propose adjustments for next quarter.",
+    "behavioral_freedom": [
+      "是否修改追踪表格式",
+      "复盘风格：数据驱动 vs 叙述性",
+      "是否创建新的计划文件"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "M-04",
+    "name": "会议纪要归档与跟进",
+    "name_en": "Meeting minutes archiving and follow-up",
+    "type": "maintain",
+    "dimensions": ["D", "E", "C"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "文件夹中有最近四周的会议纪要散落在各处。请：1. 将所有会议纪要按时间归档到统一的目录中 2. 从每份纪要中提取行动项，更新一份总行动项追踪表 3. 标注已完成、进行中和逾期的事项 4. 为下周的会议准备一份议程建议（基于未完成的行动项）。",
+    "prompt_en": "Meeting minutes from the past four weeks are scattered throughout the folder. Please: 1. Archive all meeting minutes chronologically into a unified directory 2. Extract action items from each and update a master action item tracking sheet 3. Mark items as completed, in-progress, or overdue 4. Prepare a suggested agenda for next week's meeting (based on incomplete action items).",
+    "behavioral_freedom": [
+      "归档目录结构设计",
+      "行动项追踪表格式：简单列表 vs 详细表格",
+      "是否回溯标注纪要中的决策",
+      "议程建议的详细程度"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "M-05",
+    "name": "联系人信息维护",
+    "name_en": "Contact information maintenance",
+    "type": "maintain",
+    "dimensions": ["D", "E", "A"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这个文件夹中有一份旧的联系人列表和近期的邮件往来记录。请：1. 对比邮件中出现的联系人和旧列表 2. 添加新出现的联系人 3. 更新已有联系人的信息（如有变化）4. 标注不再活跃的联系人 5. 按照你认为合理的方式重新组织联系人信息。",
+    "prompt_en": "This folder contains an old contact list and recent email correspondence records. Please: 1. Compare contacts appearing in emails against the old list 2. Add newly appeared contacts 3. Update existing contact information (if changed) 4. Flag inactive contacts 5. Reorganize contact information in whatever way you find reasonable.",
+    "behavioral_freedom": [
+      "信息提取方式：逐封邮件阅读 vs 搜索人名模式",
+      "联系人分类方式：按关系 vs 按部门 vs 按活跃度",
+      "是否保留旧版联系人列表",
+      "更新日志的记录方式"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "M-06",
+    "name": "项目进度同步更新",
+    "name_en": "Project progress sync update",
+    "type": "maintain",
+    "dimensions": ["D", "E", "B"],
+    "workspace_bundle": "client_case",
+    "prompt_zh": "这个文件夹包含一份项目计划书和近两周的进度更新邮件。请：1. 阅读最新的进度信息 2. 更新项目计划中的里程碑状态 3. 识别偏差（延迟、范围变更）并标注 4. 写一份简短的项目状态更新备忘录给相关方。保持与原计划文档一致的风格。",
+    "prompt_en": "This folder contains a project plan and progress update emails from the past two weeks. Please: 1. Read the latest progress information 2. Update milestone statuses in the project plan 3. Identify deviations (delays, scope changes) and flag them 4. Write a brief project status update memo for stakeholders. Maintain the style consistent with the original plan document.",
+    "behavioral_freedom": [
+      "更新方式：原地修改计划 vs 创建更新附录",
+      "偏差处理：仅记录 vs 分析原因 vs 提出补救方案",
+      "备忘录风格：正式 vs 简洁",
+      "是否创建风险登记表"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "MM-01",
+    "name": "图文并茂的产品说明",
+    "name_en": "Illustrated product documentation",
+    "type": "multimodal",
+    "dimensions": ["B", "F", "C"],
+    "workspace_bundle": "media_project",
+    "prompt_zh": "这个文件夹里有一个产品的多张截图和一些简要的功能描述。请创建一份图文并茂的产品说明文档，将截图和文字描述有机结合。文档应该让从未使用过该产品的人能快速理解。",
+    "prompt_en": "This folder contains multiple product screenshots and brief feature descriptions. Create an illustrated product documentation that organically combines screenshots with text descriptions. The document should help someone who has never used the product understand it quickly.",
+    "behavioral_freedom": [
+      "文档结构：按功能分 vs 按使用流程分",
+      "图片引用方式",
+      "说明详细程度",
+      "是否添加对比表或快速入门指南"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "MM-02",
+    "name": "数据可视化方案设计",
+    "name_en": "Data visualization design review",
+    "type": "multimodal",
+    "dimensions": ["B", "F"],
+    "workspace_bundle": "media_project",
+    "prompt_zh": "这个文件夹包含几张数据图表（PNG格式）和对应的原始数据。请分析这些图表，评估它们的可视化效果：1. 每张图表传达了什么信息？是否清晰？2. 有什么改进建议？3. 创建一份改进版的数据展示方案文档。",
+    "prompt_en": "This folder contains several data charts (PNG format) and corresponding raw data. Analyze these charts and evaluate their visualization effectiveness: 1. What information does each chart convey? Is it clear? 2. What improvement suggestions do you have? 3. Create an improved data presentation plan document.",
+    "behavioral_freedom": [
+      "是否逐张分析还是整体评估",
+      "改进建议的具体程度",
+      "是否提供替代方案的文字描述",
+      "输出格式"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "MM-03",
+    "name": "演示文稿内容整理",
+    "name_en": "Presentation content review",
+    "type": "multimodal",
+    "dimensions": ["A", "B", "F"],
+    "workspace_bundle": "research_project",
+    "prompt_zh": "这个文件夹包含一组演示文稿和相关的图片、数据文件。请审查这些材料，然后：1. 创建一份演示文稿的内容大纲（每页的要点）2. 标注哪些图片对应哪些页面内容 3. 建议哪些地方需要补充图表或数据 4. 写一份演讲者备注。",
+    "prompt_en": "This folder contains a set of presentations with related images and data files. Review these materials, then: 1. Create a content outline of the presentation (key points per slide) 2. Map which images correspond to which slide content 3. Suggest where additional charts or data are needed 4. Write speaker notes.",
+    "behavioral_freedom": [
+      "分析深度",
+      "是否重新组织演示顺序",
+      "备注详细程度",
+      "是否建议新增/删除幻灯片"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "MM-04",
+    "name": "多媒体资产清单",
+    "name_en": "Multimedia asset inventory",
+    "type": "multimodal",
+    "dimensions": ["A", "C", "F"],
+    "workspace_bundle": "media_project",
+    "prompt_zh": "这个文件夹混合了文档、图片、视频和音频文件。请：1. 创建一份多媒体资产清单，列出所有非文本文件 2. 为每个媒体文件写简短描述（用途、内容）3. 建议一个适合管理这些多媒体资源的目录方案 4. 标注哪些媒体文件与哪些文档相关。",
+    "prompt_en": "This folder mixes documents, images, videos, and audio files. Please: 1. Create a multimedia asset inventory listing all non-text files 2. Write a brief description for each media file (purpose, content) 3. Suggest a directory scheme suitable for managing these multimedia resources 4. Note which media files relate to which documents.",
+    "behavioral_freedom": [
+      "检查方式：全部查看 vs 采样",
+      "描述详细程度",
+      "分类方案设计",
+      "是否建议删除冗余文件"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "MM-05",
+    "name": "图文一致性审查",
+    "name_en": "Image-text consistency audit",
+    "type": "multimodal",
+    "dimensions": ["A", "F", "D"],
+    "workspace_bundle": "media_project",
+    "prompt_zh": "这个文件夹中有一份包含多张图片引用的报告文档和对应的图片文件。请审查图文一致性：1. 检查文档中引用的每张图片是否存在 2. 图片内容是否与文字描述匹配 3. 是否有未被引用的孤立图片 4. 提出修正建议并整理成一份审查报告。如有必要，修正文档中的引用。",
+    "prompt_en": "This folder contains a report document with multiple image references and corresponding image files. Audit image-text consistency: 1. Check whether each referenced image exists 2. Whether image content matches text descriptions 3. Whether there are orphaned unreferenced images 4. Propose corrections and compile an audit report. Fix document references if necessary.",
+    "behavioral_freedom": [
+      "审查方式：逐个图片核对 vs 先列清单再对比",
+      "是否修正原文档 vs 只出报告",
+      "孤立图片处理：删除 vs 建议插入位置",
+      "审查报告格式和详细程度"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "MM-06",
+    "name": "照片分类与标注",
+    "name_en": "Photo categorization and annotation",
+    "type": "multimodal",
+    "dimensions": ["C", "F", "A"],
+    "workspace_bundle": "media_project",
+    "prompt_zh": "这个文件夹包含数十张未分类的照片，来自不同场景（会议、产品、团队活动、办公环境等）。请：1. 浏览所有照片并按主题分类 2. 为每张照片创建标注（拍摄场景、主要内容、可能的用途）3. 整理到分类目录中 4. 创建一份图片索引文件，方便查找。",
+    "prompt_en": "This folder contains dozens of uncategorized photos from various scenarios (meetings, products, team activities, office environments, etc.). Please: 1. Browse all photos and categorize by theme 2. Create annotations for each photo (scene, main content, potential use) 3. Organize into categorized directories 4. Create a photo index file for easy retrieval.",
+    "behavioral_freedom": [
+      "分类维度：按场景 vs 按用途 vs 按时间",
+      "标注详细程度：一句话 vs 结构化描述",
+      "目录结构深度",
+      "索引格式：列表 vs 表格 vs 缩略图式描述"
+    ],
+    "expected_file_ops": 15,
+    "status": "candidate"
+  },
+  {
+    "task_id": "MM-07",
+    "name": "图文报告生成",
+    "name_en": "Visual report generation from data",
+    "type": "multimodal",
+    "dimensions": ["B", "F", "E"],
+    "workspace_bundle": "investment_desk",
+    "prompt_zh": "这个文件夹包含多份数据表格和一些相关的图表图片。请基于这些素材创建一份面向客户的月度汇报文档：1. 综合数据和图表撰写分析 2. 描述建议新增的可视化（如趋势图、对比图的文字描述）3. 确保图表引用与文字分析对应 4. 组织成可直接展示的文档结构。",
+    "prompt_en": "This folder contains multiple data spreadsheets and related chart images. Create a client-facing monthly report document from these materials: 1. Write analysis combining data and charts 2. Describe recommended new visualizations (text descriptions of trend graphs, comparison charts) 3. Ensure chart references correspond to text analysis 4. Organize into a presentation-ready document structure.",
+    "behavioral_freedom": [
+      "报告结构：按指标分 vs 按时间分 vs 按业务线分",
+      "可视化描述方式和数量",
+      "是否创建数据摘要附件",
+      "工作节奏：先写文字再配图 vs 先整理图再写分析"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "MM-08",
+    "name": "素材库建设与使用指南",
+    "name_en": "Media library setup and usage guide",
+    "type": "multimodal",
+    "dimensions": ["C", "F", "B"],
+    "workspace_bundle": "media_project",
+    "prompt_zh": "这个文件夹有大量散乱的图片、图标、模板和设计素材。请：1. 设计一套素材库的目录结构和分类方案 2. 将现有素材整理归类 3. 为每个分类写使用说明和素材描述 4. 创建一份素材库使用指南，包括命名规范和新增素材的流程。",
+    "prompt_en": "This folder has a large number of scattered images, icons, templates, and design assets. Please: 1. Design a media library directory structure and categorization scheme 2. Organize existing assets into categories 3. Write usage notes and asset descriptions for each category 4. Create a media library usage guide including naming conventions and the process for adding new assets.",
+    "behavioral_freedom": [
+      "分类方案：按类型 vs 按项目 vs 按用途",
+      "描述详细程度：简短标签 vs 详细说明",
+      "命名规范复杂度",
+      "是否创建缩略图索引描述"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  }
+]

@@ -1,0 +1,70 @@
+# FileGramPlugin default configuration
+
+# Directories to monitor (absolute paths)
+watch_dirs:
+  - /Users/choiszt/Desktop/test
+
+# Glob patterns to ignore
+ignore_patterns:
+  - "**/.git/**"
+  - "**/.DS_Store"
+  - "**/node_modules/**"
+  - "**/__pycache__/**"
+  - "**/.shadow/**"
+  - "**/filegramplugin/data/**"
+  - "**/Library/**"
+  - "**/.Trash/**"
+  - "**/.cache/**"
+  - "**/.npm/**"
+  - "**/.venv/**"
+  - "**/.conda/**"
+  - "**/.local/**"
+  - "**/.cargo/**"
+  - "**/.rustup/**"
+  - "**/Pictures/Photos Library.photoslibrary/**"
+  - "**/.zsh_history"
+  - "**/.bash_history"
+  - "**/.python_history"
+
+# Dedup window: merge rapid-fire modify events within this window
+dedup_window_sec: 2.0
+
+# Directory snapshot interval (seconds)
+snapshot_interval_sec: 300
+
+# Binary file size threshold (bytes) — files above this only record hash
+binary_size_threshold: 1048576  # 1 MB
+
+# Text file extensions (others treated as binary)
+text_extensions:
+  - txt
+  - md
+  - rst
+  - py
+  - json
+  - yaml
+  - yml
+  - csv
+  - html
+  - css
+  - js
+  - ts
+  - xml
+  - log
+  - toml
+  - ini
+  - cfg
+  - sh
+  - bash
+  - tex
+  - bib
+  - r
+  - rmd
+  - sql
+  - env
+  - gitignore
+  - dockerfile
+  - makefile
+
+# User identifier
+profile_id: "real_user"
