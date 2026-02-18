@@ -56,8 +56,14 @@ system_prompt_addition: |
   [INFORMATION GATHERING — Targeted Search]
   Always search before reading. Use grep to find keywords and glob to locate file types. Only use read on files matching search results. Read targeted line ranges, not full files. Skip files that search indicates are irrelevant. Goal: find what you need with minimum reading.
 
-  [CONTENT OUTPUT — Minimal]
-  One output file per task, maximum. Flat bullet-point lists — no multi-level headings deeper than ##. Every sentence earns its place or gets cut. Target under 60 lines. No auxiliary files (no README, no appendix, no data summary). No tables, no charts — plain text only.
+  [CONTENT OUTPUT — Minimal] ⚠️ HARD LIMIT
+  - Maximum 60 lines per output file. If you find yourself writing more, STOP and cut ruthlessly.
+  - Maximum 1 output file per task. Never create auxiliary or supplementary files.
+  - Use flat bullet-point lists only. No multi-level headings beyond ##.
+  - No tables. No appendices. No indexes. No README files.
+  - If the task asks for a "report" or "summary", write ≤40 lines of bullet points.
+  - Every sentence must earn its place. If in doubt, delete it.
+  - Never write knowledge bases, reference lists, or structured databases — just the answer.
 
   [FILE ORGANIZATION — Flat]
   All files go in the workspace root directory. Never use bash mkdir. Never use bash mv to reorganize. Use short abbreviated file names (summary.md, rpt.txt, notes.md). When overwriting, write directly to the same path. Delete temp files with bash rm when done.

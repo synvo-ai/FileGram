@@ -15,15 +15,56 @@ from .base import BaseTool, ToolContext
 # Load description from txt file (like OpenCode's static import)
 DESCRIPTION = load_tool_prompt("bash")
 
-# Patterns for filesystem command detection
-_LS_PATTERN = re.compile(r"^\s*(?:ls|dir)\b(.*)$", re.MULTILINE)
-_MV_PATTERN = re.compile(r"^\s*mv\s+(.+)$", re.MULTILINE)
-_MKDIR_PATTERN = re.compile(r"^\s*mkdir\s+(.+)$", re.MULTILINE)
-_RM_PATTERN = re.compile(r"^\s*rm\s+(.+)$", re.MULTILINE)
-_CP_PATTERN = re.compile(r"^\s*cp\s+(.+)$", re.MULTILINE)
+# Patterns for filesystem command detection — applied per sub-command
+_LS_PATTERN = re.compile(r"^\s*(?:ls|dir)\b(.*)$")
+_MV_PATTERN = re.compile(r"^\s*mv\s+(.+)$")
+_MKDIR_PATTERN = re.compile(r"^\s*mkdir\s+(.+)$")
+_RM_PATTERN = re.compile(r"^\s*rm\s+(.+)$")
+_CP_PATTERN = re.compile(r"^\s*cp\s+(.+)$")
 
 _TEMP_EXTENSIONS = {".tmp", ".temp", ".bak", ".swp", ".swo", ".pyc", ".o", ".log"}
 _BACKUP_EXTENSIONS = {".bak", ".backup", ".orig", ".old", ".save"}
+
+# Shell keywords and builtins that should never be recorded as paths
+_SHELL_KEYWORDS = frozenset(
+    {
+        "&&",
+        "||",
+        ";",
+        "|",
+        ">",
+        ">>",
+        "<",
+        "<<",
+        "echo",
+        "printf",
+        "find",
+        "mkdir",
+        "rm",
+        "cp",
+        "mv",
+        "ls",
+        "cat",
+        "grep",
+        "awk",
+        "sed",
+        "cd",
+        "pwd",
+        "true",
+        "false",
+        "test",
+        "xargs",
+        "sort",
+        "uniq",
+        "head",
+        "tail",
+        "wc",
+        "tee",
+        "touch",
+        "chmod",
+        "chown",
+    }
+)
 
 
 def _safe_shlex_split(args_str: str) -> list[str]:
@@ -35,9 +76,70 @@ def _safe_shlex_split(args_str: str) -> list[str]:
 
 
 def _extract_paths(args_str: str) -> list[str]:
-    """Extract non-flag arguments (file paths) from an argument string."""
+    """Extract non-flag arguments (file paths) from an argument string.
+
+    Filters out flags (starting with -) and shell keywords/builtins.
+    """
     parts = _safe_shlex_split(args_str)
-    return [p for p in parts if not p.startswith("-")]
+    return [p for p in parts if not p.startswith("-") and p not in _SHELL_KEYWORDS]
+
+
+def _split_compound_commands(command: str) -> list[str]:
+    """Split compound bash command into individual sub-commands.
+
+    Splits by &&, ||, ; while respecting quoted strings.
+    """
+    sub_commands = []
+    current = []
+    in_single_quote = False
+    in_double_quote = False
+    i = 0
+    chars = command
+
+    while i < len(chars):
+        c = chars[i]
+
+        # Track quote state
+        if c == "'" and not in_double_quote:
+            in_single_quote = not in_single_quote
+            current.append(c)
+            i += 1
+        elif c == '"' and not in_single_quote:
+            in_double_quote = not in_double_quote
+            current.append(c)
+            i += 1
+        elif in_single_quote or in_double_quote:
+            current.append(c)
+            i += 1
+        # Split on && || ;
+        elif c == "&" and i + 1 < len(chars) and chars[i + 1] == "&":
+            sub_commands.append("".join(current))
+            current = []
+            i += 2
+        elif c == "|" and i + 1 < len(chars) and chars[i + 1] == "|":
+            sub_commands.append("".join(current))
+            current = []
+            i += 2
+        elif c == ";":
+            sub_commands.append("".join(current))
+            current = []
+            i += 1
+        else:
+            current.append(c)
+            i += 1
+
+    if current:
+        sub_commands.append("".join(current))
+
+    return [s.strip() for s in sub_commands if s.strip()]
+
+
+def _resolve_path(path: str, context: ToolContext) -> str:
+    """Resolve relative path to absolute using target_directory."""
+    p = Path(path)
+    if not p.is_absolute():
+        p = Path(context.target_directory) / p
+    return str(p)
 
 
 def _record_fs_events(command: str, context: ToolContext, output: str) -> None:
@@ -46,62 +148,71 @@ def _record_fs_events(command: str, context: ToolContext, output: str) -> None:
     if collector is None or not collector.enabled:
         return
 
-    # ls / dir → FILE_BROWSE
-    for match in _LS_PATTERN.finditer(command):
-        args = match.group(1).strip()
-        paths = _extract_paths(args)
-        dir_path = paths[0] if paths else str(context.target_directory)
-        # Estimate files listed from output line count
-        lines = [line for line in output.split("\n") if line.strip()] if output else []
-        collector.record_file_browse(
-            directory_path=dir_path,
-            files_listed=len(lines),
-        )
+    for sub_cmd in _split_compound_commands(command):
+        sub_cmd = sub_cmd.strip()
+        if not sub_cmd:
+            continue
 
-    # mv → FILE_RENAME or FILE_MOVE
-    for match in _MV_PATTERN.finditer(command):
-        paths = _extract_paths(match.group(1))
-        if len(paths) >= 2:
-            old_path = paths[-2]
-            new_path = paths[-1]
-            old_dir = str(Path(old_path).parent)
-            new_dir = str(Path(new_path).parent)
-            if old_dir == new_dir or new_dir == ".":
-                collector.record_file_rename(old_path=old_path, new_path=new_path)
-            else:
-                collector.record_file_move(old_path=old_path, new_path=new_path)
-
-    # mkdir → DIR_CREATE
-    for match in _MKDIR_PATTERN.finditer(command):
-        paths = _extract_paths(match.group(1))
-        for dir_path in paths:
-            collector.record_dir_create(dir_path=dir_path)
-
-    # rm → FILE_DELETE
-    for match in _RM_PATTERN.finditer(command):
-        args = match.group(1)
-        paths = _extract_paths(args)
-        for file_path in paths:
-            ext = Path(file_path).suffix.lower()
-            was_temporary = ext in _TEMP_EXTENSIONS
-            collector.record_file_delete(
-                file_path=file_path,
-                was_temporary=was_temporary,
+        # ls / dir → FILE_BROWSE
+        m = _LS_PATTERN.match(sub_cmd)
+        if m:
+            args = m.group(1).strip()
+            paths = _extract_paths(args)
+            dir_path = _resolve_path(paths[0] if paths else ".", context)
+            lines = [line for line in output.split("\n") if line.strip()] if output else []
+            collector.record_file_browse(
+                directory_path=dir_path,
+                files_listed=len(lines),
             )
 
-    # cp → FILE_COPY
-    for match in _CP_PATTERN.finditer(command):
-        paths = _extract_paths(match.group(1))
-        if len(paths) >= 2:
-            source = paths[-2]
-            dest = paths[-1]
-            dest_ext = Path(dest).suffix.lower()
-            is_backup = dest_ext in _BACKUP_EXTENSIONS
-            collector.record_file_copy(
-                source_path=source,
-                dest_path=dest,
-                is_backup=is_backup,
-            )
+        # mv → FILE_RENAME or FILE_MOVE
+        m = _MV_PATTERN.match(sub_cmd)
+        if m:
+            paths = _extract_paths(m.group(1))
+            if len(paths) >= 2:
+                old_path = _resolve_path(paths[-2], context)
+                new_path = _resolve_path(paths[-1], context)
+                old_dir = str(Path(old_path).parent)
+                new_dir = str(Path(new_path).parent)
+                if old_dir == new_dir or new_dir == ".":
+                    collector.record_file_rename(old_path=old_path, new_path=new_path)
+                else:
+                    collector.record_file_move(old_path=old_path, new_path=new_path)
+
+        # mkdir → DIR_CREATE
+        m = _MKDIR_PATTERN.match(sub_cmd)
+        if m:
+            paths = _extract_paths(m.group(1))
+            for dir_path in paths:
+                collector.record_dir_create(dir_path=_resolve_path(dir_path, context))
+
+        # rm → FILE_DELETE
+        m = _RM_PATTERN.match(sub_cmd)
+        if m:
+            paths = _extract_paths(m.group(1))
+            for file_path in paths:
+                resolved = _resolve_path(file_path, context)
+                ext = Path(resolved).suffix.lower()
+                was_temporary = ext in _TEMP_EXTENSIONS
+                collector.record_file_delete(
+                    file_path=resolved,
+                    was_temporary=was_temporary,
+                )
+
+        # cp → FILE_COPY
+        m = _CP_PATTERN.match(sub_cmd)
+        if m:
+            paths = _extract_paths(m.group(1))
+            if len(paths) >= 2:
+                source = _resolve_path(paths[-2], context)
+                dest = _resolve_path(paths[-1], context)
+                dest_ext = Path(dest).suffix.lower()
+                is_backup = dest_ext in _BACKUP_EXTENSIONS
+                collector.record_file_copy(
+                    source_path=source,
+                    dest_path=dest,
+                    is_backup=is_backup,
+                )
 
 
 class BashTool(BaseTool):

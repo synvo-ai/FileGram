@@ -322,7 +322,7 @@ class AgentLoop:
             from ..profile import get_current_profile
 
             profile = get_current_profile()
-            profile_id = profile.basic.name.lower() if profile else "default"
+            profile_id = profile.id if profile else "default"
             provider_name = config.llm.provider.value if config.llm.provider else "unknown"
             model_name = config.get_model_display()
 
@@ -743,7 +743,7 @@ class AgentLoop:
                     set_current_profile(profile)
                     # Update behavior collector with new profile
                     if self.behavior_collector:
-                        self.behavior_collector.update_profile(profile.basic.name.lower())
+                        self.behavior_collector.update_profile(profile.id)
                     self.console.print(f"[green]Switched to profile: {profile.basic.name}[/green]")
                     if profile.greeting:
                         self.console.print(f"\n[italic]{profile.greeting}[/italic]")
