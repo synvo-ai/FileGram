@@ -49,11 +49,43 @@ class ToolContext:
             try:
                 resolved.relative_to(target_resolved)
             except ValueError:
+                # Auto-correct: LLM sometimes generates absolute paths with a
+                # wrong root prefix (e.g. "Claude Code" instead of "FileGram")
+                # but the relative portion within the sandbox dir is correct.
+                # Try to extract the relative part and remap into sandbox.
+                corrected = self._auto_correct_path(path, target_resolved)
+                if corrected is not None:
+                    return corrected
                 raise ValueError(
                     f"Access denied: '{path_str}' is outside the allowed directory. Allowed: {target_resolved}"
                 )
 
         return resolved
+
+    def _auto_correct_path(self, bad_path: Path, target_dir: Path) -> Path | None:
+        """Try to remap an out-of-sandbox path back into the sandbox.
+
+        Looks for the sandbox directory name in the bad path's components.
+        If found, extracts everything after it as a relative path and
+        reconstructs using the real target_dir.
+        """
+        target_name = target_dir.name
+        parts = bad_path.parts
+        for i, part in enumerate(parts):
+            if part == target_name:
+                # Build relative path from everything after the match
+                if i + 1 < len(parts):
+                    relative = Path(*parts[i + 1 :])
+                    corrected = (target_dir / relative).resolve()
+                else:
+                    corrected = target_dir.resolve()
+                # Verify corrected path is actually within sandbox
+                try:
+                    corrected.relative_to(target_dir)
+                    return corrected
+                except ValueError:
+                    continue
+        return None
 
     def is_path_allowed(self, path_str: str) -> bool:
         """Check if a path is within the allowed directory.

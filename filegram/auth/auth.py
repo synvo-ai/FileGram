@@ -22,6 +22,15 @@ OAUTH_AUTHORIZE_URL_CONSOLE = "https://console.anthropic.com/oauth/authorize"
 OAUTH_TOKEN_URL = "https://console.anthropic.com/v1/oauth/token"
 OAUTH_CREATE_API_KEY_URL = "https://api.anthropic.com/api/oauth/claude_cli/create_api_key"  # pragma: allowlist secret
 
+# OpenAI (Codex) OAuth constants (from opencode codex plugin)
+OPENAI_OAUTH_CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann"
+OPENAI_OAUTH_ISSUER = "https://auth.openai.com"
+OPENAI_OAUTH_AUTHORIZE_URL = "https://auth.openai.com/oauth/authorize"
+OPENAI_OAUTH_TOKEN_URL = "https://auth.openai.com/oauth/token"
+OPENAI_OAUTH_SCOPE = "openid profile email offline_access"
+OPENAI_OAUTH_PORT = 1455
+OPENAI_CODEX_API_ENDPOINT = "https://chatgpt.com/backend-api/codex/responses"
+
 
 STORAGE_KEY = ["auth", "credentials"]
 
@@ -86,6 +95,108 @@ def build_authorize_url(code_challenge: str, verifier: str, mode: str = "max") -
         "state": verifier,
     }
     return f"{base_url}?{urlencode(params)}"
+
+
+def build_openai_authorize_url(redirect_uri: str, code_challenge: str, state: str) -> str:
+    """Build the OpenAI OAuth authorization URL with PKCE."""
+    params = {
+        "response_type": "code",
+        "client_id": OPENAI_OAUTH_CLIENT_ID,
+        "redirect_uri": redirect_uri,
+        "scope": OPENAI_OAUTH_SCOPE,
+        "code_challenge": code_challenge,
+        "code_challenge_method": "S256",
+        "id_token_add_organizations": "true",
+        "codex_cli_simplified_flow": "true",
+        "state": state,
+        "originator": "filegram",
+    }
+    return f"{OPENAI_OAUTH_AUTHORIZE_URL}?{urlencode(params)}"
+
+
+async def openai_exchange_code(code: str, redirect_uri: str, code_verifier: str) -> dict[str, Any]:
+    """Exchange OpenAI authorization code for tokens.
+
+    Args:
+        code: Authorization code from callback
+        redirect_uri: The redirect URI used in the authorize request
+        code_verifier: PKCE code verifier
+
+    Returns:
+        Token response dict with access_token, refresh_token, id_token, expires_in
+    """
+    import httpx
+
+    async with httpx.AsyncClient() as client:
+        resp = await client.post(
+            OPENAI_OAUTH_TOKEN_URL,
+            data={
+                "grant_type": "authorization_code",
+                "code": code,
+                "redirect_uri": redirect_uri,
+                "client_id": OPENAI_OAUTH_CLIENT_ID,
+                "code_verifier": code_verifier,
+            },
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+        )
+        if resp.status_code != 200:
+            raise RuntimeError(f"OpenAI token exchange failed ({resp.status_code}): {resp.text}")
+        return resp.json()
+
+
+async def openai_refresh_token(refresh_token: str) -> dict[str, Any]:
+    """Refresh an expired OpenAI OAuth access token.
+
+    Args:
+        refresh_token: The refresh token
+
+    Returns:
+        New token response dict
+    """
+    import httpx
+
+    async with httpx.AsyncClient() as client:
+        resp = await client.post(
+            OPENAI_OAUTH_TOKEN_URL,
+            data={
+                "grant_type": "refresh_token",
+                "refresh_token": refresh_token,
+                "client_id": OPENAI_OAUTH_CLIENT_ID,
+            },
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+        )
+        if resp.status_code != 200:
+            raise RuntimeError(f"OpenAI token refresh failed ({resp.status_code}): {resp.text}")
+        return resp.json()
+
+
+def extract_openai_account_id(tokens: dict[str, Any]) -> str | None:
+    """Extract ChatGPT account ID from JWT id_token or access_token."""
+    import json as _json
+
+    for key in ("id_token", "access_token"):
+        token = tokens.get(key)
+        if not token:
+            continue
+        parts = token.split(".")
+        if len(parts) != 3:
+            continue
+        try:
+            # Pad base64url
+            payload = parts[1]
+            payload += "=" * (4 - len(payload) % 4)
+            claims = _json.loads(base64.urlsafe_b64decode(payload))
+            account_id = claims.get("chatgpt_account_id") or (claims.get("https://api.openai.com/auth") or {}).get(
+                "chatgpt_account_id"
+            )
+            if account_id:
+                return account_id
+            orgs = claims.get("organizations")
+            if orgs and isinstance(orgs, list) and len(orgs) > 0:
+                return orgs[0].get("id")
+        except Exception:
+            continue
+    return None
 
 
 async def exchange_code(code: str, verifier: str) -> dict[str, Any]:

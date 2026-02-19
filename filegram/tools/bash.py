@@ -257,6 +257,14 @@ class BashTool(BaseTool):
         timeout_ms = arguments.get("timeout", context.default_timeout)
         workdir = arguments.get("workdir", str(context.target_directory))
 
+        # Auto-correct workdir if it points to a non-existent path
+        # (e.g., LLM generates "Claude Code" instead of "FileGram")
+        workdir_path = Path(workdir)
+        if not workdir_path.exists():
+            corrected = context._auto_correct_path(workdir_path, context.target_directory.resolve())
+            if corrected is not None and corrected.exists():
+                workdir = str(corrected)
+
         if not command:
             return self._make_result(
                 tool_use_id,

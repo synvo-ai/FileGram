@@ -47,6 +47,8 @@ class OpenAIConfig:
     model: str = "gpt-4o"
     max_tokens: int = 8192
     temperature: float = 1.0
+    oauth_token: str | None = None  # OAuth access token (alternative to api_key)
+    account_id: str | None = None  # ChatGPT account ID for org subscriptions
 
 
 @dataclass
@@ -103,7 +105,7 @@ class LLMConfig:
             config.anthropic = AnthropicConfig(api_key=anthropic_key, **anthropic_params)
 
         openai_key = os.environ.get("OPENAI_API_KEY")
-        if openai_key:
+        if openai_key and not openai_key.endswith("-here") and openai_key != "":
             config.openai = OpenAIConfig(api_key=openai_key, **openai_params)
 
         # Fill missing credentials from stored auth (api_key / oauth only)
@@ -166,7 +168,16 @@ class LLMConfig:
 
         if self.openai is None and "openai" in stored:
             cred = stored["openai"]
-            if cred.get("key"):
+            cred_type = cred.get("type", "api")
+            if cred_type == "oauth" and cred.get("access_token"):
+                access_token = self._maybe_refresh_openai_oauth(cred, stored)
+                self.openai = OpenAIConfig(
+                    api_key="oauth-placeholder",
+                    oauth_token=access_token,
+                    account_id=cred.get("account_id"),
+                    **openai_params,
+                )
+            elif cred.get("key"):
                 self.openai = OpenAIConfig(api_key=cred["key"], **openai_params)
 
         if self.azure_openai is None and "azure_openai" in stored:
@@ -219,6 +230,64 @@ class LLMConfig:
                 cred["expires_at"] = int(time.time()) + tokens.get("expires_in", 3600)
                 # Write back updated credentials
                 all_stored["anthropic"] = cred
+                try:
+                    import json as _json
+
+                    from .storage.storage import Storage
+
+                    path = Storage._key_to_path(["auth", "credentials"])
+                    with open(path, "w", encoding="utf-8") as f:
+                        _json.dump(all_stored, f, indent=2)
+                except Exception:
+                    pass
+                return cred["access_token"]
+        except Exception:
+            pass
+
+        return cred["access_token"]
+
+    @staticmethod
+    def _maybe_refresh_openai_oauth(cred: dict, all_stored: dict) -> str:
+        """Check if OpenAI OAuth token needs refresh and refresh it synchronously.
+
+        Args:
+            cred: The OpenAI credential dict with access_token, refresh_token, expires_at
+            all_stored: Full stored credentials dict (to write back updated tokens)
+
+        Returns:
+            Valid access token
+        """
+        import time
+
+        expires_at = cred.get("expires_at", 0)
+        # Refresh if token expires within 5 minutes
+        if time.time() < expires_at - 300:
+            return cred["access_token"]
+
+        refresh_token = cred.get("refresh_token")
+        if not refresh_token:
+            return cred["access_token"]
+
+        try:
+            import httpx
+
+            resp = httpx.post(
+                "https://auth.openai.com/oauth/token",
+                data={
+                    "grant_type": "refresh_token",
+                    "refresh_token": refresh_token,
+                    "client_id": "app_EMoamEEZ73f0CkXaXp7hrann",
+                },
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+            )
+            if resp.status_code == 200:
+                tokens = resp.json()
+                cred["access_token"] = tokens["access_token"]
+                if tokens.get("refresh_token"):
+                    cred["refresh_token"] = tokens["refresh_token"]
+                cred["expires_at"] = int(time.time()) + tokens.get("expires_in", 3600)
+                # Write back updated credentials
+                all_stored["openai"] = cred
                 try:
                     import json as _json
 
