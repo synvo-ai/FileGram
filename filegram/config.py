@@ -14,6 +14,7 @@ class LLMProvider(Enum):
     AZURE_OPENAI = "azure_openai"
     ANTHROPIC = "anthropic"
     OPENAI = "openai"
+    GOOGLE = "google"
 
 
 @dataclass
@@ -37,6 +38,7 @@ class AnthropicConfig:
     enable_thinking: bool = False
     thinking_budget_tokens: int = 10000
     oauth_token: str | None = None  # OAuth Bearer token (alternative to api_key)
+    base_url: str | None = None  # Custom API base URL (e.g., Bedrock gateway)
 
 
 @dataclass
@@ -52,6 +54,16 @@ class OpenAIConfig:
 
 
 @dataclass
+class GoogleConfig:
+    """Google Gemini configuration."""
+
+    api_key: str
+    model: str = "gemini-2.5-flash"
+    max_tokens: int = 8192
+    temperature: float = 1.0
+
+
+@dataclass
 class LLMConfig:
     """LLM configuration with multi-provider support."""
 
@@ -59,6 +71,7 @@ class LLMConfig:
     azure_openai: AzureOpenAIConfig | None = None
     anthropic: AnthropicConfig | None = None
     openai: OpenAIConfig | None = None
+    google: GoogleConfig | None = None
 
     @classmethod
     def from_env(cls) -> "LLMConfig":
@@ -83,6 +96,7 @@ class LLMConfig:
             "temperature": float(os.environ.get("ANTHROPIC_TEMPERATURE", "1.0")),
             "enable_thinking": os.environ.get("ANTHROPIC_ENABLE_THINKING", "").lower() in ("1", "true", "yes"),
             "thinking_budget_tokens": int(os.environ.get("ANTHROPIC_THINKING_BUDGET_TOKENS", "10000")),
+            "base_url": os.environ.get("ANTHROPIC_BASE_URL"),
         }
         openai_params = {
             "model": os.environ.get("OPENAI_MODEL", "gpt-4o"),
@@ -93,6 +107,11 @@ class LLMConfig:
             "endpoint": os.environ.get("AZURE_OPENAI_ENDPOINT", "https://haku-chat.openai.azure.com"),
             "deployment": os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-4.1-mini"),
             "api_version": os.environ.get("AZURE_OPENAI_API_VERSION", "2025-01-01-preview"),
+        }
+        google_params = {
+            "model": os.environ.get("GEMINI_MODEL", "gemini-2.5-flash"),
+            "max_tokens": int(os.environ.get("GEMINI_MAX_TOKENS", "8192")),
+            "temperature": float(os.environ.get("GEMINI_TEMPERATURE", "1.0")),
         }
 
         # --- Credentials: env vars first, then stored credentials as fallback ---
@@ -108,6 +127,10 @@ class LLMConfig:
         if openai_key and not openai_key.endswith("-here") and openai_key != "":
             config.openai = OpenAIConfig(api_key=openai_key, **openai_params)
 
+        google_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        if google_key:
+            config.google = GoogleConfig(api_key=google_key, **google_params)
+
         # Fill missing credentials from stored auth (api_key / oauth only)
         config._load_stored_credentials(anthropic_params, openai_params, azure_params)
 
@@ -118,6 +141,7 @@ class LLMConfig:
                 for candidate, cfg in [
                     (LLMProvider.ANTHROPIC, config.anthropic),
                     (LLMProvider.OPENAI, config.openai),
+                    (LLMProvider.GOOGLE, config.google),
                     (LLMProvider.AZURE_OPENAI, config.azure_openai),
                 ]:
                     if cfg is not None:
@@ -134,6 +158,8 @@ class LLMConfig:
             return self.openai
         elif provider == LLMProvider.AZURE_OPENAI:
             return self.azure_openai
+        elif provider == LLMProvider.GOOGLE:
+            return self.google
         return None
 
     def _load_stored_credentials(
@@ -304,7 +330,7 @@ class LLMConfig:
 
         return cred["access_token"]
 
-    def get_active_config(self) -> AzureOpenAIConfig | AnthropicConfig | OpenAIConfig:
+    def get_active_config(self) -> AzureOpenAIConfig | AnthropicConfig | OpenAIConfig | GoogleConfig:
         """Get the active provider configuration."""
         if self.provider == LLMProvider.ANTHROPIC:
             if self.anthropic is None:
@@ -314,6 +340,10 @@ class LLMConfig:
             if self.openai is None:
                 raise ValueError("OpenAI configuration not available")
             return self.openai
+        elif self.provider == LLMProvider.GOOGLE:
+            if self.google is None:
+                raise ValueError("Google Gemini configuration not available")
+            return self.google
         else:  # Default to Azure OpenAI
             if self.azure_openai is None:
                 raise ValueError("Azure OpenAI configuration not available")
@@ -415,6 +445,8 @@ class Config:
             "azure": LLMProvider.AZURE_OPENAI,
             "anthropic": LLMProvider.ANTHROPIC,
             "openai": LLMProvider.OPENAI,
+            "google": LLMProvider.GOOGLE,
+            "gemini": LLMProvider.GOOGLE,
         }
 
         provider = provider_map.get(provider_str.lower())
@@ -431,6 +463,10 @@ class Config:
             if self.llm.openai is None:
                 raise ValueError("OpenAI API key not configured. Set OPENAI_API_KEY.")
             self.llm.openai.model = model_name
+        elif provider == LLMProvider.GOOGLE:
+            if self.llm.google is None:
+                raise ValueError("Google Gemini not configured. Set GEMINI_API_KEY.")
+            self.llm.google.model = model_name
         elif provider == LLMProvider.AZURE_OPENAI:
             if self.llm.azure_openai is None:
                 raise ValueError("Azure OpenAI not configured. Set AZURE_OPENAI_API_KEY.")

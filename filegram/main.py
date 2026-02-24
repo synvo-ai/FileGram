@@ -134,6 +134,12 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--autonomous",
+        action="store_true",
+        help="Autonomous mode: skip all permission checks, auto-continue on confirmation requests, never ask user",
+    )
+
+    parser.add_argument(
         "task",
         nargs="?",
         type=str,
@@ -150,12 +156,13 @@ async def run_agent(
     one_shot: bool = False,
     continue_session: bool = False,
     session_id: str | None = None,
+    autonomous: bool = False,
 ) -> int:
     """Run the agent with given configuration."""
     console = Console()
 
     try:
-        agent = AgentLoop(config=config, console=console)
+        agent = AgentLoop(config=config, console=console, autonomous_mode=autonomous)
 
         # If a task is provided, run it first
         if task is not None:
@@ -186,7 +193,9 @@ async def run_agent(
         console.print("\n[dim]Interrupted[/dim]")
         return 130
     except Exception as e:
-        console.print(f"[red]Error: {e}[/red]")
+        from rich.markup import escape
+
+        console.print(f"[red]Error: {escape(str(e))}[/red]")
         return 1
 
 
@@ -216,7 +225,9 @@ def main() -> int:
             sandbox_enabled=not args.no_sandbox,
         )
     except ValueError as e:
-        console.print(f"[red]Configuration error: {e}[/red]")
+        from rich.markup import escape
+
+        console.print(f"[red]Configuration error: {escape(str(e))}[/red]")
         console.print("[dim]Set AZURE_OPENAI_API_KEY, ANTHROPIC_API_KEY, or OPENAI_API_KEY.[/dim]")
         console.print("[dim]Or run: filegram auth login[/dim]")
         return 1
@@ -234,7 +245,9 @@ def main() -> int:
             config.apply_model_override(args.model)
             console.print(f"[dim]Using model: {config.get_model_display()}[/dim]")
         except ValueError as e:
-            console.print(f"[red]Model error: {e}[/red]")
+            from rich.markup import escape
+
+            console.print(f"[red]Model error: {escape(str(e))}[/red]")
             return 1
 
     # Load profile if specified
@@ -258,6 +271,7 @@ def main() -> int:
             one_shot=args.one_shot,
             continue_session=args.continue_session,
             session_id=args.session_id,
+            autonomous=args.autonomous,
         )
     )
 

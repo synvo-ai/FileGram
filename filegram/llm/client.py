@@ -304,10 +304,13 @@ class AzureOpenAIClient:
 
     def __init__(self, config: AzureOpenAIConfig):
         self.config = config
+        import httpx
+
         self.client = AzureOpenAI(
             api_key=config.api_key,
             api_version=config.api_version,
             azure_endpoint=config.endpoint,
+            timeout=httpx.Timeout(timeout=300.0, connect=10.0),
         )
 
     def _messages_to_openai_format(self, messages: list[Message]) -> list[dict[str, Any]]:

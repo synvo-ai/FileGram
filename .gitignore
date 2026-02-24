@@ -22,3 +22,7 @@ todo.md
 data/
 .notes/
 pilot/
+*.zip
+*.tar.gz
+filegram_no_playground.zip
+demo/

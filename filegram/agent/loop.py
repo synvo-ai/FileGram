@@ -51,10 +51,10 @@ from .types import AgentInfo
 
 DOOM_LOOP_THRESHOLD = 3  # Detect after 3 identical tool calls
 
-RETRY_INITIAL_DELAY = 2.0  # seconds
+RETRY_INITIAL_DELAY = 5.0  # seconds
 RETRY_BACKOFF_FACTOR = 2
-RETRY_MAX_ATTEMPTS = 3
-RETRY_MAX_DELAY = 30.0  # seconds
+RETRY_MAX_ATTEMPTS = 10
+RETRY_MAX_DELAY = 120.0  # seconds
 
 
 # ============== System Prompt ==============
@@ -180,7 +180,7 @@ class RetryHandler:
                 retry_after = response.headers.get("retry-after")
                 if retry_after:
                     try:
-                        return float(retry_after)
+                        return min(float(retry_after), self.max_delay)
                     except ValueError:
                         pass
 
@@ -273,12 +273,15 @@ class AgentLoop:
         enable_doom_loop_detection: bool = True,
         enable_retry: bool = True,
         enable_behavior_collection: bool = True,
+        autonomous_mode: bool = False,
     ):
         self.config = config
         self.client = self._create_client(config)
         self.console = console or Console()
         self.session_id = str(uuid.uuid4())
         self.messages: list[Message] = []
+        self.autonomous_mode = autonomous_mode
+        self._run_error = False  # Set True when run() exits due to LLM error
 
         # Display module (set by ConsoleApp, or lazy-initialized)
         if TYPE_CHECKING:
@@ -388,6 +391,12 @@ class AgentLoop:
             if config.llm.openai is None:
                 raise ValueError("OpenAI configuration not available. Set OPENAI_API_KEY.")
             return OpenAIClient(config.llm.openai)
+        elif provider == LLMProvider.GOOGLE:
+            from ..llm.gemini_client import GeminiClient
+
+            if config.llm.google is None:
+                raise ValueError("Google Gemini configuration not available. Set GEMINI_API_KEY.")
+            return GeminiClient(config.llm.google)
         else:
             # Default: Azure OpenAI
             return AzureOpenAIClient(config.azure_openai)
@@ -507,6 +516,19 @@ class AgentLoop:
         if profile:
             prompt += "\n\n" + profile.to_system_prompt()
 
+        # In autonomous mode, add strong instruction to never ask for confirmation
+        if self.autonomous_mode:
+            prompt += "\n\n" + (
+                "CRITICAL INSTRUCTION — AUTONOMOUS MODE:\n"
+                "You MUST complete the entire task independently without asking for "
+                "user confirmation or approval at any point. "
+                "Do NOT pause to ask questions like '要不要继续', 'shall I proceed', or 'do you want me to'. "
+                "Do NOT use the question tool. "
+                "Execute all steps of the task from start to finish in one go. "
+                "If you are unsure about something, make the best judgment call and proceed. "
+                "Your goal is to produce complete, finished output — not to request permission."
+            )
+
         return prompt
 
     def _get_display(self):
@@ -555,6 +577,19 @@ class AgentLoop:
             is_current = current == spec
             models.append((spec, f"  {name}", is_current, openai_configured))
 
+        # Google Gemini models
+        google_configured = self.config.llm.google is not None
+        google_models = [
+            ("google/gemini-3.1-pro-preview", "Gemini 3.1 Pro"),
+            ("google/gemini-2.5-pro", "Gemini 2.5 Pro"),
+            ("google/gemini-2.5-flash", "Gemini 2.5 Flash"),
+            ("google/gemini-2.5-flash-lite", "Gemini 2.5 Flash Lite"),
+            ("google/gemini-2.0-flash", "Gemini 2.0 Flash"),
+        ]
+        for spec, name in google_models:
+            is_current = current == spec
+            models.append((spec, f"  {name}", is_current, google_configured))
+
         # Azure OpenAI models
         azure_configured = self.config.llm.azure_openai is not None
         if azure_configured:
@@ -602,6 +637,7 @@ class AgentLoop:
             provider_display = {
                 "anthropic": "Anthropic (Claude)",
                 "openai": "OpenAI",
+                "google": "Google (Gemini)",
                 "azure": "Azure OpenAI",
             }.get(provider, provider.title())
 
@@ -625,6 +661,8 @@ class AgentLoop:
             unconfigured.append("ANTHROPIC_API_KEY")
         if not self.config.llm.openai:
             unconfigured.append("OPENAI_API_KEY")
+        if not self.config.llm.google:
+            unconfigured.append("GEMINI_API_KEY")
         if not self.config.llm.azure_openai:
             unconfigured.append("AZURE_OPENAI_API_KEY")
 
@@ -789,6 +827,8 @@ class AgentLoop:
 
     def _check_permission(self, tool_name: str, arguments: dict) -> None:
         """Check permission for a tool call."""
+        if self.autonomous_mode:
+            return  # Skip all permission checks in autonomous mode
         if tool_name in ("read", "write", "edit"):
             target = arguments.get("file_path", "*")
         elif tool_name == "bash":
@@ -958,7 +998,7 @@ class AgentLoop:
 
     def _on_retry(self, attempt: int, delay: float, error: Exception) -> None:
         """Callback for retry attempts."""
-        self.console.print(f"[yellow]API error (attempt {attempt}/{RETRY_MAX_ATTEMPTS}): {error}[/yellow]")
+        self.console.print(f"[yellow]API error (attempt {attempt}/{self.retry_handler.max_attempts}): {error}[/yellow]")
         self.console.print(f"[dim]Retrying in {delay:.1f}s...[/dim]")
 
     async def _call_llm(
@@ -1057,7 +1097,9 @@ class AgentLoop:
                     self.console.print(f"[green]Switched to: {model_display}[/green]")
                     return True, f"Switched to: {model_display}"
                 except ValueError as e:
-                    self.console.print(f"[red]{e}[/red]")
+                    from rich.markup import escape
+
+                    self.console.print(f"[red]{escape(str(e))}[/red]")
                     return True, str(e)
 
         if command == "/profile":
@@ -1246,7 +1288,10 @@ class AgentLoop:
                     on_reasoning,
                 )
             except Exception as e:
-                self.console.print(f"\n[red]LLM Error: {e}[/red]")
+                from rich.markup import escape
+
+                self.console.print(f"\n[red]LLM Error: {escape(str(e))}[/red]")
+                self._run_error = True
                 # Record iteration end on error
                 if self.behavior_collector:
                     self.behavior_collector.record_iteration_end()
@@ -1286,8 +1331,27 @@ class AgentLoop:
                 final_response = text_content
 
             if finish_reason == "tool_calls" and tool_uses:
-                tool_results = await self._execute_tools(tool_uses)
-                self.messages.extend(tool_results)
+                # In autonomous mode, auto-answer question tool
+                if self.autonomous_mode:
+                    for tu in tool_uses:
+                        if tu.name == "question":
+                            tu.name = "_question_skipped"  # prevent execution
+                            self.messages.append(
+                                Message.tool_result(
+                                    tool_use_id=tu.tool_use_id,
+                                    content=(
+                                        "User response: Yes, proceed. "
+                                        "Complete the task autonomously "
+                                        "without asking for confirmation."
+                                    ),
+                                )
+                            )
+                    # Filter out skipped question tools
+                    tool_uses = [tu for tu in tool_uses if tu.name != "_question_skipped"]
+
+                if tool_uses:
+                    tool_results = await self._execute_tools(tool_uses)
+                    self.messages.extend(tool_results)
 
                 # Record iteration end for behavior tracking
                 if self.behavior_collector:
@@ -1297,6 +1361,76 @@ class AgentLoop:
             # Record iteration end for behavior tracking
             if self.behavior_collector:
                 self.behavior_collector.record_iteration_end()
+
+            # In autonomous mode, if LLM stopped without completing the task,
+            # inject a continue message and keep going
+            if self.autonomous_mode and iterations < max_iterations:
+                # Check if any file was written in this session
+                has_writes = False
+                if self.behavior_collector:
+                    has_writes = (
+                        len(self.behavior_collector.stats.files_created) > 0
+                        or len(self.behavior_collector.stats.files_modified) > 0
+                    )
+
+                # If no files written yet, the task is definitely not done — force continue
+                if not has_writes:
+                    self.console.print("[dim]  [autonomous] No output yet, auto-continuing...[/dim]")
+                    self.messages.append(
+                        Message.user(
+                            "Continue immediately. Execute the task now — use the available tools "
+                            "(glob, grep, read, write, edit, bash) to read the files and produce the output. "
+                            "Do not explain what you plan to do. Just do it."
+                        )
+                    )
+                    continue
+
+                # Even with writes, check for confirmation-seeking patterns
+                response_text = "".join(text_buffer).strip()
+                response_lower = response_text.lower()
+                confirmation_patterns = [
+                    # Chinese
+                    "如果你同意",
+                    "如果你确认",
+                    "如果你要",
+                    "如果你需要",
+                    "是否继续",
+                    "要不要",
+                    "需要我继续",
+                    "要我继续",
+                    "你希望我",
+                    "请确认",
+                    "你同意",
+                    "你觉得",
+                    "你可以告诉我",
+                    "等你确认",
+                    "请告诉我",
+                    "你想让我",
+                    "是否需要",
+                    "需要进一步",
+                    # English
+                    "shall i",
+                    "should i",
+                    "would you like",
+                    "do you want",
+                    "let me know",
+                    "please confirm",
+                    "if you want",
+                    "if you'd like",
+                    "if you agree",
+                    "i can proceed",
+                    "want me to",
+                    "ready to proceed",
+                    "before i continue",
+                ]
+                if any(p in response_lower for p in confirmation_patterns):
+                    self.console.print("[dim]  [autonomous] Auto-continuing...[/dim]")
+                    self.messages.append(
+                        Message.user(
+                            "Yes, proceed. Complete the entire task autonomously. Do not ask for confirmation again."
+                        )
+                    )
+                    continue
             break
 
         if iterations >= max_iterations:
@@ -1313,7 +1447,7 @@ class AgentLoop:
             Session summary dictionary, or None if behavior collection is disabled
         """
         if self.behavior_collector:
-            return self.behavior_collector.finalize()
+            return self.behavior_collector.finalize(error=self._run_error)
         return None
 
     async def run_interactive(self) -> None:
@@ -1385,4 +1519,6 @@ class AgentLoop:
                 self.console.print("[dim]Goodbye![/dim]")
                 break
             except Exception as e:
-                self.console.print(f"[red]Error: {e}[/red]")
+                from rich.markup import escape
+
+                self.console.print(f"[red]Error: {escape(str(e))}[/red]")

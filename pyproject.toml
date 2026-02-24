@@ -16,6 +16,12 @@ dependencies = [
     "pyyaml>=6.0.0",
     "mcp>=1.0.0",
     "pymupdf>=1.24.0",  # PDF reading support
+    # Benchmark dependencies
+    "networkx>=3.0",     # zep adapter: knowledge graph
+    "mem0ai>=1.0.0",     # mem0 adapter: memory framework
+    "cohere>=5.0.0",     # naive_rag & mem0: Cohere embed-v4.0
+    "numpy>=1.21",       # naive_rag: embedding similarity
+    "azure-identity>=1.15.0",  # mem0: Azure OpenAI LLM provider
 ]
 
 [project.scripts]

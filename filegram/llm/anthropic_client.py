@@ -12,7 +12,7 @@ from enum import Enum
 from typing import Any
 
 import httpx
-from anthropic import AsyncAnthropic
+from anthropic import AsyncAnthropic, AsyncAnthropicBedrock
 from anthropic.types import (
     Message as AnthropicMessage,
 )
@@ -67,6 +67,36 @@ class _OAuthTransport(httpx.AsyncBaseTransport):
                 del request.headers[key]
 
         return await self._wrapped.handle_async_request(request)
+
+
+class _BedrockGatewayTransport(httpx.AsyncBaseTransport):
+    """Custom transport for Bedrock gateway that uses Bearer token instead of AWS SigV4.
+
+    The gateway (e.g., ai-gateway.zende.sk/bedrock) handles AWS auth internally
+    and expects a simple Bearer token from the client.
+    """
+
+    def __init__(self, wrapped: httpx.AsyncBaseTransport, bearer_token: str):
+        self._wrapped = wrapped
+        self._bearer_token = bearer_token
+
+    async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+        # Replace AWS SigV4 Authorization with Bearer token
+        request.headers["Authorization"] = f"Bearer {self._bearer_token}"
+        return await self._wrapped.handle_async_request(request)
+
+
+class _GatewayAnthropicBedrock(AsyncAnthropicBedrock):
+    """AsyncAnthropicBedrock that skips AWS SigV4 signing for gateway use.
+
+    The gateway handles AWS auth; we only need Bearer token (set via transport).
+    Keeps _prepare_options (URL rewriting /v1/messages → /model/{model}/invoke)
+    but skips _prepare_request (SigV4 signing that requires botocore).
+    """
+
+    async def _prepare_request(self, request: httpx.Request) -> None:
+        # No-op: skip SigV4 signing. Bearer auth is handled by _BedrockGatewayTransport.
+        return None
 
 
 from ..config import AnthropicConfig  # noqa: E402
@@ -159,7 +189,24 @@ class AnthropicClient:
                 http_client=http_client,
             )
         else:
-            self.client = AsyncAnthropic(api_key=config.api_key)
+            if config.base_url:
+                # Bedrock gateway: use AsyncAnthropicBedrock with Bearer token auth
+                # The gateway handles AWS auth; we just need to send a Bearer token.
+                base_transport = httpx.AsyncHTTPTransport()
+                gateway_transport = _BedrockGatewayTransport(base_transport, config.api_key)
+                http_client = httpx.AsyncClient(
+                    transport=gateway_transport,
+                    timeout=httpx.Timeout(timeout=600.0, connect=10.0),
+                )
+                self.client = _GatewayAnthropicBedrock(
+                    base_url=config.base_url,
+                    aws_access_key="skip",
+                    aws_secret_key="skip",  # pragma: allowlist secret
+                    aws_region="us-east-1",
+                    http_client=http_client,
+                )
+            else:
+                self.client = AsyncAnthropic(api_key=config.api_key)
 
     def _convert_messages_to_anthropic(
         self,
@@ -310,13 +357,26 @@ class AnthropicClient:
     _TOOL_PREFIX = "mcp_"
     _CLAUDE_CODE_IDENT = "You are Claude Code, Anthropic's official CLI for Claude."
 
+    @staticmethod
+    def _sanitize_product_name(text: str) -> str:
+        """Replace product names with 'Claude Code', preserving file paths.
+
+        Only replaces standalone occurrences (not inside /path/to/FileGram/...).
+        """
+        # Replace product names that are NOT part of a file path
+        # Negative lookbehind for '/' ensures we skip path components
+        text = re.sub(r"(?<!/)\b(?i:opencode)\b", "Claude Code", text)
+        text = re.sub(r"(?<!/)\b(?i:synvocowork)\b", "Claude Code", text)
+        text = re.sub(r"(?<!/)\b(?i:filegram)\b(?!/)", "Claude Code", text)
+        return text
+
     def _prepare_oauth_kwargs(self, kwargs: dict[str, Any]) -> None:
         """Transform API kwargs to match Claude Code format for OAuth.
 
         Modifies kwargs in-place to make the request look like Claude Code:
         - Splits system prompt into two blocks: [prefix] [prefix + rest]
           (server validates that first block === Claude Code identifier)
-        - Sanitizes system prompt text
+        - Sanitizes system prompt text (product names only, not paths)
         - Prefixes tool names with mcp_
         - Prefixes tool_use blocks in messages with mcp_
         - Removes temperature (Claude Code doesn't send this explicitly)
@@ -330,9 +390,7 @@ class AnthropicClient:
         if "system" in kwargs:
             system = kwargs["system"]
             if isinstance(system, str):
-                system = re.sub(r"(?i)opencode", "Claude Code", system)
-                system = re.sub(r"(?i)synvocowork", "Claude Code", system)
-                system = re.sub(r"(?i)filegram", "Claude Code", system)
+                system = self._sanitize_product_name(system)
                 # Strip any existing prefix to avoid duplication
                 rest = system.replace(self._CLAUDE_CODE_IDENT, "").strip()
                 kwargs["system"] = [
@@ -342,9 +400,7 @@ class AnthropicClient:
             elif isinstance(system, list):
                 # Already array format — ensure first block is exact prefix
                 all_text = "\n\n".join(item.get("text", "") if isinstance(item, dict) else str(item) for item in system)
-                all_text = re.sub(r"(?i)opencode", "Claude Code", all_text)
-                all_text = re.sub(r"(?i)synvocowork", "Claude Code", all_text)
-                all_text = re.sub(r"(?i)filegram", "Claude Code", all_text)
+                all_text = self._sanitize_product_name(all_text)
                 rest = all_text.replace(self._CLAUDE_CODE_IDENT, "").strip()
                 kwargs["system"] = [
                     {"type": "text", "text": self._CLAUDE_CODE_IDENT},
@@ -484,12 +540,42 @@ class AnthropicClient:
         Returns:
             Tuple of (response text, metadata)
         """
+        # Extract system messages and convert tool messages to Anthropic format.
+        # Anthropic API only allows "user" and "assistant" roles.
+        # Tool results must be sent as role: "user" with tool_result content blocks.
+        system_parts = []
+        non_system_messages = []
+        for msg in messages:
+            if msg.get("role") == "system":
+                system_parts.append(msg.get("content", ""))
+            elif msg.get("role") == "tool":
+                # Convert OpenAI-style tool message to Anthropic tool_result format
+                tool_call_id = msg.get("tool_call_id", "")
+                content = msg.get("content", "")
+                non_system_messages.append(
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "tool_result",
+                                "tool_use_id": tool_call_id,
+                                "content": content,
+                            }
+                        ],
+                    }
+                )
+            else:
+                non_system_messages.append(msg)
+
         kwargs: dict[str, Any] = {
             "model": self.config.model,
             "max_tokens": self.config.max_tokens,
-            "messages": messages,
+            "messages": non_system_messages,
             "temperature": self.config.temperature,
         }
+
+        if system_parts:
+            kwargs["system"] = "\n\n".join(system_parts)
 
         if tools:
             kwargs["tools"] = self._convert_tools(tools)

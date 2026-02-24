@@ -44,7 +44,7 @@ class SlashCommandCompleter(Completer):
 
     # Subcommands for specific commands
     SUBCOMMANDS = {
-        "/model": ["anthropic/", "openai/", "azure_openai/", "azure/"],
+        "/model": ["anthropic/", "openai/", "google/", "azure_openai/", "azure/"],
         "/revert": ["last", "all"],
         "/auth": ["login", "logout", "status"],
     }

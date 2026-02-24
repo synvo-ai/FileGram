@@ -241,7 +241,7 @@ class Compactor:
         ]
 
         # Get summary from LLM
-        summary, _ = self.llm_client.chat_completion(
+        summary, _ = await self.llm_client.chat_completion(
             messages=summarization_messages,
             tools=None,
         )

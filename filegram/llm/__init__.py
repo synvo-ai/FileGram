@@ -9,6 +9,7 @@ from .anthropic_client import (
     create_anthropic_client,
 )
 from .client import AzureOpenAIClient
+from .gemini_client import GeminiClient
 from .openai_client import OpenAIClient
 
 __all__ = [
@@ -19,6 +20,8 @@ __all__ = [
     # Anthropic Claude
     "AnthropicClient",
     "create_anthropic_client",
+    # Google Gemini
+    "GeminiClient",
     "StreamEvent",
     "StreamEventType",
     "TokenUsage",

@@ -68,9 +68,11 @@ class Display:
         display_name, style = self.TOOL_STYLES.get(tool_name, (tool_name.capitalize(), "dim bold"))
         # Format: " | Read    src/file.ts"
         # The pipe character gets the tool color, name is padded to 8 chars
+        from rich.markup import escape
+
         bar = f"[{style}]|[/{style}]"
         name_padded = f"[{style}]{display_name:<8}[/{style}]"
-        self.console.print(f" {bar} {name_padded}{title}")
+        self.console.print(f" {bar} {name_padded}{escape(title)}")
 
     def get_tool_title(self, tool_name: str, args: dict[str, Any]) -> str:
         """Generate a title string for a tool call.
@@ -145,8 +147,10 @@ class Display:
         """
         stripped = output.strip()
         if stripped:
+            from rich.markup import escape
+
             self.console.print()
-            self.console.print(stripped)
+            self.console.print(escape(stripped))
 
     def print_tool_result(self, name: str, output: str, is_error: bool) -> None:
         """Print tool result (errors only shown explicitly).
@@ -160,7 +164,9 @@ class Display:
             is_error: Whether this is an error result
         """
         if is_error:
-            self.console.print(f" [red bold]![/red bold] [red]{name}: {output[:200]}[/red]")
+            from rich.markup import escape
+
+            self.console.print(f" [red bold]![/red bold] [red]{name}: {escape(output[:200])}[/red]")
 
     def print_text(self, text: str) -> None:
         """Print assistant text output with Markdown rendering.

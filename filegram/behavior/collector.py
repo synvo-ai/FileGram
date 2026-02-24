@@ -963,8 +963,14 @@ class BehaviorCollector:
 
     # ============== Session Events ==============
 
-    def finalize(self) -> dict[str, Any]:
-        """Finalize the session and generate summary."""
+    def finalize(self, error: bool = False) -> dict[str, Any]:
+        """Finalize the session and generate summary.
+
+        Args:
+            error: If True, the session ended due to an LLM error (e.g., quota exceeded).
+                   In this case, session_end event is NOT emitted so the trajectory
+                   is recognized as incomplete and can be re-run.
+        """
         if not self.enabled:
             return {}
 
@@ -979,17 +985,18 @@ class BehaviorCollector:
             self.stats.tool_success_count / self.stats.total_tool_calls if self.stats.total_tool_calls > 0 else 1.0
         )
 
-        # Emit SESSION_END event
-        event = SessionEndEvent.create(
-            session_id=self.session_id,
-            profile_id=self.profile_id,
-            model_provider=self.model_provider,
-            model_name=self.model_name,
-            total_iterations=self.stats.total_iterations,
-            total_tool_calls=self.stats.total_tool_calls,
-            duration_ms=total_duration_ms,
-        )
-        self.exporter.write_event(event)
+        # Only emit SESSION_END event for successful completions
+        if not error:
+            event = SessionEndEvent.create(
+                session_id=self.session_id,
+                profile_id=self.profile_id,
+                model_provider=self.model_provider,
+                model_name=self.model_name,
+                total_iterations=self.stats.total_iterations,
+                total_tool_calls=self.stats.total_tool_calls,
+                duration_ms=total_duration_ms,
+            )
+            self.exporter.write_event(event)
 
         summary = {
             "session_id": self.session_id,
@@ -1017,6 +1024,7 @@ class BehaviorCollector:
             "dirs_created": self.stats.dirs_created,
             "error_count": self.stats.error_count,
             "error_recovery_count": self.stats.error_recovery_count,
+            "completed": not error,
         }
 
         # Write summary.json
