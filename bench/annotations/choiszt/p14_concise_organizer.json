@@ -1,0 +1,32 @@
+{
+  "annotator": "choiszt",
+  "profile_id": "p14_concise_organizer",
+  "dimensions": {
+    "A": {
+      "value": "M",
+      "confidence": null
+    },
+    "B": {
+      "value": "L",
+      "confidence": null
+    },
+    "C": {
+      "value": "M",
+      "confidence": null
+    },
+    "D": {
+      "value": "R",
+      "confidence": null
+    },
+    "E": {
+      "value": "L",
+      "confidence": null
+    },
+    "F": {
+      "value": "R",
+      "confidence": null
+    }
+  },
+  "notes": "",
+  "timestamp": "2026-03-01T11:17:46.257Z"
+}

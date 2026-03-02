@@ -1,0 +1,1139 @@
+{
+  "results": [
+    {
+      "profile": "p10_silent_auditor",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "R",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "E": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "F": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p11_meticulous_planner",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "L",
+          "pred": "L",
+          "match": true
+        },
+        "C": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "E": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        }
+      }
+    },
+    {
+      "profile": "p12_prolific_scanner",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "B": {
+          "gt": "L",
+          "pred": "L",
+          "match": true
+        },
+        "C": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "E": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p13_visual_architect",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "M",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "E": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p14_concise_organizer",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "R",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "E": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        }
+      }
+    },
+    {
+      "profile": "p15_thorough_surveyor",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "B": {
+          "gt": "L",
+          "pred": "L",
+          "match": true
+        },
+        "C": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "D": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "E": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "F": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p16_phased_minimalist",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "M",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "E": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        }
+      }
+    },
+    {
+      "profile": "p17_creative_archivist",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "L",
+          "pred": "L",
+          "match": true
+        },
+        "C": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "E": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p18_decisive_scanner",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "B": {
+          "gt": "R",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "E": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p19_agile_pragmatist",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "M",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "E": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        }
+      }
+    },
+    {
+      "profile": "p1_methodical",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "L",
+          "pred": "L",
+          "match": true
+        },
+        "C": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "E": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p20_visual_auditor",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "R",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "D": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "E": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "F": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p2_thorough_reviser",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "L",
+          "pred": "L",
+          "match": true
+        },
+        "C": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "D": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "E": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p3_efficient_executor",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "C": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "E": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        }
+      }
+    },
+    {
+      "profile": "p4_structured_analyst",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "L",
+          "pred": "L",
+          "match": true
+        },
+        "C": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "D": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "E": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "F": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p5_balanced_organizer",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "B": {
+          "gt": "M",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "D": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "E": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "F": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p6_quick_curator",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "B": {
+          "gt": "M",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "E": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        }
+      }
+    },
+    {
+      "profile": "p7_visual_reader",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "M",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "D": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "E": {
+          "gt": "R",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        }
+      }
+    },
+    {
+      "profile": "p8_minimal_editor",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        },
+        "B": {
+          "gt": "R",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "D": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "E": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "F": {
+          "gt": "R",
+          "pred": "R",
+          "match": true
+        }
+      }
+    },
+    {
+      "profile": "p9_visual_organizer",
+      "n_trajectories": 32,
+      "dims": {
+        "A": {
+          "gt": "M",
+          "pred": "R",
+          "match": false
+        },
+        "B": {
+          "gt": "M",
+          "pred": "L",
+          "match": false
+        },
+        "C": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "D": {
+          "gt": "M",
+          "pred": "M",
+          "match": true
+        },
+        "E": {
+          "gt": "L",
+          "pred": "M",
+          "match": false
+        },
+        "F": {
+          "gt": "L",
+          "pred": "R",
+          "match": false
+        }
+      }
+    }
+  ],
+  "per_dimension": {
+    "A": {
+      "accuracy": 0.3,
+      "correct": 6,
+      "total": 20,
+      "errors": [
+        {
+          "profile": "p10_silent_auditor",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p11_meticulous_planner",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p13_visual_architect",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p14_concise_organizer",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p16_phased_minimalist",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p17_creative_archivist",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p19_agile_pragmatist",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p1_methodical",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p20_visual_auditor",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p2_thorough_reviser",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p3_efficient_executor",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p4_structured_analyst",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p7_visual_reader",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p9_visual_organizer",
+          "gt": "M",
+          "pred": "R"
+        }
+      ]
+    },
+    "B": {
+      "accuracy": 0.35,
+      "correct": 7,
+      "total": 20,
+      "errors": [
+        {
+          "profile": "p10_silent_auditor",
+          "gt": "R",
+          "pred": "L"
+        },
+        {
+          "profile": "p13_visual_architect",
+          "gt": "M",
+          "pred": "L"
+        },
+        {
+          "profile": "p14_concise_organizer",
+          "gt": "R",
+          "pred": "L"
+        },
+        {
+          "profile": "p16_phased_minimalist",
+          "gt": "M",
+          "pred": "L"
+        },
+        {
+          "profile": "p18_decisive_scanner",
+          "gt": "R",
+          "pred": "L"
+        },
+        {
+          "profile": "p19_agile_pragmatist",
+          "gt": "M",
+          "pred": "L"
+        },
+        {
+          "profile": "p20_visual_auditor",
+          "gt": "R",
+          "pred": "L"
+        },
+        {
+          "profile": "p3_efficient_executor",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p5_balanced_organizer",
+          "gt": "M",
+          "pred": "L"
+        },
+        {
+          "profile": "p6_quick_curator",
+          "gt": "M",
+          "pred": "L"
+        },
+        {
+          "profile": "p7_visual_reader",
+          "gt": "M",
+          "pred": "L"
+        },
+        {
+          "profile": "p8_minimal_editor",
+          "gt": "R",
+          "pred": "L"
+        },
+        {
+          "profile": "p9_visual_organizer",
+          "gt": "M",
+          "pred": "L"
+        }
+      ]
+    },
+    "C": {
+      "accuracy": 0.35,
+      "correct": 7,
+      "total": 20,
+      "errors": [
+        {
+          "profile": "p10_silent_auditor",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p11_meticulous_planner",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p12_prolific_scanner",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p13_visual_architect",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p14_concise_organizer",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p16_phased_minimalist",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p17_creative_archivist",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p18_decisive_scanner",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p19_agile_pragmatist",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p1_methodical",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p3_efficient_executor",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p6_quick_curator",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p9_visual_organizer",
+          "gt": "L",
+          "pred": "M"
+        }
+      ]
+    },
+    "D": {
+      "accuracy": 0.65,
+      "correct": 13,
+      "total": 20,
+      "errors": [
+        {
+          "profile": "p11_meticulous_planner",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p12_prolific_scanner",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p14_concise_organizer",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p17_creative_archivist",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p1_methodical",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p4_structured_analyst",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p8_minimal_editor",
+          "gt": "L",
+          "pred": "M"
+        }
+      ]
+    },
+    "E": {
+      "accuracy": 0.3,
+      "correct": 6,
+      "total": 20,
+      "errors": [
+        {
+          "profile": "p11_meticulous_planner",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p12_prolific_scanner",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p13_visual_architect",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p14_concise_organizer",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p16_phased_minimalist",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p17_creative_archivist",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p18_decisive_scanner",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p19_agile_pragmatist",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p1_methodical",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p2_thorough_reviser",
+          "gt": "L",
+          "pred": "M"
+        },
+        {
+          "profile": "p3_efficient_executor",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p6_quick_curator",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p7_visual_reader",
+          "gt": "R",
+          "pred": "M"
+        },
+        {
+          "profile": "p9_visual_organizer",
+          "gt": "L",
+          "pred": "M"
+        }
+      ]
+    },
+    "F": {
+      "accuracy": 0.35,
+      "correct": 7,
+      "total": 20,
+      "errors": [
+        {
+          "profile": "p10_silent_auditor",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p12_prolific_scanner",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p13_visual_architect",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p15_thorough_surveyor",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p17_creative_archivist",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p18_decisive_scanner",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p1_methodical",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p20_visual_auditor",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p2_thorough_reviser",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p4_structured_analyst",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p5_balanced_organizer",
+          "gt": "M",
+          "pred": "R"
+        },
+        {
+          "profile": "p7_visual_reader",
+          "gt": "L",
+          "pred": "R"
+        },
+        {
+          "profile": "p9_visual_organizer",
+          "gt": "L",
+          "pred": "R"
+        }
+      ]
+    }
+  },
+  "overall_accuracy": 0.38333333333333336
+}

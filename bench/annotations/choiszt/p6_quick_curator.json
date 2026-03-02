@@ -1,0 +1,32 @@
+{
+  "annotator": "choiszt",
+  "profile_id": "p6_quick_curator",
+  "dimensions": {
+    "A": {
+      "value": "M",
+      "confidence": null
+    },
+    "B": {
+      "value": "R",
+      "confidence": null
+    },
+    "C": {
+      "value": "M",
+      "confidence": null
+    },
+    "D": {
+      "value": "M",
+      "confidence": null
+    },
+    "E": {
+      "value": "L",
+      "confidence": null
+    },
+    "F": {
+      "value": "M",
+      "confidence": null
+    }
+  },
+  "notes": "",
+  "timestamp": "2026-03-01T11:11:07.626Z"
+}

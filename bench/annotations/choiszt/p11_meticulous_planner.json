@@ -1,0 +1,32 @@
+{
+  "annotator": "choiszt",
+  "profile_id": "p11_meticulous_planner",
+  "dimensions": {
+    "A": {
+      "value": "L",
+      "confidence": 3
+    },
+    "B": {
+      "value": "M",
+      "confidence": 1
+    },
+    "C": {
+      "value": "L",
+      "confidence": null
+    },
+    "D": {
+      "value": "L",
+      "confidence": null
+    },
+    "E": {
+      "value": "R",
+      "confidence": null
+    },
+    "F": {
+      "value": "M",
+      "confidence": 1
+    }
+  },
+  "notes": "",
+  "timestamp": "2026-03-01T09:51:47.783Z"
+}

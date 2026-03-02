@@ -1,0 +1,248 @@
+[
+  {
+    "exp_id": "A",
+    "name": "original_baseline",
+    "desc": "All original params (baseline reproduction)",
+    "category": "ingest_params",
+    "params": {
+      "PREVIEW_FILE_CHARS": 500,
+      "PREVIEW_DIFF_CHARS": 300,
+      "LLM_ENCODE_MAX_FILES": 4,
+      "LLM_ENCODE_FILE_CHARS": 600,
+      "LLM_ENCODE_MAX_EDITS": 3,
+      "LLM_ENCODE_EDIT_CHARS": 400,
+      "SEMANTIC_BUDGET": 8000,
+      "RETRIEVER_DISPLAY_CHARS": 300
+    },
+    "results": {
+      "filegramos_simple": {
+        "AttrRec": 49.0, "BehavInf": 48.1, "TraceDis": 78.3,
+        "AnomDet": 48.7, "ShiftAna": 39.6,
+        "Proc": 58.8, "Sem": 66.7, "Epi": 42.8,
+        "Overall": 52.6
+      },
+      "filegramos": {
+        "AttrRec": 45.6, "BehavInf": 46.4, "TraceDis": 85.7,
+        "AnomDet": 56.4, "ShiftAna": 38.9,
+        "Proc": 60.8, "Sem": 61.7, "Epi": 45.0,
+        "Overall": 54.3
+      }
+    },
+    "timestamp": "2026-03-01 03:55:49"
+  },
+  {
+    "exp_id": "B",
+    "name": "preview_750",
+    "desc": "Only increase preview (750/400), everything else original",
+    "category": "ingest_params",
+    "params": {"changed": "PREVIEW_FILE_CHARS=750, PREVIEW_DIFF_CHARS=400"},
+    "results": {
+      "filegramos_simple": {"Overall": 52.5},
+      "filegramos": {"Overall": 54.3}
+    },
+    "finding": "No effect — preview length affects cache content but retriever re-truncates",
+    "timestamp": "2026-03-01 04:11:06"
+  },
+  {
+    "exp_id": "C",
+    "name": "llm_encode_up",
+    "desc": "Only increase LLM encoding (5x800, 3x500)",
+    "category": "ingest_params",
+    "params": {"changed": "LLM_ENCODE_MAX_FILES=5, LLM_ENCODE_FILE_CHARS=800, LLM_ENCODE_EDIT_CHARS=500"},
+    "results": {
+      "filegramos_simple": {"Overall": 52.6},
+      "filegramos": {"Overall": 54.3}
+    },
+    "finding": "No effect — LLM narrative quality change doesn't influence MCQ accuracy",
+    "timestamp": "2026-03-01 04:23:57"
+  },
+  {
+    "exp_id": "D",
+    "name": "budget_12k",
+    "desc": "Only increase sampler budget (12000)",
+    "category": "ingest_params",
+    "params": {"changed": "SEMANTIC_BUDGET=12000"},
+    "results": {
+      "filegramos_simple": {"Overall": 52.6},
+      "filegramos": {"Overall": 54.3}
+    },
+    "finding": "No effect — more stored samples don't change retriever output (capped at 12 samples)",
+    "timestamp": "2026-03-01 04:50:00"
+  },
+  {
+    "exp_id": "E",
+    "name": "display_500",
+    "desc": "Retriever display chars = 500 (affects formal only)",
+    "category": "retriever_display",
+    "params": {"changed": "RETRIEVER_DISPLAY_CHARS=500"},
+    "results": {
+      "filegramos_simple": {
+        "AttrRec": 49.0, "BehavInf": 48.1, "TraceDis": 78.7,
+        "AnomDet": 49.4, "ShiftAna": 39.2,
+        "Proc": 59.0, "Sem": 66.7, "Epi": 42.8,
+        "Overall": 52.6
+      },
+      "filegramos": {
+        "AttrRec": 45.0, "BehavInf": 48.5, "TraceDis": 84.3,
+        "AnomDet": 55.8, "ShiftAna": 39.9,
+        "Proc": 60.8, "Sem": 63.3, "Epi": 45.5,
+        "Overall": 54.5
+      }
+    },
+    "finding": "Formal +0.2% — marginal improvement",
+    "timestamp": "2026-03-01 05:00:00"
+  },
+  {
+    "exp_id": "F",
+    "name": "display_800",
+    "desc": "Retriever display chars = 800 (sweet spot)",
+    "category": "retriever_display",
+    "params": {"changed": "RETRIEVER_DISPLAY_CHARS=800"},
+    "results": {
+      "filegramos": {
+        "AttrRec": 45.6, "BehavInf": 49.4, "TraceDis": 84.3,
+        "AnomDet": 55.8, "ShiftAna": 40.3,
+        "Proc": 61.4, "Sem": 63.3, "Epi": 45.7,
+        "Overall": 54.9
+      }
+    },
+    "finding": "Best display setting: formal +0.6% vs baseline. BehavInf and ShiftAna both improved.",
+    "timestamp": "2026-03-01 05:05:00"
+  },
+  {
+    "exp_id": "G",
+    "name": "display_1000",
+    "desc": "Retriever display chars = 1000",
+    "category": "retriever_display",
+    "params": {"changed": "RETRIEVER_DISPLAY_CHARS=1000"},
+    "results": {
+      "filegramos": {
+        "AttrRec": 45.6, "BehavInf": 48.5, "TraceDis": 84.3,
+        "AnomDet": 55.8, "ShiftAna": 40.3,
+        "Proc": 61.0, "Sem": 63.3, "Epi": 45.7,
+        "Overall": 54.7
+      }
+    },
+    "finding": "Slightly worse than 800 — diminishing returns from longer display",
+    "timestamp": "2026-03-01 05:10:00"
+  },
+  {
+    "exp_id": "H",
+    "name": "qa_preview_400",
+    "desc": "QA extractor: per-task content preview 200→400 chars (with display=800)",
+    "category": "qa_extractor",
+    "params": {"changed": "run_qa_eval.py line 448: [:200]→[:400], RETRIEVER_DISPLAY_CHARS=800"},
+    "results": {
+      "filegramos": {
+        "AttrRec": 45.0, "BehavInf": 48.5, "TraceDis": 81.7,
+        "AnomDet": 55.1, "ShiftAna": 36.8,
+        "Proc": 59.7, "Sem": 63.3, "Epi": 43.2,
+        "Overall": 53.0
+      }
+    },
+    "finding": "WORSE (-1.9%) — more per-task preview adds noise, hurts TraceDis and ShiftAna",
+    "timestamp": "2026-03-01 05:15:00"
+  },
+  {
+    "exp_id": "I",
+    "name": "files_per_task_5",
+    "desc": "QA extractor: show 5 files/task instead of 3 (with display=800)",
+    "category": "qa_extractor",
+    "params": {"changed": "run_qa_eval.py line 447: [:3]→[:5], RETRIEVER_DISPLAY_CHARS=800"},
+    "results": {
+      "filegramos": {
+        "AttrRec": 43.0, "BehavInf": 48.5, "TraceDis": 85.2,
+        "AnomDet": 58.3, "ShiftAna": 39.2,
+        "Proc": 60.8, "Sem": 61.7, "Epi": 45.9,
+        "Overall": 54.6
+      }
+    },
+    "finding": "Slightly worse (-0.3%) — more files doesn't help",
+    "timestamp": "2026-03-01 05:20:00"
+  },
+  {
+    "exp_id": "J",
+    "name": "files_per_task_2",
+    "desc": "QA extractor: show 2 files/task instead of 3 (with display=800)",
+    "category": "qa_extractor",
+    "params": {"changed": "run_qa_eval.py line 447: [:3]→[:2], RETRIEVER_DISPLAY_CHARS=800"},
+    "results": {
+      "filegramos": {
+        "AttrRec": 44.3, "BehavInf": 47.2, "TraceDis": 83.0,
+        "AnomDet": 55.8, "ShiftAna": 37.5,
+        "Proc": 59.6, "Sem": 63.3, "Epi": 43.9,
+        "Overall": 53.2
+      }
+    },
+    "finding": "WORSE (-1.7%) — too few files loses useful semantic signal",
+    "timestamp": "2026-03-01 05:25:00"
+  },
+  {
+    "exp_id": "K",
+    "name": "simple_semantic_800",
+    "desc": "filegramos_simple QA extractor: semantic truncation 500→800",
+    "category": "qa_extractor",
+    "params": {"changed": "run_qa_eval.py line 258: [:500]→[:800], RETRIEVER_DISPLAY_CHARS=800"},
+    "results": {
+      "filegramos_simple": {
+        "AttrRec": 49.0, "BehavInf": 48.5, "TraceDis": 78.3,
+        "AnomDet": 50.6, "ShiftAna": 38.2,
+        "Proc": 58.7, "Sem": 70.0, "Epi": 42.6,
+        "Overall": 52.6
+      }
+    },
+    "finding": "Sem channel +3.3% (66.7→70.0%) but other tracks slightly worse, overall unchanged",
+    "timestamp": "2026-03-01 05:30:00"
+  },
+  {
+    "exp_id": "L",
+    "name": "simple_semantic_1200",
+    "desc": "filegramos_simple QA extractor: semantic truncation 500→1200",
+    "category": "qa_extractor",
+    "params": {"changed": "run_qa_eval.py line 258: [:500]→[:1200], RETRIEVER_DISPLAY_CHARS=800"},
+    "results": {
+      "filegramos_simple": {
+        "AttrRec": 51.7, "BehavInf": 44.7, "TraceDis": 80.4,
+        "AnomDet": 50.0, "ShiftAna": 39.6,
+        "Proc": 58.5, "Sem": 71.7, "Epi": 43.2,
+        "Overall": 52.8
+      }
+    },
+    "finding": "Sem +5% (66.7→71.7%) but BehavInf -3.4%, overall +0.2% — diminishing returns",
+    "timestamp": "2026-03-01 05:35:00"
+  },
+  {
+    "exp_id": "M",
+    "name": "add_edit_diffs",
+    "desc": "QA extractor: add edit chain diffs to per-task context (with display=800)",
+    "category": "qa_extractor",
+    "params": {"changed": "run_qa_eval.py: added edit_diffs section, RETRIEVER_DISPLAY_CHARS=800"},
+    "results": {
+      "filegramos": {
+        "AttrRec": 45.6, "BehavInf": 49.4, "TraceDis": 83.9,
+        "AnomDet": 53.8, "ShiftAna": 37.8,
+        "Proc": 61.0, "Sem": 65.0, "Epi": 43.5,
+        "Overall": 53.9
+      }
+    },
+    "finding": "WORSE (-1.0%) — edit diff previews add noise",
+    "timestamp": "2026-03-01 05:40:00"
+  },
+  {
+    "exp_id": "N",
+    "name": "no_per_task_previews",
+    "desc": "QA extractor: remove content_previews from per-task section (with display=800)",
+    "category": "qa_extractor",
+    "params": {"changed": "run_qa_eval.py: commented out content_previews, RETRIEVER_DISPLAY_CHARS=800"},
+    "results": {
+      "filegramos": {
+        "AttrRec": 42.3, "BehavInf": 48.9, "TraceDis": 83.0,
+        "AnomDet": 55.8, "ShiftAna": 35.8,
+        "Proc": 60.1, "Sem": 60.0, "Epi": 42.8,
+        "Overall": 52.8
+      }
+    },
+    "finding": "WORSE (-2.1%) — per-task previews ARE useful, removing them hurts",
+    "timestamp": "2026-03-01 05:45:00"
+  }
+]
