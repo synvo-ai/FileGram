@@ -186,16 +186,7 @@ See `.env.example` for the full configuration template.
 
 ## Citation
 
-```bibtex
-@inproceedings{liu2026filegram,
-  title     = {FileGram: Grounding Agent Personalization in File-System Behavioral Traces},
-  author    = {Liu, Shuai and Tian, Shulin and Hu, Kairui and Dong, Yuhao
-               and Yang, Zhe and Li, Bo and Yang, Jingkang
-               and Loy, Chen Change and Liu, Ziwei},
-  booktitle = {European Conference on Computer Vision (ECCV)},
-  year      = {2026}
-}
-```
+Coming soon.
 
 ## License
 
