@@ -1,0 +1,28 @@
+{
+  "task_id": "T-21",
+  "name": "文件系统清理与去重",
+  "name_en": "File system cleanup and deduplication",
+  "type": "organize",
+  "dimensions": ["C", "A", "D"],
+  "observable_attributes": {
+    "directory_style": "cleanup approach: create archive/ vs. delete in place vs. sort into categories",
+    "reading_strategy": "how files are inspected before deletion: read content vs. check name/size vs. diff pairs",
+    "edit_strategy": "handling near-duplicates: merge content vs. keep newer vs. keep both with rename",
+    "version_strategy": "backup behavior before deleting: copy first vs. direct delete vs. move to trash/"
+  },
+  "workspace_bundle": "pilot/workspace/t21_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹是一个长期积累的项目目录，已经变得很乱。里面有：重复文件（同一内容出现在不同位置或不同文件名下）、过期的临时文件（.tmp, .bak, 带~的文件）、命名混乱的文件（copy(2), final_final_v3, 新建文档等）、空文件、以及散落各处的有用文件。请清理这个文件夹：1. 识别并处理重复文件（删除多余副本或合并内容）2. 清理临时文件和无用文件 3. 统一文件命名规范 4. 将有价值的文件整理到合理的位置 5. 写一份 cleanup_log.md 记录你的清理操作（删除了什么、重命名了什么、为什么）。",
+  "prompt_en": "This folder is a long-accumulated project directory that has become messy. It contains: duplicate files (same content under different names or locations), expired temporary files (.tmp, .bak, files with ~), poorly named files (copy(2), final_final_v3, Untitled Document, etc.), empty files, and useful files scattered everywhere. Please clean up this folder: 1. Identify and handle duplicate files (delete redundant copies or merge content) 2. Clean up temporary and useless files 3. Standardize file naming conventions 4. Organize valuable files into sensible locations 5. Write a cleanup_log.md documenting your cleanup actions (what was deleted, renamed, and why).",
+  "behavioral_freedom": [
+    "Deletion strategy: aggressive (delete all duplicates immediately) vs. cautious (move to trash/ first, backup before delete)",
+    "Duplicate detection: read and compare content vs. judge by filename similarity vs. check file size",
+    "Naming standardization: date-prefix vs. descriptive vs. numbered sequence",
+    "Organization after cleanup: create subdirectories vs. keep flat with clean names",
+    "Whether to create backup/archive before any destructive operations",
+    "How thorough the inspection: read every file vs. scan names/sizes only vs. grep for content overlap",
+    "Cleanup log detail level: brief list vs. detailed rationale for each action"
+  ],
+  "expected_file_ops": 25,
+  "status": "active"
+}

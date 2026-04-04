@@ -1,10 +1,7 @@
-"""FileGramOS Formal: engram-based three-channel memory adapter.
+"""FileGramOS: engram-based three-channel memory adapter.
 
-Distinct from filegramos_simple (flat extraction + one-shot synthesis).
 Uses typed Engram memory units, fingerprint-based deviation detection,
 stratified content sampling, and query-adaptive retrieval.
-
-Registered as "filegramos" for A/B comparison with "filegramos_simple".
 """
 
 from __future__ import annotations

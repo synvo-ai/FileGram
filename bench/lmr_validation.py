@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """L/M/R Cross-Validation: Extract behavioral stats per profile, classify blind, compare to ground truth.
 
-Loads filegramos_simple ingest caches, extracts per-profile aggregate stats
+Loads filegramos ingest caches, extracts per-profile aggregate stats
 across all trajectories, and outputs a CSV + per-dimension confusion analysis.
 """
 

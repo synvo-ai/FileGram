@@ -1,0 +1,26 @@
+{
+  "task_id": "T-17",
+  "name": "文件系统健康检查",
+  "name_en": "File system health check and diagnostics",
+  "type": "understand",
+  "dimensions": ["A", "C"],
+  "observable_attributes": {
+    "reading_strategy": "inspection approach: full scan of every file vs. sampling strategy vs. pattern-based search for issues; focus areas chosen",
+    "directory_style": "diagnostic focus: naming conventions vs. directory structure vs. duplicates vs. missing files vs. stale content",
+    "output_structure": "report organization: by severity vs. by issue type vs. by file vs. checklist format",
+    "thoroughness": "inspection depth: content-level checks vs. metadata/naming only"
+  },
+  "workspace_bundle": "pilot/workspace/t17_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一位法律专业人士的工作文件。请对文件系统进行一次全面的健康检查：1. 有没有命名不规范或不一致的文件？2. 有没有疑似重复的文件？3. 有没有放错位置的文件？4. 有没有过期的临时文件？5. 文件之间的引用关系是否完整？写一份 health_check_report.md，按严重程度排列发现的问题，并给出整改建议。",
+  "prompt_en": "This folder contains a legal professional's work files. Conduct a comprehensive file system health check: 1. Are there files with inconsistent or non-standard naming? 2. Are there suspected duplicate files? 3. Are there misplaced files? 4. Are there expired temporary files? 5. Are cross-file references complete? Write a health_check_report.md listing issues by severity with remediation recommendations.",
+  "behavioral_freedom": [
+    "Inspection scope: every single file vs. sampling approach vs. pattern-based",
+    "Focus priority: naming vs. structure vs. duplicates vs. content consistency",
+    "Report style: concise checklist vs. detailed narrative with evidence",
+    "Whether to actually fix issues or only report them",
+    "Whether to check content-level consistency or only metadata/naming"
+  ],
+  "expected_file_ops": 14,
+  "status": "active"
+}

@@ -1,0 +1,252 @@
+{
+  "description": "20-profile x 6-dimension L/M/R matrix for pilot validation. Each profile is assigned L/M/R values across 6 behavioral dimensions derived from OS agent use cases.",
+  "dimensions": {
+    "A_consumption": {"left": "sequential", "middle": "targeted", "right": "breadth_first"},
+    "B_production": {"left": "comprehensive", "middle": "balanced", "right": "minimal"},
+    "C_organization": {"left": "deeply_nested", "middle": "adaptive", "right": "flat"},
+    "D_iteration": {"left": "incremental", "middle": "balanced", "right": "rewrite"},
+    "E_curation": {"left": "selective", "middle": "pragmatic", "right": "preservative"},
+    "F_crossmodal": {"left": "visual_heavy", "middle": "balanced", "right": "text_only"}
+  },
+  "profiles": {
+    "p1_methodical": {
+      "name": "Chen Wei",
+      "role": "Research Analyst",
+      "language": "Chinese",
+      "dimensions": {"A": "L", "B": "L", "C": "L", "D": "L", "E": "L", "F": "M"}
+    },
+    "p2_thorough_reviser": {
+      "name": "Liu Jing",
+      "role": "Policy Analyst",
+      "language": "Chinese",
+      "dimensions": {"A": "L", "B": "L", "C": "R", "D": "R", "E": "L", "F": "M"}
+    },
+    "p3_efficient_executor": {
+      "name": "Sam Taylor",
+      "role": "Operations Manager",
+      "language": "English",
+      "dimensions": {"A": "M", "B": "R", "C": "R", "D": "R", "E": "M", "F": "R"}
+    },
+    "p4_structured_analyst": {
+      "name": "Nakamura Yuki",
+      "role": "Financial Consultant",
+      "language": "Chinese",
+      "dimensions": {"A": "M", "B": "L", "C": "M", "D": "L", "E": "R", "F": "L"}
+    },
+    "p5_balanced_organizer": {
+      "name": "Maria Santos",
+      "role": "Marketing Coordinator",
+      "language": "Chinese",
+      "dimensions": {"A": "R", "B": "M", "C": "M", "D": "M", "E": "R", "F": "M"}
+    },
+    "p6_quick_curator": {
+      "name": "Alex Kim",
+      "role": "Event Planner",
+      "language": "English",
+      "dimensions": {"A": "R", "B": "M", "C": "L", "D": "R", "E": "M", "F": "R"}
+    },
+    "p7_visual_reader": {
+      "name": "Zhang Meilin",
+      "role": "Curriculum Designer",
+      "language": "Chinese",
+      "dimensions": {"A": "L", "B": "M", "C": "M", "D": "M", "E": "M", "F": "L"}
+    },
+    "p8_minimal_editor": {
+      "name": "Jordan Rivera",
+      "role": "Technical Writer",
+      "language": "English",
+      "dimensions": {"A": "R", "B": "R", "C": "M", "D": "L", "E": "R", "F": "R"}
+    },
+    "p9_visual_organizer": {
+      "name": "Li Hao",
+      "role": "UX Researcher",
+      "language": "Chinese",
+      "dimensions": {"A": "M", "B": "M", "C": "L", "D": "M", "E": "L", "F": "L"}
+    },
+    "p10_silent_auditor": {
+      "name": "Emily Okafor",
+      "role": "Quality Auditor",
+      "language": "English",
+      "dimensions": {"A": "L", "B": "R", "C": "R", "D": "R", "E": "R", "F": "M"}
+    },
+    "p11_meticulous_planner": {
+      "name": "Priya Sharma",
+      "role": "Supply Chain Analyst",
+      "language": "English",
+      "dimensions": {"A": "M", "B": "L", "C": "L", "D": "L", "E": "L", "F": "R"}
+    },
+    "p12_prolific_scanner": {
+      "name": "Wang Fang",
+      "role": "Journalism Editor",
+      "language": "Chinese",
+      "dimensions": {"A": "R", "B": "L", "C": "R", "D": "L", "E": "M", "F": "M"}
+    },
+    "p13_visual_architect": {
+      "name": "Zhao Ming",
+      "role": "Landscape Architect",
+      "language": "Chinese",
+      "dimensions": {"A": "L", "B": "M", "C": "L", "D": "M", "E": "L", "F": "L"}
+    },
+    "p14_concise_organizer": {
+      "name": "Daniel Osei",
+      "role": "Compliance Officer",
+      "language": "English",
+      "dimensions": {"A": "M", "B": "R", "C": "L", "D": "L", "E": "M", "F": "R"}
+    },
+    "p15_thorough_surveyor": {
+      "name": "Sophie Laurent",
+      "role": "Project Manager",
+      "language": "English",
+      "dimensions": {"A": "R", "B": "L", "C": "M", "D": "M", "E": "R", "F": "M"}
+    },
+    "p16_phased_minimalist": {
+      "name": "Marcus Chen",
+      "role": "Data Analyst",
+      "language": "English",
+      "dimensions": {"A": "M", "B": "M", "C": "R", "D": "M", "E": "L", "F": "R"}
+    },
+    "p17_creative_archivist": {
+      "name": "Chen Wenjing",
+      "role": "Museum Curator",
+      "language": "Chinese",
+      "dimensions": {"A": "L", "B": "L", "C": "L", "D": "L", "E": "M", "F": "L"}
+    },
+    "p18_decisive_scanner": {
+      "name": "Aisha Johnson",
+      "role": "Executive Assistant",
+      "language": "English",
+      "dimensions": {"A": "R", "B": "R", "C": "R", "D": "R", "E": "L", "F": "M"}
+    },
+    "p19_agile_pragmatist": {
+      "name": "Lin Xiaoyu",
+      "role": "Social Media Manager",
+      "language": "Chinese",
+      "dimensions": {"A": "M", "B": "M", "C": "R", "D": "M", "E": "M", "F": "R"}
+    },
+    "p20_visual_auditor": {
+      "name": "Tom O'Brien",
+      "role": "Building Inspector",
+      "language": "English",
+      "dimensions": {"A": "L", "B": "R", "C": "M", "D": "R", "E": "R", "F": "L"}
+    }
+  },
+  "design_validation": {
+    "fine_grained_pairs": [
+      {
+        "profiles": ["p1_methodical", "p2_thorough_reviser"],
+        "shared_dimensions": ["A:L", "B:L", "E:L", "F:M"],
+        "differing_dimensions": ["C: L->R", "D: L->R"],
+        "diff_count": 2,
+        "note": "Differ on exactly 2 of 6 dimensions — tests fine-grained discrimination"
+      },
+      {
+        "profiles": ["p17_creative_archivist", "p1_methodical"],
+        "shared_dimensions": ["A:L", "B:L", "C:L", "D:L"],
+        "differing_dimensions": ["E: L->M", "F: M->L"],
+        "diff_count": 2,
+        "note": "Both exhaustive archivists, but p17 is pragmatic curator and visual-heavy"
+      },
+      {
+        "profiles": ["p15_thorough_surveyor", "p5_balanced_organizer"],
+        "shared_dimensions": ["A:R", "C:M", "D:M", "E:R", "F:M"],
+        "differing_dimensions": ["B: M->L"],
+        "diff_count": 1,
+        "note": "Differ on only B (balanced vs comprehensive output) — finest-grained pair"
+      },
+      {
+        "profiles": ["p19_agile_pragmatist", "p16_phased_minimalist"],
+        "shared_dimensions": ["A:M", "B:M", "C:R", "D:M", "F:R"],
+        "differing_dimensions": ["E: L->M"],
+        "diff_count": 1,
+        "note": "Differ on only E (selective vs pragmatic) — tests curation discrimination"
+      },
+      {
+        "profiles": ["p8_minimal_editor", "p10_silent_auditor"],
+        "shared_dimensions": ["B:R"],
+        "differing_dimensions": ["A: R->L", "C: M->R", "D: L->R", "E: R->R"],
+        "diff_count": 3,
+        "note": "Both minimal output but opposite reading (skim vs deep) and editing (incremental vs rewrite)"
+      }
+    ],
+    "coarse_grained_pairs": [
+      {
+        "profiles": ["p1_methodical", "p3_efficient_executor"],
+        "differing_dimensions": ["A: L->M", "B: L->R", "C: L->R", "D: L->R", "E: L->M"],
+        "diff_count": 5,
+        "note": "Differ on 5 of 6 dimensions"
+      },
+      {
+        "profiles": ["p17_creative_archivist", "p18_decisive_scanner"],
+        "differing_dimensions": ["A: L->R", "B: L->R", "C: L->R", "D: L->R", "E: M->L", "F: L->M"],
+        "diff_count": 6,
+        "note": "True opposites — differ on all 6 dimensions"
+      }
+    ],
+    "per_dimension_coverage": {
+      "A": {
+        "L": ["p1", "p2", "p7", "p10", "p13", "p17", "p20"],
+        "M": ["p3", "p4", "p9", "p11", "p14", "p16", "p19"],
+        "R": ["p5", "p6", "p8", "p12", "p15", "p18"]
+      },
+      "B": {
+        "L": ["p1", "p2", "p4", "p11", "p12", "p15", "p17"],
+        "M": ["p5", "p6", "p7", "p9", "p13", "p16", "p19"],
+        "R": ["p3", "p8", "p10", "p14", "p18", "p20"]
+      },
+      "C": {
+        "L": ["p1", "p6", "p9", "p11", "p13", "p14", "p17"],
+        "M": ["p4", "p5", "p7", "p8", "p15", "p20"],
+        "R": ["p2", "p3", "p10", "p12", "p16", "p18", "p19"]
+      },
+      "D": {
+        "L": ["p1", "p4", "p8", "p11", "p12", "p14", "p17"],
+        "M": ["p5", "p7", "p9", "p13", "p15", "p16", "p19"],
+        "R": ["p2", "p3", "p6", "p10", "p18", "p20"]
+      },
+      "E": {
+        "L": ["p1", "p2", "p9", "p11", "p13", "p16", "p18"],
+        "M": ["p3", "p6", "p7", "p12", "p14", "p17", "p19"],
+        "R": ["p4", "p5", "p8", "p10", "p15", "p20"]
+      },
+      "F": {
+        "L": ["p4", "p7", "p9", "p13", "p17", "p20"],
+        "M": ["p1", "p2", "p5", "p10", "p12", "p15", "p18"],
+        "R": ["p3", "p6", "p8", "p11", "p14", "p16", "p19"]
+      }
+    },
+    "interesting_mixes": [
+      {
+        "profile": "p4_structured_analyst",
+        "note": "Targeted search (A:M) but comprehensive output (B:L) with visual materials (F:L)"
+      },
+      {
+        "profile": "p6_quick_curator",
+        "note": "Breadth-first browse (A:R) with deeply nested dirs (C:L)"
+      },
+      {
+        "profile": "p11_meticulous_planner",
+        "note": "Targeted search (A:M) → comprehensive output (B:L) → deeply nested (C:L) → selective curation (E:L) but text-only (F:R) — meticulous planner who never uses visuals"
+      },
+      {
+        "profile": "p12_prolific_scanner",
+        "note": "Breadth-first (A:R) with comprehensive output (B:L) despite flat org (C:R) and pragmatic curation (E:M) — scans widely but writes exhaustively"
+      },
+      {
+        "profile": "p14_concise_organizer",
+        "note": "Minimal output (B:R) with deeply nested dirs (C:L) — quality over quantity, obsessive organization"
+      },
+      {
+        "profile": "p17_creative_archivist",
+        "note": "Like p1 but pragmatic curation (E:M) + visual-heavy (F:L) — comprehensive archivist who lets files accumulate"
+      },
+      {
+        "profile": "p18_decisive_scanner",
+        "note": "Near-opposite of p1: scans quickly (A:R), writes sparingly (B:R), flat org (C:R), rewrites (D:R) — but selective curation (E:L)"
+      },
+      {
+        "profile": "p20_visual_auditor",
+        "note": "Sequential deep reader (A:L) with minimal output (B:R) but visual-heavy (F:L) — reads everything, reports concisely with visual evidence"
+      }
+    ]
+  }
+}

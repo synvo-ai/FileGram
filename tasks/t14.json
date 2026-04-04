@@ -1,0 +1,27 @@
+{
+  "task_id": "T-14",
+  "name": "版本管理与归档",
+  "name_en": "Version management and archiving",
+  "type": "organize",
+  "dimensions": ["C", "D"],
+  "observable_attributes": {
+    "directory_style": "version organization scheme: flat with naming vs. subdirectory archiving vs. date-based hierarchy",
+    "version_strategy": "which versions to keep, archive, or delete; naming convention for versions",
+    "edit_strategy": "how version history document is created: by reading diffs vs. summarizing each file",
+    "naming": "version file naming convention: v1/v2 vs. dates vs. semantic versioning"
+  },
+  "workspace_bundle": "pilot/workspace/t14_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一份报告的多个版本（draft, v2, final, final_revised, LATEST_backup），还有评审意见和参考数据。版本关系混乱，不清楚哪个是最终版本。请：1. 理清所有版本之间的演变关系 2. 设计并实施一个清晰的版本管理方案（整理目录结构、重命名文件等）3. 写一份 version_history.md 记录每个版本的变更摘要和版本演变链。",
+  "prompt_en": "This folder contains multiple versions of a report (draft, v2, final, final_revised, LATEST_backup) along with reviewer comments and reference data. The version relationships are unclear and messy. Please: 1. Clarify the evolution relationship between all versions 2. Design and implement a clear version management scheme (reorganize directory structure, rename files, etc.) 3. Write a version_history.md documenting change summaries for each version and the evolution chain.",
+  "behavioral_freedom": [
+    "Version organization: flat with clear naming vs. directory-based (archive/ + current/) vs. date-based",
+    "Which versions to keep: all vs. only latest + oldest vs. key milestones",
+    "Naming convention: semantic (v1.0, v1.1) vs. date-based vs. descriptive",
+    "Whether to create a diff or changelog between versions",
+    "Whether to reorganize non-version files (comments, data) alongside",
+    "How thoroughly to read each version to determine relationships"
+  ],
+  "expected_file_ops": 16,
+  "status": "active"
+}

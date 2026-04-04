@@ -1,0 +1,31 @@
+{
+  "task_id": "T-22",
+  "name": "影视收藏目录编写",
+  "name_en": "Film and animation collection catalog",
+  "type": "understand",
+  "dimensions": [
+    "A",
+    "F",
+    "B"
+  ],
+  "observable_attributes": {
+    "reading_strategy": "Whether agent watches (reads annotation of) each video vs. judges by filename; depth of engagement with GIFs and supplementary materials",
+    "output_detail": "Catalog format: brief list vs. detailed reviews with ratings; whether organized by genre/chronology/rating",
+    "cross_modal_behavior": "How video/GIF/presentation materials are referenced or described in the written catalog"
+  },
+  "workspace_bundle": "pilot/workspace/t22_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一个人的影视收藏——有电影、动画短片、预告片、GIF动图、影评文档和相关资料。请浏览所有内容，然后编写一份影视收藏目录。目录应该包含每部作品的基本信息、个人评价或简介，以及合理的分类方式。你可以自由决定目录的格式、详细程度和组织方式。",
+  "prompt_en": "This folder contains someone's film and animation collection — movies, animated shorts, trailers, GIF clips, review documents, and related materials. Browse through all the content, then write a film collection catalog. The catalog should include basic information about each work, personal reviews or summaries, and a sensible classification system. You are free to decide the catalog format, level of detail, and organization approach.",
+  "behavioral_freedom": [
+    "Viewing depth: watch (read annotation of) every video vs. skim filenames and metadata only",
+    "Whether GIFs and supplementary materials (PPTX, DOCX) are reviewed or skipped",
+    "Catalog structure: by genre vs. by chronology vs. by rating vs. by format",
+    "Detail level: one-line entries vs. multi-paragraph reviews per work",
+    "Whether to include ratings, recommendations, or viewing priority",
+    "Whether to create separate files (one per genre) vs. single catalog document",
+    "How trailers and clips are cataloged relative to full films"
+  ],
+  "expected_file_ops": 18,
+  "status": "active"
+}

@@ -1,0 +1,31 @@
+{
+  "task_id": "T-23",
+  "name": "旅行照片整理与相册制作",
+  "name_en": "Travel photo organization and album creation",
+  "type": "organize",
+  "dimensions": [
+    "C",
+    "F",
+    "A"
+  ],
+  "observable_attributes": {
+    "directory_style": "Photo organization: by location vs. by date vs. by trip vs. flat with naming; depth of directory hierarchy",
+    "reading_strategy": "Whether each photo is individually examined (read annotation) vs. batch-processed by filename pattern",
+    "cross_modal_behavior": "Whether written descriptions, captions, or index files are created alongside photo organization"
+  },
+  "workspace_bundle": "pilot/workspace/t23_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹里有大量旅行照片——欧洲各国景点、日本富士山、校园生活、毕业照、果园风景和日常生活照片，总共约40张，全部散放在一起没有分类。请整理这些照片：建立合理的目录结构，必要时重命名文件，并可以选择性地为相册编写说明或索引文件。你可以自由决定分类方式和组织深度。",
+  "prompt_en": "This folder contains a large collection of travel photos — European landmarks, Mount Fuji in Japan, campus life, graduation photos, orchard scenery, and daily life shots, approximately 40 photos total, all scattered without organization. Please organize these photos: create a sensible directory structure, rename files as needed, and optionally write descriptions or index files for the album. You are free to decide the classification method and depth of organization.",
+  "behavioral_freedom": [
+    "Classification dimension: by geographic location vs. by trip/date vs. by theme (nature/architecture/personal)",
+    "Directory depth: deeply nested (continent/country/city) vs. flat with descriptive names",
+    "Whether to individually examine each photo or batch-process by filename patterns",
+    "Whether to rename files with descriptive names or keep originals",
+    "Whether to create README/index files describing each folder or album section",
+    "Whether to create captions or descriptions for individual photos",
+    "Handling of non-travel photos (graduation, daily life): separate category vs. mixed in"
+  ],
+  "expected_file_ops": 30,
+  "status": "active"
+}

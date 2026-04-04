@@ -1,0 +1,28 @@
+{
+  "task_id": "T-06",
+  "name": "多源信息综合研究报告",
+  "name_en": "Multi-source synthesis research report",
+  "type": "synthesize",
+  "dimensions": ["A", "B", "F"],
+  "observable_attributes": {
+    "reading_strategy": "which source files are read and in what order; depth of reading per source (full vs. skim); whether cross-references between files are followed",
+    "output_detail": "report length, number of data points cited, whether specific figures are extracted from sources",
+    "output_structure": "report organization (thematic vs. source-by-source vs. comparative framework)",
+    "tone": "writing register (academic/analytical vs. executive briefing vs. informal summary)",
+    "cross_modal_behavior": "whether data is presented in tables/lists/visual references vs. pure prose"
+  },
+  "workspace_bundle": "pilot/workspace/t06_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含关于一家科技公司的多种材料：SEC年报/季报、投资分析笔记、相关邮件讨论和行业背景文件。请综合阅读这些材料，撰写一份投资研究报告，涵盖：公司基本面概况、财务亮点与风险、行业竞争地位分析。报告保存在当前目录下。",
+  "prompt_en": "This folder contains various materials about a technology company: SEC annual/quarterly reports, investment analysis notes, related email discussions, and industry background documents. Synthesize these materials and write an investment research report covering: company fundamentals overview, financial highlights and risks, and competitive position analysis. Save the report in the current directory.",
+  "behavioral_freedom": [
+    "Reading order: start with analysis notes vs. go straight to raw filings vs. read emails for context first",
+    "Source coverage: read all available documents vs. focus on the most recent/relevant ones",
+    "Report structure: thematic sections vs. standard equity research format vs. SWOT analysis",
+    "Whether to create supporting artifacts (comparison tables, data summaries) in addition to the main report",
+    "Level of quantitative detail: cite exact figures vs. qualitative summaries only",
+    "Whether to include a sources/references section"
+  ],
+  "expected_file_ops": 12,
+  "status": "candidate"
+}

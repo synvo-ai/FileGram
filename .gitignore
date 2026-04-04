@@ -1,28 +1,63 @@
+# === Environment & secrets ===
 .env
 .venv/
-.cache/
+env/
+.Python
+
+# === Python cache ===
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
-.Python
-env/
+*.egg-info/
 build/
 dist/
-*.egg-info/
 .ipynb_checkpoints/
+
+# === IDE ===
 .idea/
 .vscode/
-*.log
-*.lock
-.synvocode/
+.syncocode/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Large data (host on HuggingFace) ===
+signal/
+signal_old/
 playground/
-claude.md
-todo.md
+workspace/
 data/
+filegramQA/
+logs/
+logs_old/
+
+# === Generated outputs ===
+output/
+bench/ingest_cache*/
+bench/test_results*/
+web/
+docs/
+bench/*_results.json
+*.log
+
+# === Temporary / dev ===
+sandbox/
+.backup/
 .notes/
-pilot/
+.pytest_cache/
+.ruff_cache/
+.secrets.baseline
+.claude/
 *.zip
 *.tar.gz
-filegram_no_playground.zip
-demo/
+
+# === Dev-only root files ===
+choiszt.json
+run_all_200_log.json
+filegramos_arch.html
+todo.md
+filegramplugin/
+CLAUDE.md
+filegramQA/results/

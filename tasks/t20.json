@@ -1,0 +1,28 @@
+{
+  "task_id": "T-20",
+  "name": "周报管理系统搭建",
+  "name_en": "Weekly report management system setup",
+  "type": "create",
+  "dimensions": ["B", "C", "E"],
+  "observable_attributes": {
+    "output_detail": "system completeness: minimal template vs. comprehensive system with samples and dashboard",
+    "output_structure": "template design: simple vs. structured with multiple sections",
+    "directory_style": "archiving scheme: by date vs. by person vs. single file vs. nested hierarchy",
+    "work_rhythm": "creation rhythm: design overall architecture first vs. iterative build-up; template first vs. samples first",
+    "naming": "file naming convention for weekly reports: date-based vs. person-based vs. sequential"
+  },
+  "workspace_bundle": "empty",
+  "depends_on": null,
+  "prompt_zh": "请为一个5人小组搭建一套周报管理系统：1. 设计周报模板（包含本周完成、下周计划、问题与风险等板块）2. 创建前两周的示例周报（虚构内容）3. 设计归档和检索方案，方便查阅历史周报 4. 写一份使用说明。所有内容的组织方式、文件格式和详细程度由你自行决定。",
+  "prompt_en": "Build a weekly report management system for a 5-person team: 1. Design a weekly report template (with sections for completed items, next week's plan, issues and risks, etc.) 2. Create sample reports for the past two weeks (fictional content) 3. Design an archiving and retrieval system for easy review of historical reports 4. Write a usage guide. Organization, format, and level of detail are entirely your choice.",
+  "behavioral_freedom": [
+    "Archiving scheme: by date directory vs. by person vs. single append-only file",
+    "Template complexity: minimal vs. comprehensive with sub-sections",
+    "Number of sample reports: minimum 2 vs. one per team member",
+    "Whether to create a dashboard or summary view",
+    "Curation: design architecture first then populate vs. build iteratively",
+    "Whether to add automation suggestions or keep it manual"
+  ],
+  "expected_file_ops": 10,
+  "status": "active"
+}

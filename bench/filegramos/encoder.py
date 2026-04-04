@@ -18,6 +18,7 @@ from .engram import (
     Engram,
     SemanticUnit,
 )
+from .episode import EpisodeSegmenter
 from .feature_extraction import FeatureExtractor
 from .fingerprint import compute_fingerprint
 from .parsers import ParserRegistry
@@ -27,6 +28,7 @@ from .schema import (
     ConsumerEventType,
     NormalizedEvent,
 )
+from .sequence import SequenceAnalyzer
 from .tuning import (
     LLM_ENCODE_EDIT_CHARS,
     LLM_ENCODE_FILE_CHARS,
@@ -109,7 +111,27 @@ class EngramEncoder:
         # 4. Fingerprint
         fingerprint = compute_fingerprint(procedural)
 
-        # 5. Importance scoring
+        # 5. Sequence analysis (deterministic, no LLM)
+        if _is_typed:
+            behavioral_events_typed: list[NormalizedEvent] = [
+                e for e in events  # type: ignore[union-attr]
+                if e.event_type.value not in SIMULATION_TYPES  # type: ignore[union-attr]
+            ]
+        else:
+            behavioral_events_typed = []
+        if behavioral_events_typed:
+            analyzer = SequenceAnalyzer(behavioral_events_typed)
+            sequence_features = analyzer.summarize()
+        else:
+            sequence_features = {}
+
+        # 6. Episode segmentation (LLM-based)
+        if self._llm_fn and behavioral_events_typed:
+            segmenter = EpisodeSegmenter(llm_fn=self._llm_fn)
+            episodes = segmenter.segment(behavioral_events_typed, trajectory_id)
+            semantic.episodes = episodes
+
+        # 7. Importance scoring
         if _is_typed:
             behavioral_list: list[dict] = []  # not used in typed path
         else:
@@ -137,6 +159,7 @@ class EngramEncoder:
             behavioral_event_count=behavioral_count,
             importance_score=importance,
             is_perturbed=is_perturbed,
+            sequence_features=sequence_features,
         )
 
     def _build_semantic_unit(

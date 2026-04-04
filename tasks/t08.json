@@ -1,0 +1,28 @@
+{
+  "task_id": "T-08",
+  "name": "季度工作总结撰写",
+  "name_en": "Quarterly work summary report creation",
+  "type": "create",
+  "dimensions": ["B", "C", "F"],
+  "observable_attributes": {
+    "output_detail": "report length and depth; number of concrete achievements/metrics cited; level of self-reflection",
+    "output_structure": "report format (narrative vs. accomplishments+plan vs. OKR-style vs. custom template)",
+    "directory_style": "whether output is a single file or structured with supporting files (data appendix, charts reference)",
+    "naming": "output filename convention chosen",
+    "cross_modal_behavior": "whether supplementary materials (tables, data files, charts) are created alongside the report"
+  },
+  "workspace_bundle": "pilot/workspace/t08_workspace",
+  "depends_on": null,
+  "prompt_zh": "基于这个文件夹中的工作记录、完成的任务列表、邮件往来和学习笔记，请撰写一份本季度的工作/学习总结报告。报告应该回顾本季度完成的主要工作、取得的成就、遇到的挑战，以及下一季度的计划。报告的格式、结构和详细程度由你自行决定。保存在当前目录下。",
+  "prompt_en": "Based on the work records, completed task lists, email correspondence, and learning notes in this folder, write a quarterly work/study summary report. The report should review major work completed this quarter, achievements, challenges encountered, and plans for next quarter. The format, structure, and level of detail are up to you. Save it in the current directory.",
+  "behavioral_freedom": [
+    "Report format: narrative essay vs. structured sections (accomplishments/challenges/plans) vs. bullet-point summary",
+    "Whether to create supporting data files or appendices",
+    "Depth of reflection: factual listing vs. analytical assessment with lessons learned",
+    "Whether to include quantitative metrics or keep it qualitative",
+    "Output file organization: single report vs. report + appendix + plan",
+    "Naming and dating convention for the output file(s)"
+  ],
+  "expected_file_ops": 8,
+  "status": "candidate"
+}

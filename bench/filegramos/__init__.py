@@ -14,8 +14,10 @@ Core differentiator from all baselines:
 from . import schema
 from .aggregation import FeatureAggregator
 from .consolidator import EngramConsolidator
+from .embedder import TextEmbedder
 from .encoder import EngramEncoder
 from .engram import ContentSample, CrossRef, EditChainSample, Engram, MemoryStore, SemanticUnit
+from .episode import Episode, EpisodeSegmenter
 from .feature_extraction import FeatureExtractor
 from .fingerprint import compute_deviations, compute_fingerprint, normalize_fingerprints
 from .normalizer import EventNormalizer
@@ -23,6 +25,7 @@ from .parsers import ParserRegistry
 from .retriever import QueryAdaptiveRetriever
 from .sampler import StratifiedSampler
 from .schema import ConsumerEventType, NormalizedEvent
+from .sequence import SequenceAnalyzer
 
 __all__ = [
     "schema",
@@ -45,4 +48,8 @@ __all__ = [
     "QueryAdaptiveRetriever",
     "StratifiedSampler",
     "ParserRegistry",
+    "SequenceAnalyzer",
+    "EpisodeSegmenter",
+    "Episode",
+    "TextEmbedder",
 ]

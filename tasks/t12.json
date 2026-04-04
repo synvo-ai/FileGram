@@ -1,0 +1,30 @@
+{
+  "task_id": "T-12",
+  "name": "文档格式统一化",
+  "name_en": "Document format standardization",
+  "type": "iterate",
+  "dimensions": ["D", "C"],
+  "observable_attributes": {
+    "edit_strategy": "standardization approach: edit each file sequentially vs. define standard first then batch apply; number of edits per file; lines changed per edit",
+    "directory_style": "whether directory structure is adjusted alongside format changes; whether files are moved between existing subdirectories",
+    "version_strategy": "whether original formatting is preserved (backup) or directly overwritten",
+    "naming": "whether files are renamed for consistency during standardization",
+    "cross_modal_handling": "how non-text files (PDF, PNG, EML) in reference/ are handled: ignored vs. renamed vs. archived vs. annotated in style guide"
+  },
+  "workspace_bundle": "pilot/workspace/t12_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一个团队共享工作区中多人产出的文档，分布在4个子目录中（meeting_notes/、personal/、work/、reference/）。这些文档格式极不统一：有的用#号标题，有的用加粗代替标题，有的用emoji分隔符，有的用【】括号分节；日期格式混乱；列表符号不一致；状态标记方式各异（✅、[x]、☐混用）。文件夹中还包含PDF、图片和邮件等非文本参考材料。\n\n请：\n1. 浏览所有文件，了解当前的格式现状\n2. 选择一套你认为最合理的标准格式（可参考 reference/team_formatting_reference.md，但该参考文档本身不完整，你可以扩展或修改）\n3. 将所有文本文件统一为这套格式（直接修改原文件）\n4. 写一份 style_guide.md 说明你选择的格式标准\n5. 决定如何处理非文本文件（PDF/PNG/EML）——是否重命名、归档、或在 style guide 中注明处理方式",
+  "prompt_en": "This folder contains documents produced by multiple team members in a shared workspace, organized across 4 subdirectories (meeting_notes/, personal/, work/, reference/). The formatting is highly inconsistent: some use # headings, others use bold as pseudo-headings, some use emoji separators, others use 【】bracket sections; date formats are mixed; list symbols vary; status markers differ (✅, [x], ☐ used interchangeably). The folder also contains PDFs, images, and emails as non-text reference materials.\n\nPlease:\n1. Browse all files to understand the current formatting landscape\n2. Choose a standard format you consider most appropriate (you may reference reference/team_formatting_reference.md, but note it is incomplete — you can extend or modify it)\n3. Standardize all text files to this format (edit the original files directly)\n4. Write a style_guide.md explaining your chosen formatting standards\n5. Decide how to handle non-text files (PDF/PNG/EML) — whether to rename, archive, or document handling rules in the style guide",
+  "behavioral_freedom": [
+    "Which format standard to adopt (ATX headings vs. setext, ISO dates vs. locale, etc.)",
+    "Processing order: systematic file-by-file vs. one format element across all files",
+    "Whether to create a style guide BEFORE or AFTER standardizing",
+    "Whether to backup files before editing",
+    "Whether to rename files for naming consistency",
+    "How aggressive the standardization is: minimal changes vs. full reformat",
+    "How non-text files (PDF/PNG/EML) are handled: ignore vs. rename vs. archive vs. document in style guide",
+    "Whether to use/extend the existing team_formatting_reference.md or start fresh"
+  ],
+  "expected_file_ops": 22,
+  "status": "active"
+}

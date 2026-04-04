@@ -1,0 +1,28 @@
+{
+  "task_id": "T-10",
+  "name": "知识库内容更新与维护",
+  "name_en": "Knowledge base content update and maintenance",
+  "type": "maintain",
+  "dimensions": ["D", "C", "E"],
+  "observable_attributes": {
+    "edit_strategy": "how existing files are modified: incremental additions vs. section rewrites; number and size of edits per file",
+    "directory_style": "whether existing directory structure is preserved or reorganized; whether new subdirectories are created for new content",
+    "version_strategy": "whether old content is preserved (backup/archive) or directly modified; whether index file is updated",
+    "naming": "whether new files follow the same naming convention as existing ones"
+  },
+  "workspace_bundle": "pilot/workspace/t10_workspace",
+  "depends_on": null,
+  "depends_on_note": "Decoupled from T-03. Now uses a fixed pre-built knowledge base workspace for all profiles (ensures same starting point).",
+  "prompt_zh": "你之前搭建了一个「投资分析方法论」知识库。现在有三条新信息需要纳入：(1) 新增一个「技术分析基础」模块，涵盖移动平均线、RSI、MACD等基本指标；(2) 在基本面分析框架中补充「自由现金流折现模型（DCF）」的详细说明；(3) 更新索引文件以反映所有变更。请在现有知识库基础上完成这些更新。",
+  "prompt_en": "You previously built an 'Investment Analysis Methodology' knowledge base. Now three new pieces of information need to be incorporated: (1) Add a new 'Technical Analysis Basics' module covering basic indicators like moving averages, RSI, and MACD; (2) Add detailed explanation of the 'Discounted Cash Flow (DCF) Model' to the fundamental analysis framework; (3) Update the index file to reflect all changes. Please complete these updates on the existing knowledge base.",
+  "behavioral_freedom": [
+    "Whether to add new content as new files or append to existing files",
+    "Whether to reorganize the existing structure to accommodate new modules",
+    "How the index/README is updated: minimal addition vs. comprehensive rewrite",
+    "Whether to preserve version history of modified files (backup/rename old version)",
+    "Depth of new content: brief overview vs. detailed guide with examples",
+    "Whether to add cross-references between new and existing content"
+  ],
+  "expected_file_ops": 8,
+  "status": "candidate"
+}

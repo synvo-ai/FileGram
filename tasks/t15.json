@@ -1,0 +1,27 @@
+{
+  "task_id": "T-15",
+  "name": "矛盾报告分析与调和",
+  "name_en": "Conflicting reports analysis and reconciliation",
+  "type": "synthesize",
+  "dimensions": ["A", "D", "B"],
+  "observable_attributes": {
+    "reading_strategy": "comparison approach: read bullish then bearish sequentially vs. alternating sections vs. data-first then opinions; depth of raw data inspection",
+    "output_detail": "reconciliation memo detail: brief verdict vs. point-by-point analysis with evidence",
+    "output_structure": "memo organization: by topic vs. by report vs. verdict-first vs. evidence-first",
+    "edit_strategy": "whether original reports are annotated/marked or only the reconciliation memo is created"
+  },
+  "workspace_bundle": "pilot/workspace/t15_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含两份分析报告，对同一家公司（NovaTech Corp）给出了截然相反的结论：一份看涨（analysis_bullish.md），一份看跌（analysis_bearish.md）。同时还有 raw_data/ 目录中的原始数据（营收历史、市场份额、债务情况）。请：1. 仔细阅读两份报告和原始数据 2. 分析两份报告的分歧点和各自的论据 3. 用原始数据验证哪些论点有数据支撑 4. 写一份 reconciliation_memo.md 给出你的综合判断。",
+  "prompt_en": "This folder contains two analysis reports reaching OPPOSITE conclusions about the same company (NovaTech Corp): one bullish (analysis_bullish.md) and one bearish (analysis_bearish.md). There is also raw_data/ directory with source data (revenue history, market share, debt profile). Please: 1. Carefully read both reports and the raw data 2. Analyze the disagreement points and each report's supporting arguments 3. Verify which arguments are supported by raw data 4. Write a reconciliation_memo.md with your integrated assessment.",
+  "behavioral_freedom": [
+    "Reading order: bullish first vs. bearish first vs. raw data first",
+    "Comparison method: side-by-side point comparison vs. thematic analysis",
+    "How deeply to inspect raw data vs. trusting report claims",
+    "Whether to annotate or mark up original reports",
+    "Reconciliation style: pick a side vs. nuanced middle ground vs. uncertainty-focused",
+    "Output detail: executive summary vs. detailed point-by-point analysis"
+  ],
+  "expected_file_ops": 12,
+  "status": "active"
+}

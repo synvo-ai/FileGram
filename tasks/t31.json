@@ -1,0 +1,31 @@
+{
+  "task_id": "T-31",
+  "name": "自然风光视频集锦策划",
+  "name_en": "Nature scenery video collection curation",
+  "type": "create",
+  "dimensions": [
+    "B",
+    "F",
+    "C"
+  ],
+  "observable_attributes": {
+    "cross_modal_behavior": "How 14 videos and 10 photos are evaluated and curated; whether all are viewed",
+    "output_detail": "Curation output: simple playlist vs. detailed descriptions with selection criteria",
+    "directory_style": "Whether curated collection is organized into categories or kept as a flat selection"
+  },
+  "workspace_bundle": "pilot/workspace/t31_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含大量自然风光素材——14个果园/农场视频和10张自然风景照片（包括日本富士山）。请策划一个自然风光视频集锦：浏览所有素材，根据内容和质量进行筛选和分类，编写集锦方案文档（包括选片理由、排序逻辑、可能的解说词或配文），并组织好最终的素材目录。",
+  "prompt_en": "This folder contains extensive nature scenery materials — 14 orchard/farm videos and 10 nature landscape photos (including Mount Fuji, Japan). Please curate a nature scenery video collection: browse all materials, select and classify based on content and quality, write a curation plan document (including selection rationale, ordering logic, potential narration or captions), and organize the final material directory.",
+  "behavioral_freedom": [
+    "Whether all 14 videos are viewed or a subset is sampled based on filenames",
+    "Selection criteria: visual quality vs. content variety vs. thematic coherence",
+    "Whether photos are included in the video collection or handled separately",
+    "Collection structure: by theme (seasons/locations/crops) vs. by quality ranking",
+    "Whether to write narration scripts or caption text for selected items",
+    "Whether to create a storyboard/sequence plan or just a catalog",
+    "Output format: single curation document vs. organized directory with README"
+  ],
+  "expected_file_ops": 20,
+  "status": "active"
+}

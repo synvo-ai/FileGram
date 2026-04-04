@@ -1,0 +1,397 @@
+{
+  "description": "Coverage matrix mapping observable_attributes to tasks. Each attribute shows which tasks observe it and through what behavioral signal.",
+  "attribute_to_task_mapping": {
+    "reading_strategy": {
+      "definition": "How the user explores and navigates files: sequential deep reading vs. keyword search vs. breadth-first browsing",
+      "profile_dimension": "A (Consumption Pattern)",
+      "observed_by": [
+        {"task": "T-01", "signal": "file_open sequence, file_browse events, trigger sources"},
+        {"task": "T-02", "signal": "file_open order, coverage of different file types including non-text"},
+        {"task": "T-05", "signal": "whether files are read before organizing vs. organized by filename only"},
+        {"task": "T-06", "signal": "which sources read first, reading depth per source, cross-file reference patterns"},
+        {"task": "T-07", "signal": "file access order, coverage ratio, sampling vs. exhaustive reading"}
+      ],
+      "task_count": 5
+    },
+    "output_detail": {
+      "definition": "Level of detail and completeness in produced content: word count, data citations, structural depth",
+      "profile_dimension": "B (Production Style)",
+      "observed_by": [
+        {"task": "T-01", "signal": "output file length, number of headings, whether specific numbers cited"},
+        {"task": "T-02", "signal": "output granularity, individual case detail vs. high-level themes"},
+        {"task": "T-03", "signal": "total content volume per file, depth of index"},
+        {"task": "T-04", "signal": "content completeness, word count, section depth"},
+        {"task": "T-06", "signal": "report length, number of data points cited"},
+        {"task": "T-07", "signal": "profile comprehensiveness, number of dimensions covered"},
+        {"task": "T-08", "signal": "report length, number of concrete metrics"},
+        {"task": "T-09", "signal": "resulting document length relative to original"}
+      ],
+      "task_count": 8
+    },
+    "output_structure": {
+      "definition": "How output content is organized: flat narrative vs. hierarchical sections vs. bullet lists vs. tables",
+      "profile_dimension": "B (Production Style)",
+      "observed_by": [
+        {"task": "T-01", "signal": "output organization style in summary file"},
+        {"task": "T-02", "signal": "output organization (narrative vs. per-case vs. timeline)"},
+        {"task": "T-03", "signal": "content organization across files"},
+        {"task": "T-04", "signal": "document structure choice"},
+        {"task": "T-06", "signal": "report organization style"},
+        {"task": "T-07", "signal": "profile organization format"},
+        {"task": "T-08", "signal": "report format choice"},
+        {"task": "T-09", "signal": "structural changes made during revision"}
+      ],
+      "task_count": 8
+    },
+    "tone": {
+      "definition": "Writing register and formality level: formal/professional vs. casual/conversational vs. neutral",
+      "profile_dimension": "B (Production Style)",
+      "observed_by": [
+        {"task": "T-01", "signal": "language register in output file"},
+        {"task": "T-02", "signal": "formality level in case summary"},
+        {"task": "T-03", "signal": "writing style in knowledge base content"},
+        {"task": "T-04", "signal": "writing register in meeting notes and emails"},
+        {"task": "T-06", "signal": "writing register in research report"},
+        {"task": "T-07", "signal": "writing style in personal profile"}
+      ],
+      "task_count": 6
+    },
+    "directory_style": {
+      "definition": "Directory structure preferences: flat vs. nested by topic vs. by file type vs. evolving",
+      "profile_dimension": "C (Organization Preference)",
+      "observed_by": [
+        {"task": "T-03", "signal": "dir_create events, directory depth, nesting pattern"},
+        {"task": "T-04", "signal": "whether outputs are organized into subdirectories"},
+        {"task": "T-05", "signal": "resulting directory structure after reorganization"},
+        {"task": "T-08", "signal": "whether output includes supporting file structure"},
+        {"task": "T-10", "signal": "whether existing structure is preserved or reorganized"}
+      ],
+      "task_count": 5
+    },
+    "naming": {
+      "definition": "File naming conventions: descriptive_long vs. short_abbreviation vs. date_prefix vs. category_prefix",
+      "profile_dimension": "C (Organization Preference)",
+      "observed_by": [
+        {"task": "T-03", "signal": "file naming pattern in created knowledge base files"},
+        {"task": "T-04", "signal": "output file naming pattern"},
+        {"task": "T-05", "signal": "whether files are renamed and how"},
+        {"task": "T-08", "signal": "output filename convention chosen"},
+        {"task": "T-10", "signal": "whether new files follow existing naming convention"}
+      ],
+      "task_count": 5
+    },
+    "edit_strategy": {
+      "definition": "How existing content is modified: incremental small edits vs. large bulk rewrites; edit frequency and amplitude",
+      "profile_dimension": "D (Iteration Strategy)",
+      "observed_by": [
+        {"task": "T-09", "signal": "file_edit event count, lines changed per edit, number of passes"},
+        {"task": "T-10", "signal": "how existing files are modified: incremental additions vs. section rewrites"}
+      ],
+      "task_count": 2
+    },
+    "version_strategy": {
+      "definition": "How old versions are handled: keep history (backup/archive) vs. overwrite vs. archive",
+      "profile_dimension": "C/D (Organization + Iteration)",
+      "observed_by": [
+        {"task": "T-05", "signal": "handling of apparent duplicates or old versions during reorganization"},
+        {"task": "T-09", "signal": "whether original file is preserved before editing"},
+        {"task": "T-10", "signal": "whether old content is backed up before modification"}
+      ],
+      "task_count": 3
+    },
+    "cross_modal_behavior": {
+      "definition": "Whether the user creates or references visual/tabular supplementary materials vs. pure text",
+      "profile_dimension": "F (Cross-Modal Behavior)",
+      "observed_by": [
+        {"task": "T-04", "signal": "whether supplementary tracking documents created beyond main output"},
+        {"task": "T-06", "signal": "whether data is presented in tables/lists vs. pure prose"},
+        {"task": "T-08", "signal": "whether supplementary data files or charts are created alongside report"}
+      ],
+      "task_count": 3
+    }
+  },
+  "task_to_dimension_mapping": {
+    "T-01": {"type": "understand",   "dimensions": ["A", "B"],      "attributes": ["reading_strategy", "output_detail", "output_structure", "tone"]},
+    "T-02": {"type": "understand",   "dimensions": ["A", "B", "E"], "attributes": ["reading_strategy", "output_detail", "output_structure", "tone"]},
+    "T-03": {"type": "create",       "dimensions": ["B", "C"],      "attributes": ["output_detail", "output_structure", "directory_style", "naming", "tone"]},
+    "T-04": {"type": "create",       "dimensions": ["B", "C", "F"], "attributes": ["output_detail", "output_structure", "directory_style", "naming", "tone", "cross_modal_behavior"]},
+    "T-05": {"type": "organize",     "dimensions": ["A", "C"],      "attributes": ["reading_strategy", "directory_style", "naming", "version_strategy"]},
+    "T-06": {"type": "synthesize",   "dimensions": ["A", "B", "F"], "attributes": ["reading_strategy", "output_detail", "output_structure", "tone", "cross_modal_behavior"]},
+    "T-07": {"type": "synthesize",   "dimensions": ["A", "B"],      "attributes": ["reading_strategy", "output_detail", "output_structure", "tone"]},
+    "T-08": {"type": "create",       "dimensions": ["B", "C", "F"], "attributes": ["output_detail", "output_structure", "directory_style", "naming", "cross_modal_behavior"]},
+    "T-09": {"type": "iterate",      "dimensions": ["D", "B"],      "attributes": ["edit_strategy", "version_strategy", "output_detail", "output_structure"]},
+    "T-10": {"type": "maintain",     "dimensions": ["D", "C", "E"], "attributes": ["edit_strategy", "directory_style", "version_strategy", "naming"]}
+  },
+  "dimension_coverage_summary": {
+    "A_consumption_pattern": {"tasks": ["T-01", "T-02", "T-05", "T-06", "T-07"], "count": 5, "requirement": "2+", "status": "PASS"},
+    "B_production_style":    {"tasks": ["T-01", "T-02", "T-03", "T-04", "T-06", "T-07", "T-08", "T-09"], "count": 8, "requirement": "2+", "status": "PASS"},
+    "C_organization":        {"tasks": ["T-03", "T-04", "T-05", "T-08", "T-10"], "count": 5, "requirement": "2+", "status": "PASS"},
+    "D_iteration":           {"tasks": ["T-09", "T-10"], "count": 2, "requirement": "2+", "status": "PASS"},
+    "E_work_rhythm":         {"tasks": ["T-02", "T-10"], "count": 2, "requirement": "1+", "status": "PASS"},
+    "F_cross_modal":         {"tasks": ["T-04", "T-06", "T-08"], "count": 3, "requirement": "1+", "status": "PASS"}
+  },
+  "type_distribution": {
+    "understand":  {"tasks": ["T-01", "T-02"], "count": 2, "target": "2"},
+    "create":      {"tasks": ["T-03", "T-04", "T-08"], "count": 3, "target": "2-3"},
+    "organize":    {"tasks": ["T-05"], "count": 1, "target": "1-2"},
+    "synthesize":  {"tasks": ["T-06", "T-07"], "count": 2, "target": "2"},
+    "iterate":     {"tasks": ["T-09"], "count": 1, "target": "1-2"},
+    "maintain":    {"tasks": ["T-10"], "count": 1, "target": "1"}
+  },
+  "attribute_coverage_check": {
+    "description": "Every attribute is observed by 2+ tasks, ensuring closure with mini profiles",
+    "reading_strategy":      {"task_count": 5, "min_required": 2, "status": "PASS"},
+    "output_detail":         {"task_count": 8, "min_required": 2, "status": "PASS"},
+    "output_structure":      {"task_count": 8, "min_required": 2, "status": "PASS"},
+    "tone":                  {"task_count": 6, "min_required": 2, "status": "PASS"},
+    "directory_style":       {"task_count": 5, "min_required": 2, "status": "PASS"},
+    "naming":                {"task_count": 5, "min_required": 2, "status": "PASS"},
+    "edit_strategy":         {"task_count": 2, "min_required": 2, "status": "PASS"},
+    "version_strategy":      {"task_count": 3, "min_required": 2, "status": "PASS"},
+    "cross_modal_behavior":  {"task_count": 3, "min_required": 2, "status": "PASS"}
+  },
+  "workspace_file_recommendations": {
+    "t01_workspace": {
+      "source": "Victoria Subset",
+      "description": "Investment analyst work files - mix of professional research and personal notes",
+      "file_count": 25,
+      "composition": {
+        "core_files_65pct": [
+          "Documents/Capitol_Investments/Companies/AAPL - Apple Inc/4. Analysis & Models/AAPL_Coverage_Initiation_Notes.md",
+          "Documents/Capitol_Investments/Companies/AAPL - Apple Inc/2. SEC Filings/_10-K-Q4-2023-As-Filed.pdf",
+          "Documents/Capitol_Investments/Companies/AAPL - Apple Inc/1. Investor Relations/FY24_Q3_Consolidated_Financial_Statements.pdf",
+          "Documents/Capitol_Investments/Companies/AAPL - Apple Inc/1. Investor Relations/Apple_Environmental_Progress_Report_2024.pdf",
+          "Documents/Capitol_Investments/Companies/AAPL - Apple Inc/3. Leadership & Governance/Corporate-Governance-Guidelines.pdf",
+          "Documents/Tasks.md",
+          "Documents/Notes/Note_Client_Dinner_Success_Sep2024.txt",
+          "Documents/Notes/Note_Next_Skill_Tableau.txt",
+          "Documents/Notes/Note_Python_Homework_Reminder.txt",
+          "Documents/Outlook/Inbox/Email_006.eml",
+          "Documents/Outlook/Inbox/Email_009.eml",
+          "Documents/Outlook/Inbox/Email_015.eml",
+          "Documents/Outlook/Sent_Items/Email_017.eml",
+          "Documents/Outlook/Sent_Items/Email_021.eml",
+          "Documents/Outlook/Sent_Items/Email_022.eml",
+          "Downloads/AI_Finance_Summit_Attendees.md"
+        ],
+        "peripheral_files_25pct": [
+          "Documents/CFA/Prep for CFA Python Webinar.docx",
+          "Documents/Programming/Python_Course_Progress.md",
+          "Documents/Fitness/Running_Log_Export_Oct2025.csv",
+          "Documents/Notes/Note_Weekend_ToDo.txt",
+          "Documents/Notes/Note_OctBreak_2023_Final_Plan.txt"
+        ],
+        "noise_files_10pct": [
+          "Documents/Watercolor Learning Log.md",
+          "Documents/Hobbies/Dance_Class_Notes.md",
+          "Pictures/Personal/Image_Lily_Park_Oct25.png"
+        ]
+      }
+    },
+    "t02_workspace": {
+      "source": "Adam Subset",
+      "description": "Legal professional case materials - case reports, statutes, emails, calendar, personal files",
+      "file_count": 24,
+      "composition": {
+        "core_files_65pct": [
+          "TJCC_Case_Report_240925.docx",
+          "TJCC_Case_Report_081025.docx",
+          "TJCC_Case_Report_011025.docx",
+          "Facts of the Drug Case.docx",
+          "Criminal_Procedure_Code_2010_Annotated.docx",
+          "Housing_and_Development_Act_SG_Cap_129_Annotated.docx",
+          "Diary.txt",
+          "Sarah_Tan_to_Adam_Legal_Aid_Theft_Offence.eml",
+          "Chen_Lihua_to_Adam_Legal_Aid_Application.eml",
+          "UMF_to_Adam_Appeal_Custody.eml",
+          "Sarah_Lim_to_Adam_Urgent_Legal_Aid_Appeal.eml",
+          "Sent_Email_Report_240925.eml",
+          "Sent_Email_Report_081025.eml",
+          "Sent_Email_Report_011025.eml",
+          "Sent_Email_Questions_for_Suresh_091025.eml",
+          "Adam_Calendar_Oct_2025.ics",
+          "Adam_Calendar_Sept_2025.ics",
+          "Hearing list.pdf",
+          "Hearing list1.pdf"
+        ],
+        "peripheral_files_25pct": [
+          "Whatsapp_Chat_Sarah_Jenkins_JD.txt",
+          "Whatsapp_Chat_David_Chen.txt",
+          "Guide to attending court.pdf",
+          "Case_Memo_081025_C01.mp3",
+          "Post_Meeting_Debrief_Suresh_241025.mp3",
+          "TJCC_Clinic_Setup_011025.png"
+        ],
+        "noise_files_10pct": [
+          "Starbucks Receipt.png",
+          "starbucks_jem_reminder.eml",
+          "Whatsapp_Chat_with_Mom_Dad.txt"
+        ]
+      }
+    },
+    "t03_workspace": {
+      "source": "empty",
+      "description": "Empty directory - agent creates knowledge base from scratch",
+      "file_count": 0,
+      "composition": {}
+    },
+    "t04_workspace": {
+      "source": "empty or minimal",
+      "description": "Empty or near-empty directory - agent creates meeting documentation from scenario prompt",
+      "file_count": 0,
+      "composition": {}
+    },
+    "t05_workspace": {
+      "source": "Mixed (Adam + Victoria + Bei)",
+      "description": "Deliberately disorganized flat folder mixing files from multiple sources, no subdirectories",
+      "file_count": 30,
+      "composition": {
+        "core_files": [
+          "Diary.txt (from Adam)",
+          "TJCC_Case_Report_081025.docx (from Adam)",
+          "Facts of the Drug Case.docx (from Adam)",
+          "Tasks.md (from Victoria)",
+          "AAPL_Coverage_Initiation_Notes.md (from Victoria, renamed to remove path)",
+          "Note_Client_Dinner_Success_Sep2024.txt (from Victoria)",
+          "Note_Weekend_ToDo.txt (from Victoria)",
+          "Email_006.eml (from Victoria)",
+          "Email_009.eml (from Victoria)",
+          "Email_015.eml (from Victoria)",
+          "Back-to-school Diary.md (from Bei)",
+          "grad_day_thoughts.md (from Bei)",
+          "01_Initial_from_Weiwei.eml (from Bei)",
+          "02_Reply_from_Lucy.eml (from Bei)"
+        ],
+        "peripheral_files": [
+          "Adam_Calendar_Oct_2025.ics (from Adam)",
+          "CUHK_Graduation_Day.ics (from Bei)",
+          "Running_Log_Export_Oct2025.csv (from Victoria)",
+          "Whatsapp_Chat_David_Chen.txt (from Adam)",
+          "Dance_Class_Notes.md (from Victoria)",
+          "Watercolor Learning Log.md (from Victoria)",
+          "Pet_Care_Learning_Log.md (from Victoria)",
+          "AI_Finance_Summit_Attendees.md (from Victoria)"
+        ],
+        "noise_files": [
+          "Starbucks Receipt.png (from Adam)",
+          "campus_landscape.jpg (from Bei)",
+          "Image_Lily_Park_Oct25.png (from Victoria)",
+          "Like Dinner.png (from Adam)",
+          "Lakeville_Swim_Promo.eml (from Bei)",
+          "yakiniku_like_order_confirmation.eml (from Adam)"
+        ]
+      }
+    },
+    "t06_workspace": {
+      "source": "Victoria Subset (AAPL focused)",
+      "description": "Focused Apple investment research materials - filings, analysis, emails, governance docs",
+      "file_count": 21,
+      "composition": {
+        "core_files": [
+          "AAPL_Coverage_Initiation_Notes.md",
+          "_10-K-Q4-2023-As-Filed.pdf",
+          "_10-K-2022-(As-Filed).pdf",
+          "_10-K-2021-(As-Filed).pdf",
+          "FY24_Q3_Consolidated_Financial_Statements.pdf",
+          "Apple_Environmental_Progress_Report_2024.pdf",
+          "2024-App-Store-Transparency-Report.pdf",
+          "Anti-Corruption-Policy.pdf",
+          "Corporate-Governance-Guidelines.pdf",
+          "Email_006.eml",
+          "Email_009.eml",
+          "Email_015.eml"
+        ],
+        "peripheral_files": [
+          "Tasks.md",
+          "Note_Client_Dinner_Success_Sep2024.txt",
+          "Downloads/MAS_AI_Risk_Mgmt_Info_Paper_Dec2024.pdf"
+        ],
+        "noise_files": [
+          "Note_Interest_Watercolor.txt",
+          "Bookmarks_Watercolor_Learning.json",
+          "Image_Morning_Run_Botanic_Gardens.png"
+        ]
+      }
+    },
+    "t07_workspace": {
+      "source": "Adam Subset (personal life focus)",
+      "description": "Personal documents revealing life story - diary, WhatsApp chats, work emails, calendar, career context, hobbies",
+      "file_count": 22,
+      "composition": {
+        "core_files": [
+          "Diary.txt",
+          "Whatsapp_Chat_Sarah_Jenkins_JD.txt",
+          "Whatsapp_Chat_with_Chloe_Tan.txt",
+          "Whatsapp_Chat_with_Mom_Dad.txt",
+          "Whatsapp_Chat_David_Chen.txt",
+          "Sarah_Tan_to_Adam_Legal_Aid_Theft_Offence.eml",
+          "Sent_Email_Questions_for_Suresh_091025.eml",
+          "Sent_Email_Questions_for_Suresh_231025.eml",
+          "Adam_Calendar_Oct_2025.ics",
+          "Adam_Calendar_Sept_2025.ics",
+          "Fwd_Flight_Confirmation_Christmas.eml",
+          "TJCC_Case_Report_081025.docx",
+          "Guide to attending court.pdf"
+        ],
+        "peripheral_files": [
+          "Case_Memo_081025_C01.mp3",
+          "Sunday_Reminder_191025.mp3",
+          "Post_Meeting_Debrief_Suresh_241025.mp3",
+          "Family_Call.png",
+          "Adam_SCSM_Half_Marathon_Plan.xlsx"
+        ],
+        "noise_files": [
+          "Starbucks Receipt.png",
+          "Chloe_Pottery_Vase_Oct26.png",
+          "Like Dinner.png",
+          "yakiniku_like_order_confirmation.eml"
+        ]
+      }
+    },
+    "t08_workspace": {
+      "source": "Victoria Subset",
+      "description": "Quarterly work and life records for summary writing - tasks, emails, notes, learning logs",
+      "file_count": 18,
+      "composition": {
+        "core_files": [
+          "Documents/Tasks.md",
+          "Documents/Notes/Note_Client_Dinner_Success_Sep2024.txt",
+          "Documents/Notes/Note_Weekend_ToDo.txt",
+          "Documents/Notes/Note_Next_Skill_Guitar.txt",
+          "Documents/Notes/Note_Next_Skill_Tableau.txt",
+          "Documents/Outlook/Inbox/Email_006.eml",
+          "Documents/Outlook/Inbox/Email_009.eml",
+          "Documents/Outlook/Inbox/Email_015.eml",
+          "Documents/Outlook/Sent_Items/Email_017.eml",
+          "Documents/Outlook/Sent_Items/Email_021.eml",
+          "Documents/Outlook/Sent_Items/Email_022.eml",
+          "Documents/CFA/Prep for CFA Python Webinar.docx",
+          "Documents/Programming/Python_Course_Progress.md"
+        ],
+        "peripheral_files": [
+          "Documents/Watercolor Learning Log.md",
+          "Documents/Hobbies/Dance_Class_Notes.md",
+          "Documents/Fitness/Running_Log_Export_Oct2025.csv",
+          "Documents/Notes/Note_Lily_Birthday_Plan_Nov2024.txt"
+        ],
+        "noise_files": [
+          "Documents/Pets/Pet_Care_Learning_Log.md",
+          "Pictures/Personal/Image_Watercolor_Supplies.png",
+          "Chrome/Bookmarks_Watercolor_Learning.json"
+        ]
+      }
+    },
+    "t09_workspace": {
+      "source": "synthetic",
+      "description": "Contains a pre-written ~2000-word academic-style report for revision. Report to be created during workspace preparation.",
+      "file_count": 1,
+      "note": "The report should be a detailed academic-style analysis (~2000 words) on a general business topic (e.g., ASEAN tech investment trends). It will be created during workspace preparation as a seed file."
+    },
+    "t10_workspace": {
+      "source": "T-03 output",
+      "description": "Populated at runtime with the agent's T-03 output (knowledge base). Different for each profile.",
+      "file_count": "variable",
+      "note": "This workspace depends on T-03. Each profile's T-03 output becomes their T-10 input, enabling cross-task consistency measurement."
+    }
+  }
+}

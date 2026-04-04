@@ -1,0 +1,28 @@
+{
+  "task_id": "T-05",
+  "name": "混乱文件夹整理归档",
+  "name_en": "Messy folder cleanup and reorganization",
+  "type": "organize",
+  "dimensions": ["A", "C"],
+  "observable_attributes": {
+    "reading_strategy": "how files are examined before organizing (read content of each vs. judge by filename/type vs. quick scan)",
+    "directory_style": "resulting directory structure (flat grouping vs. nested topic hierarchy vs. by file type vs. by date)",
+    "naming": "whether and how files are renamed (preserve original vs. add prefixes vs. standardize naming convention)",
+    "version_strategy": "handling of apparent duplicates or old versions (keep all vs. archive vs. delete)"
+  },
+  "workspace_bundle": "pilot/workspace/t05_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹里堆满了各种文件——文档、邮件、图片、笔记、日历文件、聊天记录，全部混在一起没有任何组织。请将这些文件整理成合理的目录结构。你可以创建子文件夹、移动文件、重命名文件，以你认为最合理的方式组织。整理完成后，在根目录写一份简短的整理说明，解释你的组织逻辑。",
+  "prompt_en": "This folder is packed with various files -- documents, emails, images, notes, calendar files, chat logs -- all mixed together with no organization. Please reorganize these files into a sensible directory structure. You may create subdirectories, move files, and rename files in whatever way you think is most logical. After organizing, write a brief reorganization note in the root directory explaining your organizational logic.",
+  "behavioral_freedom": [
+    "Classification dimensions: by file type vs. by topic/project vs. by date vs. by importance",
+    "Directory depth: flat categories vs. multi-level hierarchy",
+    "Whether to rename files for consistency or preserve original names",
+    "How to handle ambiguous files that could belong to multiple categories",
+    "Whether to create an archive/old folder for outdated items",
+    "Level of detail in the reorganization note",
+    "Whether to scan file content before deciding placement vs. organize by filename alone"
+  ],
+  "expected_file_ops": 20,
+  "status": "candidate"
+}

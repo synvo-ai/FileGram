@@ -1,0 +1,29 @@
+{
+  "task_id": "T-16",
+  "name": "限时优先级分诊",
+  "name_en": "Time-constrained priority triage",
+  "type": "understand",
+  "dimensions": ["A", "E", "B", "F"],
+  "observable_attributes": {
+    "reading_strategy": "triage approach: scan all filenames first vs. read a few then decide vs. search for keywords; which files selected for deep reading vs. skipped; whether company subdirectories guide selection",
+    "work_rhythm": "pacing under constraint: rapid scan-and-go vs. careful selection then focused reading; time allocation between scanning and reading",
+    "output_detail": "output under time pressure: ultra-brief bullets vs. structured but short vs. still trying to be comprehensive",
+    "thoroughness": "file coverage ratio: what percentage of files were actually read; how many subdirectories explored",
+    "cross_modal_priority": "under time pressure: skip audio/PDF entirely vs. try to check a few vs. prioritize by perceived importance; whether earnings call audio (MP3) or chart images (PNG) are accessed"
+  },
+  "workspace_bundle": "pilot/workspace/t16_workspace",
+  "depends_on": null,
+  "prompt_zh": "你的老板5分钟后要开一个重要会议，需要你提供关于这个文件夹内容的快速情报简报。这个文件夹包含一位投资分析师的工作文件，按公司和主题分类在多个子目录中：TSMC/、SeaLtd/、Intel/ 的公司研究（含财报PDF和earnings call音频录音）、research/ 宏观研究笔记、communications/ 邮件和周会记录、data/ 图表截图和数据文件，以及 personal/ 个人文件。共22个文件，包含MD、PDF、MP3、EML、PNG、CSV等多种格式。\n\n你不需要也不可能在有限时间内读完所有文件，更不可能听完所有音频录音。请：\n1. 快速评估哪些文件和子目录最重要\n2. 只读最关键的文件\n3. 写一份不超过30行的 urgent_briefing.md，列出最关键的3-5个发现\n\n效率优先。",
+  "prompt_en": "Your boss has an important meeting in 5 minutes and needs a quick intelligence briefing on this folder's contents. The folder contains an investment analyst's work files organized by company and topic across multiple subdirectories: TSMC/, SeaLtd/, Intel/ for company research (including earnings PDFs and earnings call audio recordings), research/ for macro research notes, communications/ for emails and weekly sync notes, data/ for chart screenshots and data files, and personal/ for personal files. There are 22 files total in formats including MD, PDF, MP3, EML, PNG, and CSV.\n\nYou don't need to and CAN'T read everything in the limited time, and certainly can't listen to all audio recordings. Please:\n1. Quickly assess which files and subdirectories are most important\n2. Read only the most critical files\n3. Write an urgent_briefing.md of no more than 30 lines with the top 3-5 key findings\n\nEfficiency is paramount.",
+  "behavioral_freedom": [
+    "Triage strategy: filenames only vs. quick skim of each vs. type-based priority vs. directory-based priority",
+    "How many files to read: 3-5 key files vs. skim 10+ vs. search-based",
+    "Output urgency level: telegram-style vs. structured brief vs. still somewhat detailed",
+    "Whether to acknowledge what was NOT covered",
+    "File selection criteria: by type (reports first) vs. by company vs. by recency vs. by name signals",
+    "Whether to attempt reading audio/image files or skip non-text entirely",
+    "Whether personal/ directory is examined or skipped as irrelevant"
+  ],
+  "expected_file_ops": 10,
+  "status": "active"
+}

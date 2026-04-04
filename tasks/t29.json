@@ -1,0 +1,31 @@
+{
+  "task_id": "T-29",
+  "name": "公司注册资料数据库建设",
+  "name_en": "Company registration database construction",
+  "type": "organize",
+  "dimensions": [
+    "C",
+    "D",
+    "A"
+  ],
+  "observable_attributes": {
+    "directory_style": "Classification approach: by industry vs. by company name vs. by registration number; directory hierarchy depth",
+    "reading_strategy": "Whether each PDF is read in detail vs. classified by filename pattern; sampling strategy for 30 files",
+    "edit_strategy": "Whether an index/database file is created and iteratively refined"
+  },
+  "workspace_bundle": "pilot/workspace/t29_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含约30份新加坡公司注册文件（PDF格式），涵盖建筑、信息通信、批发零售、制造业、专业服务等多个行业，还有行业分类代码参考表（XLSX）。请建立一个合理的公司注册资料管理系统：将文件分类整理到合适的目录结构中，创建索引或数据库文件便于检索，并编写管理说明。",
+  "prompt_en": "This folder contains approximately 30 Singapore company registration documents (PDF format), spanning industries including construction, IT, wholesale and retail, manufacturing, professional services, and others, along with industry classification code reference spreadsheets (XLSX). Please create a sensible company registration data management system: classify files into an appropriate directory structure, create an index or database file for easy retrieval, and write management documentation.",
+  "behavioral_freedom": [
+    "Classification dimension: by industry sector vs. by entity type vs. by registration number prefix",
+    "Whether each PDF is read to extract company details or classified by filename alone",
+    "Directory depth: industry/sub-industry/company vs. flat by industry vs. alphabetical",
+    "Whether to create a searchable index file (CSV/markdown table) with extracted metadata",
+    "How reference spreadsheets are used: cross-referenced vs. copied into docs vs. linked",
+    "Whether to add summary statistics (companies per industry, entity types)",
+    "Management documentation depth: brief README vs. comprehensive user guide"
+  ],
+  "expected_file_ops": 28,
+  "status": "active"
+}

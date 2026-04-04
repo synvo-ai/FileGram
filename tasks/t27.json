@@ -1,0 +1,31 @@
+{
+  "task_id": "T-27",
+  "name": "学生个人作品集整理",
+  "name_en": "Student portfolio compilation",
+  "type": "create",
+  "dimensions": [
+    "B",
+    "F",
+    "C"
+  ],
+  "observable_attributes": {
+    "output_detail": "Portfolio depth: minimal list vs. curated showcase with descriptions; whether a cover page or introduction is created",
+    "directory_style": "Portfolio structure: by category (academic/personal/certificates) vs. chronological vs. flat showcase",
+    "cross_modal_behavior": "Whether photos, videos, and PDFs are integrated into a cohesive portfolio narrative"
+  },
+  "workspace_bundle": "pilot/workspace/t27_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一位即将毕业的大学生的各种材料——课程视频、学术论文、简历、毕业照、证件照、各种申请表、书籍、学校指南和邮件通信。请利用这些素材创建一份个人作品集/档案，展示这位学生的学术背景、能力和经历。作品集的结构、内容选择和呈现方式由你决定。",
+  "prompt_en": "This folder contains various materials from a graduating university student — course videos, academic papers, resume, graduation photos, ID photos, application forms, books, school guides, and email correspondence. Please create a personal portfolio/profile document using these materials, showcasing the student's academic background, capabilities, and experiences. The portfolio structure, content selection, and presentation style are up to you.",
+  "behavioral_freedom": [
+    "Whether all materials are reviewed or selectively curated",
+    "Portfolio structure: by category (academic/skills/personal) vs. chronological narrative",
+    "Whether a cover page, table of contents, or introduction is created",
+    "How photos and videos are referenced or described in the portfolio",
+    "Detail level: comprehensive dossier vs. focused highlight reel",
+    "Whether to create multiple files (sections) or a single document",
+    "Whether application forms and ID documents are included or filtered as private"
+  ],
+  "expected_file_ops": 18,
+  "status": "active"
+}

@@ -1,0 +1,27 @@
+{
+  "task_id": "T-13",
+  "name": "评审意见整合修订",
+  "name_en": "Review feedback integration and revision",
+  "type": "iterate",
+  "dimensions": ["D", "A", "E"],
+  "observable_attributes": {
+    "reading_strategy": "feedback processing order: read all feedback first vs. read one and revise, repeat; how original report is re-read during revision",
+    "edit_strategy": "revision approach: address each reviewer's comments sequentially vs. thematic revision vs. full rewrite; edit granularity",
+    "version_strategy": "whether original report is preserved; whether revision notes are created",
+    "work_rhythm": "revision pacing: single comprehensive pass vs. multiple focused iterations; phased (read all, plan, edit) vs. interleaved"
+  },
+  "workspace_bundle": "pilot/workspace/t13_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一份研究报告（original_report.md）和三位评审者的反馈意见（feedback_reviewer1.md, feedback_reviewer2.md, feedback_reviewer3.md）。注意：三位评审者的部分意见互相矛盾。请：1. 阅读原始报告和所有反馈 2. 直接修改原始报告以回应反馈（需要在互相矛盾的意见中做取舍）3. 写一份 revision_notes.md 记录你对每条反馈的处理决定（采纳/部分采纳/拒绝，并说明理由）。",
+  "prompt_en": "This folder contains a research report (original_report.md) and feedback from three reviewers (feedback_reviewer1.md, feedback_reviewer2.md, feedback_reviewer3.md). Note: some reviewer comments CONTRADICT each other. Please: 1. Read the original report and all feedback 2. Revise the original report directly to address the feedback (you'll need to make judgment calls on contradictory suggestions) 3. Write a revision_notes.md documenting your decision on each feedback item (accepted/partially accepted/rejected with reasoning).",
+  "behavioral_freedom": [
+    "Feedback processing order: all feedback first then revise vs. one reviewer at a time",
+    "How to handle contradictory feedback: side with majority, use own judgment, or compromise",
+    "Revision granularity: many small edits vs. section-level rewrites vs. full document rewrite",
+    "Whether to preserve original report (backup/rename) or edit in place",
+    "Curation: plan all changes then execute vs. incremental address-and-revise",
+    "Detail level of revision notes: brief vs. comprehensive with rationale"
+  ],
+  "expected_file_ops": 15,
+  "status": "active"
+}

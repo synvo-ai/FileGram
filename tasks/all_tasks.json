@@ -1,0 +1,279 @@
+[
+  {
+    "task_id": "T-01",
+    "name": "投资分析师工作概况摘要",
+    "name_en": "Investment analyst work overview summary",
+    "type": "understand",
+    "dimensions": ["A", "B"],
+    "observable_attributes": {
+      "reading_strategy": "file_open sequence and trigger source (browse directory first vs. search by keyword vs. open files directly by type); which files opened vs. skipped; total file coverage ratio",
+      "output_detail": "output file length (word count), number of structural headings, whether data points are cited with specific numbers",
+      "output_structure": "output organization style (flat narrative vs. hierarchical sections vs. bullet list vs. table format)",
+      "tone": "output language register (formal analytical vs. conversational vs. neutral)"
+    },
+    "workspace_bundle": "pilot/workspace/t01_workspace",
+    "depends_on": null,
+    "prompt_zh": "这个文件夹包含一位投资分析师的工作文件，包括研究报告、财务数据、邮件、笔记和个人文件。请浏览文件夹内容，了解这位分析师的工作重点、正在跟踪的公司和关注的议题，然后写一份工作概况摘要文件，保存在当前目录下。",
+    "prompt_en": "This folder contains an investment analyst's work files, including research reports, financial data, emails, notes, and personal files. Browse the folder contents to understand the analyst's work focus, which companies they are tracking, and what topics they are concerned with, then write a work overview summary file and save it in the current directory.",
+    "behavioral_freedom": [
+      "Browsing strategy: scan all files sequentially vs. read only key document types (md/pdf) vs. search for financial terms",
+      "Depth: read full content of each file vs. skim first paragraphs vs. check filenames only for some",
+      "Output detail level: one paragraph vs. multi-section structured report vs. table of findings",
+      "Whether to include specific financial figures and data points in the summary",
+      "Whether to mention personal/non-work files found in the folder",
+      "File naming for output: descriptive vs. generic vs. date-prefixed"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "T-02",
+    "name": "法律案件材料梳理与时间线",
+    "name_en": "Legal case materials review and timeline",
+    "type": "understand",
+    "dimensions": ["A", "B", "E"],
+    "observable_attributes": {
+      "reading_strategy": "file_open order and coverage (chronological vs. by file type vs. by perceived importance); whether mp3/image files are examined or skipped",
+      "output_detail": "output file length and granularity; whether individual case details are extracted vs. only high-level themes",
+      "output_structure": "organization of output (narrative vs. per-case breakdown vs. timeline vs. table)",
+      "tone": "formality level in writing (legal-professional vs. casual summary)"
+    },
+    "workspace_bundle": "pilot/workspace/t02_workspace",
+    "depends_on": null,
+    "prompt_zh": "这个文件夹包含一位法律工作者的案件相关材料，包括案件报告、法律法规、客户邮件、日历安排、聊天记录和语音备忘录。请阅读并理解这些材料，写一份案件概要文件，说明：涉及哪些案件/客户？目前进展到什么阶段？有哪些关键时间节点？保存在当前目录下。",
+    "prompt_en": "This folder contains case-related materials for a legal professional, including case reports, statutes, client emails, calendar entries, chat logs, and voice memos. Read and understand these materials, then write a case summary file covering: Which cases/clients are involved? What stage is each at? What are the key dates and deadlines? Save it in the current directory.",
+    "behavioral_freedom": [
+      "Reading order: by file type (docx first, then emails) vs. alphabetical vs. by date vs. exploratory browsing",
+      "Whether to attempt reading non-text files (mp3, png) or skip them",
+      "Output format: chronological timeline vs. per-case sections vs. client-centric grouping",
+      "Level of legal detail: cite specific statutes vs. general description",
+      "Whether to flag gaps or missing information in the materials",
+      "Whether to separate personal vs. professional materials in the summary"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "T-03",
+    "name": "个人知识库搭建",
+    "name_en": "Personal knowledge base creation",
+    "type": "create",
+    "dimensions": ["B", "C"],
+    "observable_attributes": {
+      "output_detail": "total content volume (file count, word count per file); depth of index/cross-references",
+      "output_structure": "how content is organized across files (single file vs. multi-file; flat vs. hierarchical)",
+      "directory_style": "directory structure created (flat vs. nested by topic vs. by type); depth of nesting",
+      "naming": "file naming pattern used (descriptive_long vs. short_abbreviation vs. date_prefix vs. category_prefix)",
+      "tone": "writing style in created content (formal vs. conversational vs. telegraphic)"
+    },
+    "workspace_bundle": "pilot/workspace/t03_workspace",
+    "depends_on": null,
+    "prompt_zh": "你需要为自己搭建一个个人知识库，主题为「投资分析方法论」。请在当前目录下创建一套知识库文件，涵盖以下方面：基本面分析框架、财务指标参考（如PE/PB/ROE等）、行业分析模板、以及一份知识库使用说明（索引文件）。知识库的组织方式、文件格式和详细程度由你自行决定。",
+    "prompt_en": "You need to build a personal knowledge base on the topic of 'Investment Analysis Methodology'. Create a set of knowledge base files in the current directory covering: fundamental analysis framework, financial metrics reference (e.g., PE/PB/ROE), industry analysis template, and a knowledge base usage guide (index file). The organization, file format, and level of detail are up to you.",
+    "behavioral_freedom": [
+      "Directory structure: single folder vs. topic-based subdirectories vs. deeply nested hierarchy",
+      "File format: all markdown vs. mix of md/txt/json vs. structured templates",
+      "Content depth: brief checklists vs. comprehensive guides with examples",
+      "Index style: simple file list vs. linked table of contents vs. categorized directory",
+      "Naming convention: topic-based vs. numbered vs. date-prefixed",
+      "Whether to add README, changelog, or meta-documentation files"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "T-04",
+    "name": "会议纪要与跟进文档制作",
+    "name_en": "Meeting minutes and follow-up document creation",
+    "type": "create",
+    "dimensions": ["B", "C", "F"],
+    "observable_attributes": {
+      "output_detail": "content completeness (whether all attendee/action items captured); word count and section depth",
+      "output_structure": "document structure (chronological notes vs. decision-action format vs. executive summary + details)",
+      "directory_style": "file organization of outputs (single file vs. separate minutes/actions/followup files; directory creation)",
+      "naming": "output file naming pattern (descriptive vs. date-prefixed vs. short)",
+      "tone": "writing register (formal meeting protocol vs. casual team notes)"
+    },
+    "workspace_bundle": "pilot/workspace/t04_workspace",
+    "depends_on": null,
+    "prompt_zh": "以下场景需要你处理：一次重要的客户晚餐刚刚结束。参加者包括你的同事Daniel Chen、客户方的John Doe（亚太区另类投资负责人）和Sarah Lee（投资组合经理）。晚餐讨论了以下要点：(1) 客户对你们团队的东盟宏观洞察印象深刻；(2) 客户对即将推出的东南亚科技基础设施另类策略基金表示兴趣；(3) Sarah Lee询问了ESG整合流程；(4) 讨论了联合白皮书的合作可能。请在当前目录下创建完整的会后文档，包括会议纪要、行动项跟踪和需要发送的跟进邮件草稿。组织方式和文件格式由你决定。",
+    "prompt_en": "You need to handle the following scenario: An important client dinner has just concluded. Attendees were your colleague Daniel Chen, and from the client side John Doe (Head of Alternative Investments, APAC) and Sarah Lee (Portfolio Manager). The dinner covered these key points: (1) The client was impressed with your team's ASEAN macro insights; (2) The client expressed interest in your upcoming alternative strategies fund for Southeast Asian tech infrastructure; (3) Sarah Lee asked about ESG integration processes; (4) A potential joint whitepaper collaboration was discussed. Create comprehensive post-meeting documentation in the current directory, including meeting minutes, action item tracking, and follow-up email drafts. Organization and file format are up to you.",
+    "behavioral_freedom": [
+      "Document scope: single combined file vs. separate files for minutes/actions/emails",
+      "Detail level: brief bullet points vs. detailed narrative with context",
+      "Whether to create a dedicated directory structure for meeting materials",
+      "Email drafts: just one generic vs. personalized per recipient",
+      "Whether to include a timeline/deadline tracker for action items",
+      "Format choice: markdown vs. plain text vs. structured template",
+      "Whether to reference source context from workspace files (if any)"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "T-05",
+    "name": "混乱文件夹整理归档",
+    "name_en": "Messy folder cleanup and reorganization",
+    "type": "organize",
+    "dimensions": ["A", "C"],
+    "observable_attributes": {
+      "reading_strategy": "how files are examined before organizing (read content of each vs. judge by filename/type vs. quick scan)",
+      "directory_style": "resulting directory structure (flat grouping vs. nested topic hierarchy vs. by file type vs. by date)",
+      "naming": "whether and how files are renamed (preserve original vs. add prefixes vs. standardize naming convention)",
+      "version_strategy": "handling of apparent duplicates or old versions (keep all vs. archive vs. delete)"
+    },
+    "workspace_bundle": "pilot/workspace/t05_workspace",
+    "depends_on": null,
+    "prompt_zh": "这个文件夹里堆满了各种文件——文档、邮件、图片、笔记、日历文件、聊天记录，全部混在一起没有任何组织。请将这些文件整理成合理的目录结构。你可以创建子文件夹、移动文件、重命名文件，以你认为最合理的方式组织。整理完成后，在根目录写一份简短的整理说明，解释你的组织逻辑。",
+    "prompt_en": "This folder is packed with various files -- documents, emails, images, notes, calendar files, chat logs -- all mixed together with no organization. Please reorganize these files into a sensible directory structure. You may create subdirectories, move files, and rename files in whatever way you think is most logical. After organizing, write a brief reorganization note in the root directory explaining your organizational logic.",
+    "behavioral_freedom": [
+      "Classification dimensions: by file type vs. by topic/project vs. by date vs. by importance",
+      "Directory depth: flat categories vs. multi-level hierarchy",
+      "Whether to rename files for consistency or preserve original names",
+      "How to handle ambiguous files that could belong to multiple categories",
+      "Whether to create an archive/old folder for outdated items",
+      "Level of detail in the reorganization note",
+      "Whether to scan file content before deciding placement vs. organize by filename alone"
+    ],
+    "expected_file_ops": 20,
+    "status": "candidate"
+  },
+  {
+    "task_id": "T-06",
+    "name": "多源信息综合研究报告",
+    "name_en": "Multi-source synthesis research report",
+    "type": "synthesize",
+    "dimensions": ["A", "B", "F"],
+    "observable_attributes": {
+      "reading_strategy": "which source files are read and in what order; depth of reading per source (full vs. skim); whether cross-references between files are followed",
+      "output_detail": "report length, number of data points cited, whether specific figures are extracted from sources",
+      "output_structure": "report organization (thematic vs. source-by-source vs. comparative framework)",
+      "tone": "writing register (academic/analytical vs. executive briefing vs. informal summary)",
+      "cross_modal_behavior": "whether data is presented in tables/lists/visual references vs. pure prose"
+    },
+    "workspace_bundle": "pilot/workspace/t06_workspace",
+    "depends_on": null,
+    "prompt_zh": "这个文件夹包含关于一家科技公司的多种材料：SEC年报/季报、投资分析笔记、相关邮件讨论和行业背景文件。请综合阅读这些材料，撰写一份投资研究报告，涵盖：公司基本面概况、财务亮点与风险、行业竞争地位分析。报告保存在当前目录下。",
+    "prompt_en": "This folder contains various materials about a technology company: SEC annual/quarterly reports, investment analysis notes, related email discussions, and industry background documents. Synthesize these materials and write an investment research report covering: company fundamentals overview, financial highlights and risks, and competitive position analysis. Save the report in the current directory.",
+    "behavioral_freedom": [
+      "Reading order: start with analysis notes vs. go straight to raw filings vs. read emails for context first",
+      "Source coverage: read all available documents vs. focus on the most recent/relevant ones",
+      "Report structure: thematic sections vs. standard equity research format vs. SWOT analysis",
+      "Whether to create supporting artifacts (comparison tables, data summaries) in addition to the main report",
+      "Level of quantitative detail: cite exact figures vs. qualitative summaries only",
+      "Whether to include a sources/references section"
+    ],
+    "expected_file_ops": 12,
+    "status": "candidate"
+  },
+  {
+    "task_id": "T-07",
+    "name": "日记与笔记综合人物画像",
+    "name_en": "Diary and notes synthesis into personal profile",
+    "type": "synthesize",
+    "dimensions": ["A", "B"],
+    "observable_attributes": {
+      "reading_strategy": "file access order and coverage; whether all diary/note files are read or only sampled; reading depth per file",
+      "output_detail": "profile comprehensiveness (number of life dimensions covered); word count; whether specific quotes/dates are cited",
+      "output_structure": "profile organization (narrative biography vs. categorical breakdown vs. timeline)",
+      "tone": "writing style (analytical/third-person vs. empathetic/first-person vs. clinical)"
+    },
+    "workspace_bundle": "pilot/workspace/t07_workspace",
+    "depends_on": null,
+    "prompt_zh": "这个文件夹包含一个人的日记、个人笔记、学习记录、聊天记录和邮件。请阅读这些材料，为这个人撰写一份综合人物画像，涵盖：职业/学业状况、生活习惯与兴趣爱好、社交关系网络、当前面临的主要挑战、以及性格特点。画像文件保存在当前目录下。",
+    "prompt_en": "This folder contains a person's diary, personal notes, learning logs, chat records, and emails. Read these materials and write a comprehensive personal profile covering: career/academic situation, lifestyle habits and hobbies, social relationships, current main challenges, and personality traits. Save the profile file in the current directory.",
+    "behavioral_freedom": [
+      "Reading strategy: chronological through diary vs. by file type vs. sampling a few entries",
+      "Coverage: attempt to read everything vs. focus on most revealing documents",
+      "Profile structure: narrative essay vs. categorized sections vs. bullet-point summary",
+      "Depth: surface-level overview vs. detailed analysis with evidence/quotes",
+      "Perspective: analytical third person vs. empathetic storytelling",
+      "Whether to include a relationship diagram or timeline visualization"
+    ],
+    "expected_file_ops": 10,
+    "status": "candidate"
+  },
+  {
+    "task_id": "T-08",
+    "name": "季度工作总结撰写",
+    "name_en": "Quarterly work summary report creation",
+    "type": "create",
+    "dimensions": ["B", "C", "F"],
+    "observable_attributes": {
+      "output_detail": "report length and depth; number of concrete achievements/metrics cited; level of self-reflection",
+      "output_structure": "report format (narrative vs. accomplishments+plan vs. OKR-style vs. custom template)",
+      "directory_style": "whether output is a single file or structured with supporting files (data appendix, charts reference)",
+      "naming": "output filename convention chosen",
+      "cross_modal_behavior": "whether supplementary materials (tables, data files, charts) are created alongside the report"
+    },
+    "workspace_bundle": "pilot/workspace/t08_workspace",
+    "depends_on": null,
+    "prompt_zh": "基于这个文件夹中的工作记录、完成的任务列表、邮件往来和学习笔记，请撰写一份本季度的工作/学习总结报告。报告应该回顾本季度完成的主要工作、取得的成就、遇到的挑战，以及下一季度的计划。报告的格式、结构和详细程度由你自行决定。保存在当前目录下。",
+    "prompt_en": "Based on the work records, completed task lists, email correspondence, and learning notes in this folder, write a quarterly work/study summary report. The report should review major work completed this quarter, achievements, challenges encountered, and plans for next quarter. The format, structure, and level of detail are up to you. Save it in the current directory.",
+    "behavioral_freedom": [
+      "Report format: narrative essay vs. structured sections (accomplishments/challenges/plans) vs. bullet-point summary",
+      "Whether to create supporting data files or appendices",
+      "Depth of reflection: factual listing vs. analytical assessment with lessons learned",
+      "Whether to include quantitative metrics or keep it qualitative",
+      "Output file organization: single report vs. report + appendix + plan",
+      "Naming and dating convention for the output file(s)"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  },
+  {
+    "task_id": "T-09",
+    "name": "报告修订与压缩",
+    "name_en": "Report revision and condensation",
+    "type": "iterate",
+    "dimensions": ["D", "B"],
+    "observable_attributes": {
+      "edit_strategy": "edit pattern: incremental small edits across multiple passes vs. one large rewrite; number of file_edit events and lines changed per edit",
+      "version_strategy": "whether original file is preserved (copied/renamed as backup) or directly overwritten",
+      "output_detail": "resulting document length relative to original; what content is kept vs. cut",
+      "output_structure": "structural changes made (preserved original structure vs. restructured entirely)"
+    },
+    "workspace_bundle": "pilot/workspace/t09_workspace",
+    "depends_on": null,
+    "prompt_zh": "这个文件夹中有一份之前写的详细报告（约2000字）。收到的反馈是：「报告太长了，请压缩到800字以内。保留最关键的发现和结论，删除次要细节。另外，语气需要从学术风格改为面向管理层的简洁汇报风格。」请按照这个反馈修改报告。",
+    "prompt_en": "This folder contains a previously written detailed report (approximately 2000 words). The feedback received is: 'The report is too long. Please condense it to under 800 words. Keep the most critical findings and conclusions, remove secondary details. Also, change the tone from academic style to a concise executive briefing style.' Please revise the report according to this feedback.",
+    "behavioral_freedom": [
+      "Revision approach: edit in-place vs. create new condensed version alongside original",
+      "Whether to preserve the original file as a backup before editing",
+      "Strategy: trim each section proportionally vs. restructure and rewrite entirely",
+      "Number of editing passes: one large rewrite vs. iterative refinement",
+      "Whether to create a revision log or change notes file",
+      "How aggressive the tone shift is (subtle adjustments vs. complete rewrite)"
+    ],
+    "expected_file_ops": 6,
+    "status": "candidate"
+  },
+  {
+    "task_id": "T-10",
+    "name": "知识库内容更新与维护",
+    "name_en": "Knowledge base content update and maintenance",
+    "type": "maintain",
+    "dimensions": ["D", "C", "E"],
+    "observable_attributes": {
+      "edit_strategy": "how existing files are modified: incremental additions vs. section rewrites; number and size of edits per file",
+      "directory_style": "whether existing directory structure is preserved or reorganized; whether new subdirectories are created for new content",
+      "version_strategy": "whether old content is preserved (backup/archive) or directly modified; whether index file is updated",
+      "naming": "whether new files follow the same naming convention as existing ones"
+    },
+    "workspace_bundle": "pilot/workspace/t10_workspace",
+    "depends_on": "T-03",
+    "depends_on_note": "Uses T-03 Create task's knowledge base output as initial workspace. At runtime, the agent's output from T-03 is copied into this workspace before T-10 begins.",
+    "prompt_zh": "你之前搭建了一个「投资分析方法论」知识库。现在有三条新信息需要纳入：(1) 新增一个「技术分析基础」模块，涵盖移动平均线、RSI、MACD等基本指标；(2) 在基本面分析框架中补充「自由现金流折现模型（DCF）」的详细说明；(3) 更新索引文件以反映所有变更。请在现有知识库基础上完成这些更新。",
+    "prompt_en": "You previously built an 'Investment Analysis Methodology' knowledge base. Now three new pieces of information need to be incorporated: (1) Add a new 'Technical Analysis Basics' module covering basic indicators like moving averages, RSI, and MACD; (2) Add detailed explanation of the 'Discounted Cash Flow (DCF) Model' to the fundamental analysis framework; (3) Update the index file to reflect all changes. Please complete these updates on the existing knowledge base.",
+    "behavioral_freedom": [
+      "Whether to add new content as new files or append to existing files",
+      "Whether to reorganize the existing structure to accommodate new modules",
+      "How the index/README is updated: minimal addition vs. comprehensive rewrite",
+      "Whether to preserve version history of modified files (backup/rename old version)",
+      "Depth of new content: brief overview vs. detailed guide with examples",
+      "Whether to add cross-references between new and existing content"
+    ],
+    "expected_file_ops": 8,
+    "status": "candidate"
+  }
+]

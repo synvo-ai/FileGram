@@ -136,7 +136,6 @@ def parse_qa_results(log_path: str) -> dict:
     """Parse QA eval results from log output.
 
     The results table format is:
-    filegramos_simple        49.0%     —   48.1%    78.3%    48.7%    39.6%     — |    58.8%    66.7%    42.8%  |    52.6%
     filegramos               45.6%     —   46.4%    85.7%    56.4%    38.9%     — |    60.8%    61.7%    45.0%  |    54.3%
     """
     results = {}
@@ -146,12 +145,8 @@ def parse_qa_results(log_path: str) -> dict:
 
         for line in text.split("\n"):
             line = line.strip()
-            # Match lines starting with method name followed by percentages
-            for method in ("filegramos_simple", "filegramos"):
+            for method in ("filegramos",):
                 if not line.startswith(method):
-                    continue
-                # Avoid partial match: "filegramos" should not match "filegramos_simple"
-                if method == "filegramos" and line.startswith("filegramos_simple"):
                     continue
                 # Extract all percentage values from the line
                 pcts = re.findall(r"(\d+\.\d+)%", line)
@@ -267,11 +262,9 @@ def main():
     for r in all_results[-len(exp_ids) :]:
         eid = r["exp_id"]
         name = r["name"]
-        s = r["results"].get("filegramos_simple", {}).get("Overall", "?")
         f = r["results"].get("filegramos", {}).get("Overall", "?")
-        ds = f"{s - baseline_simple:+.1f}" if isinstance(s, (int, float)) else "?"
         df = f"{f - baseline_formal:+.1f}" if isinstance(f, (int, float)) else "?"
-        print(f"{eid:<4} {name:<25} {s:<10} {f:<10} {ds:<10} {df:<10}")
+        print(f"{eid:<4} {name:<25} {f:<10} {df:<10}")
 
     print(f"\nResults saved to {RESULTS_FILE}")
 

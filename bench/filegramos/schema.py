@@ -115,6 +115,20 @@ class NormalizedEvent:
     resolved_diff: str = ""  # was _resolved_diff
 
 
+# ─── 1b. Phase Types (for sequence analysis) ─────────────────────────────────
+
+PHASE_EXPLORATION = "exploration"  # file_read, file_browse, file_search
+PHASE_PRODUCTION = "production"    # file_write, file_edit
+PHASE_ORGANIZATION = "organization"  # file_move, file_rename, dir_create, file_delete, file_copy
+PHASE_OTHER = "other"
+
+PHASE_TYPES: frozenset[str] = frozenset({
+    PHASE_EXPLORATION,
+    PHASE_PRODUCTION,
+    PHASE_ORGANIZATION,
+    PHASE_OTHER,
+})
+
 # ─── 2. File Types ───────────────────────────────────────────────────────────
 
 STRUCTURED_FILE_TYPES: frozenset[str] = frozenset(

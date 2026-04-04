@@ -1,0 +1,31 @@
+{
+  "task_id": "T-30",
+  "name": "语音备忘录整理归档",
+  "name_en": "Voice memo organization and archiving",
+  "type": "iterate",
+  "dimensions": [
+    "D",
+    "F",
+    "A"
+  ],
+  "observable_attributes": {
+    "edit_strategy": "Whether memos are transcribed, summarized, or archived as-is; handling of music files vs. spoken memos",
+    "cross_modal_behavior": "How audio content is processed: transcription vs. tagging vs. metadata-only organization",
+    "directory_style": "Archive structure: by person/source vs. by content type (work/personal/music) vs. chronological"
+  },
+  "workspace_bundle": "pilot/workspace/t30_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含各种音频文件——工作语音备忘录（生活记录、水彩学习、宠物护理）、法律案件备忘和会议总结、音乐文件、团队录音，还有相关的文字笔记。请整理归档这些音频文件：听取内容、分类整理、建立合理的目录结构，并为每个音频编写摘要或标签。你可以选择创建转录文档、合并相关备忘录、或建立音频索引。",
+  "prompt_en": "This folder contains various audio files — personal voice memos (daily life, watercolor learning, pet care), legal case memos and meeting debriefs, music files, team recordings, plus related text notes. Please organize and archive these audio files: listen to their content, categorize them, create a sensible directory structure, and write summaries or tags for each audio. You may choose to create transcription documents, merge related memos, or build an audio index.",
+  "behavioral_freedom": [
+    "Whether all 13 audio files are listened to or classified by filename/metadata only",
+    "Classification: by person/source vs. by topic (work/personal/music) vs. by format",
+    "Whether music files are treated separately from voice memos",
+    "Whether transcriptions are created for spoken memos",
+    "Whether related memos are merged or kept separate with cross-references",
+    "Whether an audio index/catalog is created with summaries",
+    "Handling of related text files: linked to corresponding audio or organized independently"
+  ],
+  "expected_file_ops": 18,
+  "status": "active"
+}

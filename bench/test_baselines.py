@@ -51,12 +51,17 @@ from baselines.base import BaseAdapter
 from baselines.eager_summarization import EagerSummarizationAdapter  # noqa: F401
 from baselines.evermemos_adapter import EverMemOSAdapter  # noqa: F401
 from baselines.filegramos_adapter import FileGramOSAdapter  # noqa: F401
-from baselines.filegramos_simple import FileGramOSSimpleAdapter  # noqa: F401
 from baselines.full_context import FullContextAdapter  # noqa: F401
-from baselines.mem0_adapter import Mem0Adapter  # noqa: F401
+try:
+    from baselines.mem0_adapter import Mem0Adapter  # noqa: F401
+except Exception:
+    pass
 from baselines.memos_adapter import MemOSAdapter  # noqa: F401
 from baselines.memu_adapter import MemUAdapter  # noqa: F401
 from baselines.naive_rag import NaiveRAGAdapter  # noqa: F401
+from baselines.mma_adapter import MMAAdapter  # noqa: F401
+from baselines.visrag_adapter import VisRAGAdapter  # noqa: F401
+from baselines.simplemem_adapter import SimpleMemAdapter  # noqa: F401
 from baselines.zep_adapter import ZepAdapter  # noqa: F401
 from evaluation.judge_scoring import JudgeScorer
 
@@ -92,6 +97,7 @@ CACHE_DIR = _BENCH_DIR / "ingest_cache"
 SKIP_PERTURBED = False  # False = include perturbed (main table); True = standard only (ablation)
 USE_FILTERED_EVENTS = False  # Legacy: events.json is now pre-cleaned (was events_filtered.json)
 USE_INGEST_CACHE = True  # Load/save ingest cache to avoid re-running LLM extraction
+STRIP_CONTENT = False  # True = strip _resolved_content from events (multimodal simulation)
 
 METHODS = [
     "naive_rag",
@@ -101,7 +107,9 @@ METHODS = [
     "memos",
     "memu",
     "evermemos",
-    "filegramos_simple",
+    "simplemem",
+    "mma",
+    "visrag",
     "filegramos",
     "full_context",  # last: sends huge prompts, often rate-limited
 ]
@@ -522,6 +530,13 @@ def load_trajectories_filtered(profile_id: str) -> list[dict[str, Any]]:
 
         # Resolve media content
         BaseAdapter._resolve_media_refs(traj_dir, events)
+
+        # Strip resolved content to simulate multimodal setting (PDF/image outputs)
+        if STRIP_CONTENT:
+            for event in events:
+                for key in ("_resolved_content", "_resolved_diff",
+                            "_resolved_content_old", "_resolved_content_new"):
+                    event.pop(key, None)
 
         if is_perturbed:
             included_perturbed += 1
@@ -1054,6 +1069,11 @@ if __name__ == "__main__":
         help="LLM API: azure (GPT-4.1) or gemini (Gemini 2.5 Pro)",
     )
     parser.add_argument("--ingest-only", action="store_true", help="Only run ingest (build pkl caches), skip inference")
+    parser.add_argument(
+        "--strip-content",
+        action="store_true",
+        help="Strip _resolved_content from events (simulates multimodal output setting where files are PDF/images)",
+    )
     args = parser.parse_args()
     if args.methods:
         METHODS[:] = [m.strip() for m in args.methods.split(",")]
@@ -1065,6 +1085,8 @@ if __name__ == "__main__":
         SKIP_PERTURBED = True
     if args.ingest_only:
         INGEST_ONLY = True
+    if args.strip_content:
+        STRIP_CONTENT = True
     LLM_API = args.api
     # Resolve actual model name for dir naming
     if LLM_API == "azure":
@@ -1076,8 +1098,9 @@ if __name__ == "__main__":
         _model_slug = _model_name.replace("-", "")
     else:
         _model_slug = _model_name.replace("-", "_")
-    RESULTS_DIR = _BENCH_DIR / f"test_results_{_model_slug}"
-    CACHE_DIR = _BENCH_DIR / f"ingest_cache_{_model_slug}"
+    _suffix = f"_nocontent_{_model_slug}" if STRIP_CONTENT else f"_{_model_slug}"
+    RESULTS_DIR = _BENCH_DIR / f"test_results{_suffix}"
+    CACHE_DIR = _BENCH_DIR / f"ingest_cache{_suffix}"
     LOGS_DIR = RESULTS_DIR / "logs"
     PARALLEL_JOBS = args.parallel
     MAX_TASKS = args.max_tasks

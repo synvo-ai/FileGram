@@ -1,0 +1,31 @@
+{
+  "task_id": "T-32",
+  "name": "跨模态档案一致性检查",
+  "name_en": "Cross-modal archive consistency check",
+  "type": "maintain",
+  "dimensions": [
+    "D",
+    "A",
+    "F"
+  ],
+  "observable_attributes": {
+    "reading_strategy": "Whether all files are examined or sampling is used; how cross-references are traced",
+    "edit_strategy": "How inconsistencies are handled: fix in place vs. flag and report vs. create separate corrections",
+    "cross_modal_behavior": "Ability to identify mismatches between documents referencing photos/videos/audio and actual media files"
+  },
+  "workspace_bundle": "pilot/workspace/t32_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一个多模态档案，其中存在各种一致性问题：文档中引用了图片但可能有重复文件、音频备忘录的内容与对应文字记录可能不一致、有些媒体文件被复制了多份（不同文件名但内容相同）、文档中的引用可能指向不存在的文件。请检查这个档案的一致性：1. 找出重复的媒体文件 2. 检查文档与媒体文件的引用关系 3. 标记不一致之处 4. 编写一份一致性检查报告，并可选择性地修复发现的问题。",
+  "prompt_en": "This folder contains a multi-modal archive with various consistency issues: documents reference images but there may be duplicate files, audio memo content may not match corresponding text records, some media files have been copied multiple times (different names but same content), and document references may point to non-existent files. Please check the archive's consistency: 1. Find duplicate media files 2. Check document-to-media cross-references 3. Flag inconsistencies 4. Write a consistency check report and optionally fix discovered issues.",
+  "behavioral_freedom": [
+    "Check thoroughness: comprehensive review of every file vs. sampling-based spot checks",
+    "Whether duplicates are detected by content comparison or filename similarity",
+    "How cross-references are traced: read every document for references vs. search for file mentions",
+    "Inconsistency handling: fix in place vs. flag only vs. create correction proposals",
+    "Whether a detailed consistency report with evidence is written",
+    "Whether duplicate files are cleaned up or just reported",
+    "Whether missing references are fixed by creating placeholder files or just noted"
+  ],
+  "expected_file_ops": 22,
+  "status": "active"
+}

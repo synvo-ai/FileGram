@@ -1,0 +1,31 @@
+{
+  "task_id": "T-26",
+  "name": "个人数字资产归档",
+  "name_en": "Personal digital asset archiving",
+  "type": "organize",
+  "dimensions": [
+    "C",
+    "A",
+    "F"
+  ],
+  "observable_attributes": {
+    "directory_style": "Archive structure: by modality (photos/videos/audio/docs) vs. by person/theme vs. by date",
+    "reading_strategy": "Whether each file is previewed before filing; browsing approach for 35 mixed files",
+    "version_strategy": "Whether a master index or manifest is created; backup approach"
+  },
+  "workspace_bundle": "pilot/workspace/t26_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一个人的各种数字资产——旅行照片、电影视频、音乐、语音备忘录、宠物照片、生活照、聊天记录、日记、健身数据等，来自不同时期和场景，总共约35个文件全部散放在根目录。请建立一个合理的归档系统：分类整理所有文件，建立目录结构，可以选择性地创建索引或说明文件。",
+  "prompt_en": "This folder contains a person's various digital assets — travel photos, movie videos, music, voice memos, pet photos, daily life shots, chat logs, diary, fitness data, etc., from different periods and contexts, approximately 35 files all scattered in the root directory. Please create a sensible archiving system: categorize all files, establish a directory structure, and optionally create an index or description file.",
+  "behavioral_freedom": [
+    "Top-level classification: by modality (photos/videos/audio) vs. by life domain (travel/work/hobbies/personal)",
+    "Whether to preview each file before filing or judge by name/type alone",
+    "Directory depth: 3+ levels vs. flat categories vs. hybrid approach",
+    "Whether to create a master index/manifest file listing all assets",
+    "File renaming: standardize names vs. keep originals vs. add prefixes",
+    "How mixed-source files (from different people/contexts) are handled",
+    "Whether to separate personal vs. entertainment vs. work content"
+  ],
+  "expected_file_ops": 30,
+  "status": "active"
+}

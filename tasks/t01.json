@@ -1,0 +1,27 @@
+{
+  "task_id": "T-01",
+  "name": "投资分析师工作概况摘要",
+  "name_en": "Investment analyst work overview summary",
+  "type": "understand",
+  "dimensions": ["A", "B"],
+  "observable_attributes": {
+    "reading_strategy": "file_open sequence and trigger source (browse directory first vs. search by keyword vs. open files directly by type); which files opened vs. skipped; total file coverage ratio",
+    "output_detail": "output file length (word count), number of structural headings, whether data points are cited with specific numbers",
+    "output_structure": "output organization style (flat narrative vs. hierarchical sections vs. bullet list vs. table format)",
+    "tone": "output language register (formal analytical vs. conversational vs. neutral)"
+  },
+  "workspace_bundle": "pilot/workspace/t01_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一位投资分析师的工作文件，包括研究报告、财务数据、邮件、笔记和个人文件。请浏览文件夹内容，了解这位分析师的工作重点、正在跟踪的公司和关注的议题，然后写一份工作概况摘要文件，保存在当前目录下。",
+  "prompt_en": "This folder contains an investment analyst's work files, including research reports, financial data, emails, notes, and personal files. Browse the folder contents to understand the analyst's work focus, which companies they are tracking, and what topics they are concerned with, then write a work overview summary file and save it in the current directory.",
+  "behavioral_freedom": [
+    "Browsing strategy: scan all files sequentially vs. read only key document types (md/pdf) vs. search for financial terms",
+    "Depth: read full content of each file vs. skim first paragraphs vs. check filenames only for some",
+    "Output detail level: one paragraph vs. multi-section structured report vs. table of findings",
+    "Whether to include specific financial figures and data points in the summary",
+    "Whether to mention personal/non-work files found in the folder",
+    "File naming for output: descriptive vs. generic vs. date-prefixed"
+  ],
+  "expected_file_ops": 12,
+  "status": "candidate"
+}

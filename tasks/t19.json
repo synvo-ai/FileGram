@@ -1,0 +1,30 @@
+{
+  "task_id": "T-19",
+  "name": "文档受众改写",
+  "name_en": "Document audience adaptation",
+  "type": "iterate",
+  "dimensions": ["D", "B"],
+  "observable_attributes": {
+    "edit_strategy": "adaptation approach: simplify in-place vs. create parallel simplified versions vs. complete rewrite; per-file vs. batch processing; how much original structure is preserved",
+    "output_detail": "adaptation depth: literal simplification vs. restructuring for lay audience vs. complete rewrite with explanatory additions",
+    "version_strategy": "whether professional originals are preserved alongside simplified versions or overwritten",
+    "output_structure": "whether document structure is preserved or adapted for non-expert readers (e.g., adding glossaries, removing section numbers)",
+    "cross_modal_handling": "whether audio memos (MP3) and PDF legal documents are processed: skip entirely vs. create text summaries vs. reference in simplified materials"
+  },
+  "workspace_bundle": "pilot/workspace/t19_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一位律师的案件材料，分布在5个子目录中：case_reports/ 包含法院判决书和案件报告（DOCX格式），legal_reference/ 包含法律条文和判决书PDF，audio_memos/ 包含案件口述备忘录（MP3），client_communications/ 包含法律援助相关邮件（EML），context/ 包含客户背景和会议议程。\n\n一位非法律背景的客户（陈丽华女士）即将来开会，需要你将关键文档改写为通俗易懂的版本。请阅读 context/ 目录了解客户背景和会议需求，然后处理文件夹中的核心文档，将专业法律内容改写为普通人能理解的语言。\n\n改写方式（直接修改原文件、创建平行通俗版本、或完全重写）由你决定。",
+  "prompt_en": "This folder contains a lawyer's case materials organized in 5 subdirectories: case_reports/ has court judgments and case reports (DOCX), legal_reference/ has statutes and judgment PDFs, audio_memos/ has case audio memos (MP3), client_communications/ has legal aid emails (EML), and context/ has client background and meeting agenda.\n\nA non-legal client (Mrs. Chen Lihua) is coming for a meeting and needs key documents rewritten in plain language she can understand. Please read the context/ directory to understand the client's background and meeting needs, then process the core documents in the folder, adapting professional legal content into language a layperson can understand.\n\nThe adaptation approach (edit originals in-place, create parallel simplified versions, or complete rewrite) is your choice.",
+  "behavioral_freedom": [
+    "Adaptation strategy: simplify in-place vs. create parallel '_simplified' versions vs. complete rewrite",
+    "Whether to preserve original professional documents unchanged",
+    "Adaptation depth: word-level simplification vs. structural reorganization vs. adding explanatory context",
+    "How to handle audio memos (MP3): skip vs. summarize vs. reference in written materials",
+    "How to handle PDF legal documents: skip vs. create text summary vs. extract key points",
+    "File organization: same directory vs. new client_versions/ subdirectory vs. per-topic folders",
+    "Naming convention: _simplified suffix vs. new descriptive names vs. overwrite originals",
+    "Whether to create a single consolidated briefing document vs. one simplified version per original"
+  ],
+  "expected_file_ops": 18,
+  "status": "active"
+}

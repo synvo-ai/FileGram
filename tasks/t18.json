@@ -1,0 +1,28 @@
+{
+  "task_id": "T-18",
+  "name": "知识库三轮增量更新",
+  "name_en": "Knowledge base three-round incremental update",
+  "type": "maintain",
+  "dimensions": ["D", "E", "C"],
+  "observable_attributes": {
+    "edit_strategy": "update approach per round: append to existing files vs. create new files vs. restructure; consistency across rounds",
+    "directory_style": "whether KB structure is preserved or reorganized during updates; especially in batch 3 which requests reorganization; how reference/operations split is implemented",
+    "version_strategy": "whether old versions are preserved during updates; how index is maintained across rounds; whether multimedia reference files (PDF/MP3/DOCX) are moved during reorganization",
+    "work_rhythm": "round processing pattern: read batch → execute → verify before next round vs. read all batches first then execute"
+  },
+  "workspace_bundle": "pilot/workspace/t18_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一个已建好的法律参考知识库，分为4个子主题目录（case_law/ 家庭法案例、criminal_law/ 刑法药物犯罪、court_procedures/ 出庭程序、client_matters/ 客户事务），每个目录包含文本摘要文件和对应的参考材料（PDF法律文书、MP3案件备忘录音、DOCX案件报告、EML邮件、PNG照片等）。知识库有一个 index.md 索引文件。\n\nupdates/ 目录下有三批更新指令，请按顺序处理：\n\n第一批 (batch_1.md)：新增一个法律主题（Employment Law），需创建新的主题文件并更新索引\n第二批 (batch_2.md)：修正药物犯罪摘要中的错误 + 在出庭指南中新增远程庭审章节\n第三批 (batch_3.md)：清理过时客户条目 + 将知识库重组为 reference/（静态参考）和 operations/（动态运营）两大分类\n\n每批处理完后请更新索引文件。请直接修改知识库中的文件。",
+  "prompt_en": "This folder contains a pre-built legal reference knowledge base organized into 4 topic subdirectories (case_law/ for family law cases, criminal_law/ for drug offences, court_procedures/ for court attendance, client_matters/ for client affairs). Each directory contains text summary files alongside reference materials in various formats (PDF legal documents, MP3 case audio memos, DOCX case reports, EML emails, PNG photos). The knowledge base has an index.md file.\n\nThe updates/ directory contains three batches of update instructions. Process them IN ORDER:\n\nBatch 1 (batch_1.md): Add a new legal topic (Employment Law) — create topic file and update index\nBatch 2 (batch_2.md): Correct an error in the drug offences summary + add a virtual hearings section to the court procedures guide\nBatch 3 (batch_3.md): Remove outdated client entries + reorganize the KB into reference/ (static materials) and operations/ (dynamic documents)\n\nUpdate the index file after each batch. Edit the knowledge base files directly.",
+  "behavioral_freedom": [
+    "Round processing: strict sequential (one batch at a time) vs. read all then plan",
+    "New content approach: new files vs. append to existing",
+    "Error correction: in-place edit vs. rewrite affected section",
+    "Deletion handling: actually delete vs. archive vs. mark as deprecated",
+    "Reorganization approach: move files vs. recreate structure vs. minimal changes",
+    "Whether to backup before each round of changes",
+    "How multimedia reference files (PDF/MP3/EML/PNG) are handled during reorganization: move with topic vs. centralize in one media directory"
+  ],
+  "expected_file_ops": 25,
+  "status": "active"
+}

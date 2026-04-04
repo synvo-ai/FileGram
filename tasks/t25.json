@@ -1,0 +1,31 @@
+{
+  "task_id": "T-25",
+  "name": "法律案件多媒体证据审查",
+  "name_en": "Legal case multimedia evidence review",
+  "type": "understand",
+  "dimensions": [
+    "A",
+    "F",
+    "B"
+  ],
+  "observable_attributes": {
+    "reading_strategy": "Whether all 5 court videos are watched; text-first vs. video-first approach; evidence coverage completeness",
+    "output_detail": "Review format: evidence checklist vs. narrative summary vs. structured legal brief",
+    "cross_modal_behavior": "How video, audio memo, document, and photo evidence are cross-referenced in the review"
+  },
+  "workspace_bundle": "pilot/workspace/t25_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一个法律案件的多媒体证据材料：法庭视频（MP4）、案件录音备忘（MP3）、案件报告（DOCX）、法律法规（PDF）和照片证据（PNG），以及相关邮件。请审查所有证据材料，然后撰写一份证据审查报告，总结关键发现、证据关联和需要注意的问题。",
+  "prompt_en": "This folder contains multimedia evidence for a legal case: courtroom videos (MP4), case audio memos (MP3), case reports (DOCX), legal statutes (PDF), photo evidence (PNG), and related emails. Please review all evidence materials and write an evidence review report summarizing key findings, evidence connections, and issues requiring attention.",
+  "behavioral_freedom": [
+    "Whether all 5 court videos are watched or prioritized by relevance",
+    "Consumption priority: text documents first vs. video/audio first vs. interleaved",
+    "Whether audio memos are all reviewed or only case-relevant ones",
+    "Report structure: chronological narrative vs. evidence-by-type vs. issue-based",
+    "Whether to create an evidence index or cross-reference table",
+    "Depth of legal analysis: factual summary vs. legal implications",
+    "How photo evidence is integrated into the written report"
+  ],
+  "expected_file_ops": 22,
+  "status": "active"
+}

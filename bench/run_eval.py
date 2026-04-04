@@ -53,7 +53,6 @@ METHOD_NAMES = [
     "memos",
     "memu",
     "evermemos",
-    "filegramos_simple",
 ]
 
 

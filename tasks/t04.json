@@ -1,0 +1,29 @@
+{
+  "task_id": "T-04",
+  "name": "会议纪要与跟进文档制作",
+  "name_en": "Meeting minutes and follow-up document creation",
+  "type": "create",
+  "dimensions": ["B", "C", "F"],
+  "observable_attributes": {
+    "output_detail": "content completeness (whether all attendee/action items captured); word count and section depth",
+    "output_structure": "document structure (chronological notes vs. decision-action format vs. executive summary + details)",
+    "directory_style": "file organization of outputs (single file vs. separate minutes/actions/followup files; directory creation)",
+    "naming": "output file naming pattern (descriptive vs. date-prefixed vs. short)",
+    "tone": "writing register (formal meeting protocol vs. casual team notes)"
+  },
+  "workspace_bundle": "pilot/workspace/t04_workspace",
+  "depends_on": null,
+  "prompt_zh": "以下场景需要你处理：一次重要的客户晚餐刚刚结束。参加者包括你的同事Daniel Chen、客户方的John Doe（亚太区另类投资负责人）和Sarah Lee（投资组合经理）。晚餐讨论了以下要点：(1) 客户对你们团队的东盟宏观洞察印象深刻；(2) 客户对即将推出的东南亚科技基础设施另类策略基金表示兴趣；(3) Sarah Lee询问了ESG整合流程；(4) 讨论了联合白皮书的合作可能。请在当前目录下创建完整的会后文档，包括会议纪要、行动项跟踪和需要发送的跟进邮件草稿。组织方式和文件格式由你决定。",
+  "prompt_en": "You need to handle the following scenario: An important client dinner has just concluded. Attendees were your colleague Daniel Chen, and from the client side John Doe (Head of Alternative Investments, APAC) and Sarah Lee (Portfolio Manager). The dinner covered these key points: (1) The client was impressed with your team's ASEAN macro insights; (2) The client expressed interest in your upcoming alternative strategies fund for Southeast Asian tech infrastructure; (3) Sarah Lee asked about ESG integration processes; (4) A potential joint whitepaper collaboration was discussed. Create comprehensive post-meeting documentation in the current directory, including meeting minutes, action item tracking, and follow-up email drafts. Organization and file format are up to you.",
+  "behavioral_freedom": [
+    "Document scope: single combined file vs. separate files for minutes/actions/emails",
+    "Detail level: brief bullet points vs. detailed narrative with context",
+    "Whether to create a dedicated directory structure for meeting materials",
+    "Email drafts: just one generic vs. personalized per recipient",
+    "Whether to include a timeline/deadline tracker for action items",
+    "Format choice: markdown vs. plain text vs. structured template",
+    "Whether to reference source context from workspace files (if any)"
+  ],
+  "expected_file_ops": 8,
+  "status": "candidate"
+}

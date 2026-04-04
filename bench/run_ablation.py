@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ablation: rebuild filegramos + filegramos_simple caches, then run QA eval.
+"""Ablation: rebuild filegramos caches, then run QA eval.
 
 Avoids importing all adapters (qdrant_client breaks on py3.11).
 
@@ -25,7 +25,6 @@ load_dotenv(_ROOT / ".env")
 
 from baselines.base import BaseAdapter
 from baselines.filegramos_adapter import FileGramOSAdapter
-from baselines.filegramos_simple import FileGramOSSimpleAdapter
 
 SIGNALS_DIR = _ROOT / "signal"
 CACHE_DIR = _BENCH / "ingest_cache_gemini_2.5_flash"
@@ -82,7 +81,7 @@ def get_gemini_llm_fn():
 
 
 def rebuild_caches():
-    """Rebuild filegramos_simple.pkl and filegramos.pkl for all profiles."""
+    """Rebuild filegramos.pkl for all profiles."""
     llm_fn = get_gemini_llm_fn()
 
     for profile_id in ALL_PROFILES:
@@ -97,20 +96,7 @@ def rebuild_caches():
         print(f"\n{'=' * 60}")
         print(f"[{profile_id}] {len(trajectories)} trajectories")
 
-        # --- filegramos_simple ---
-        simple_cache = cache_dir / "filegramos_simple.pkl"
-        if simple_cache.exists():
-            print("  filegramos_simple: CACHED (skipping)")
-        else:
-            print("  filegramos_simple: building...")
-            t0 = time.time()
-            adapter = FileGramOSSimpleAdapter()
-            adapter.ingest(trajectories)
-            adapter.save_ingest_cache(simple_cache)
-            adapter.reset()
-            print(f"  filegramos_simple: done ({time.time() - t0:.1f}s)")
-
-        # --- filegramos (formal) ---
+        # --- filegramos ---
         formal_cache = cache_dir / "filegramos.pkl"
         if formal_cache.exists():
             print("  filegramos: CACHED (skipping)")
@@ -135,7 +121,7 @@ def run_qa():
     ret = os.system(
         f"cd {_ROOT} && python -m filegramQA.run_qa_eval "
         f"--cache-dir gemini_2.5_flash "
-        f"--methods filegramos_simple filegramos "
+        f"--methods filegramos "
         f"--api gemini --parallel 10 --mode qa"
     )
     return ret

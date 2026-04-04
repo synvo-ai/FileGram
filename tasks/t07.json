@@ -1,0 +1,27 @@
+{
+  "task_id": "T-07",
+  "name": "日记与笔记综合人物画像",
+  "name_en": "Diary and notes synthesis into personal profile",
+  "type": "synthesize",
+  "dimensions": ["A", "B"],
+  "observable_attributes": {
+    "reading_strategy": "file access order and coverage; whether all diary/note files are read or only sampled; reading depth per file",
+    "output_detail": "profile comprehensiveness (number of life dimensions covered); word count; whether specific quotes/dates are cited",
+    "output_structure": "profile organization (narrative biography vs. categorical breakdown vs. timeline)",
+    "tone": "writing style (analytical/third-person vs. empathetic/first-person vs. clinical)"
+  },
+  "workspace_bundle": "pilot/workspace/t07_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一个人的日记、个人笔记、学习记录、聊天记录和邮件。请阅读这些材料，为这个人撰写一份综合人物画像，涵盖：职业/学业状况、生活习惯与兴趣爱好、社交关系网络、当前面临的主要挑战、以及性格特点。画像文件保存在当前目录下。",
+  "prompt_en": "This folder contains a person's diary, personal notes, learning logs, chat records, and emails. Read these materials and write a comprehensive personal profile covering: career/academic situation, lifestyle habits and hobbies, social relationships, current main challenges, and personality traits. Save the profile file in the current directory.",
+  "behavioral_freedom": [
+    "Reading strategy: chronological through diary vs. by file type vs. sampling a few entries",
+    "Coverage: attempt to read everything vs. focus on most revealing documents",
+    "Profile structure: narrative essay vs. categorized sections vs. bullet-point summary",
+    "Depth: surface-level overview vs. detailed analysis with evidence/quotes",
+    "Perspective: analytical third person vs. empathetic storytelling",
+    "Whether to include a relationship diagram or timeline visualization"
+  ],
+  "expected_file_ops": 10,
+  "status": "candidate"
+}

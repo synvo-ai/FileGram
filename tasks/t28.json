@@ -1,0 +1,31 @@
+{
+  "task_id": "T-28",
+  "name": "宠物护理档案整理",
+  "name_en": "Pet care documentation synthesis",
+  "type": "synthesize",
+  "dimensions": [
+    "A",
+    "B",
+    "F"
+  ],
+  "observable_attributes": {
+    "reading_strategy": "Whether voice memos are all listened to; how photo evidence is used alongside text records",
+    "output_detail": "Documentation depth: care timeline vs. comprehensive health profile vs. brief summary",
+    "cross_modal_behavior": "How photos, voice memos, vet records, and purchase history are woven into a narrative"
+  },
+  "workspace_bundle": "pilot/workspace/t28_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含关于一只宠物猫(Shadow)的各种记录——照片（包括领养第一天、日常生活）、语音备忘录（关于护理挑战）、兽医报告、领养证书、宠物相关邮件（购买猫粮、猫抓柱、预约兽医等）。请综合所有材料，创建一份宠物护理档案，记录Shadow的成长历程、健康状况和护理要点。",
+  "prompt_en": "This folder contains various records about a pet cat (Shadow) — photos (including adoption day, daily life), voice memos (about care challenges), vet reports, adoption certificate, pet-related emails (food orders, scratching post, vet appointments). Please synthesize all materials to create a pet care profile documenting Shadow's growth journey, health status, and care highlights.",
+  "behavioral_freedom": [
+    "Whether all voice memos are listened to or only care-relevant ones",
+    "How photos are incorporated: described in detail vs. briefly referenced",
+    "Profile structure: chronological timeline vs. topic-based (health/behavior/supplies)",
+    "Whether purchase history from emails is tracked and summarized",
+    "Output format: single narrative document vs. structured profile with sections",
+    "Whether a photo timeline or visual reference is created",
+    "Detail level: brief overview vs. comprehensive care log"
+  ],
+  "expected_file_ops": 16,
+  "status": "active"
+}

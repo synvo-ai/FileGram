@@ -1,0 +1,31 @@
+{
+  "task_id": "T-24",
+  "name": "投资业绩电话会议分析报告",
+  "name_en": "Investment earnings call analysis report",
+  "type": "synthesize",
+  "dimensions": [
+    "A",
+    "B",
+    "F"
+  ],
+  "observable_attributes": {
+    "reading_strategy": "Whether agent listens to (reads annotation of) all 8 earnings calls vs. focuses on filings first; order of consumption",
+    "output_detail": "Report depth: executive summary vs. detailed per-company analysis with data tables",
+    "cross_modal_behavior": "How audio call transcripts are synthesized with PDF filing data; whether tables/charts are created"
+  },
+  "workspace_bundle": "pilot/workspace/t24_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含多家科技公司的季度业绩电话会议录音（MP3格式）和对应的SEC财务报告（PDF格式），还有一些分析笔记。请听取（阅读）这些材料后，撰写一份综合投资分析报告，比较各公司的表现、关键指标和市场展望。报告的格式、深度和组织方式由你决定。",
+  "prompt_en": "This folder contains quarterly earnings call recordings (MP3 format) and corresponding SEC filings (PDF format) for several tech companies, plus some analysis notes. After reviewing these materials, write a comprehensive investment analysis report comparing each company's performance, key metrics, and market outlook. The report format, depth, and organization are up to you.",
+  "behavioral_freedom": [
+    "Consumption order: audio calls first vs. PDF filings first vs. alternating by company",
+    "Whether all 8 earnings calls are reviewed or a subset is sampled",
+    "Analysis structure: per-company sections vs. horizontal comparison by metric",
+    "Whether to create data comparison tables or keep prose-only",
+    "Detail level: executive summary (1 page) vs. full analyst report (multi-page)",
+    "Whether to include forward-looking recommendations or stay descriptive",
+    "Whether auxiliary files (summary tables, data extracts) are created"
+  ],
+  "expected_file_ops": 20,
+  "status": "active"
+}

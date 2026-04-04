@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""Quick learning curve: filegramos_simple + full_context at N=1,3,5,10,15,20.
+"""Quick learning curve: measure profile inference at N=1,3,5,10,15,20,30.
 
-Focus on convergence analysis — these two methods need no LLM ingest,
-so they run fast (only inference + judge calls).
+Uses pre-built ingest caches (no re-ingestion needed).
+Only does inference + judge calls per (profile, method, N) triple.
 
 Usage:
     python bench/run_curve_quick.py
-    python bench/run_curve_quick.py --methods filegramos_simple  # single method
+    python bench/run_curve_quick.py --methods filegramos  # single method
     python bench/run_curve_quick.py --parallel 3
 """
 
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import sys
 import time
@@ -44,22 +45,18 @@ from test_baselines import (
 
 RESULTS_DIR = _SCRIPT_DIR / "test_results"
 OUTPUT_FILE = RESULTS_DIR / "curve_results_v2.json"
+CACHE_DIR = _SCRIPT_DIR / "ingest_cache_gemini_2.5_flash"
 
-N_VALUES = [1, 3, 5, 10, 15, 20]
+N_VALUES = [1, 3, 5, 10, 15, 20, 30]
 
-DEFAULT_METHODS = ["filegramos_simple", "full_context"]
+DEFAULT_METHODS = ["filegramos", "full_context", "eager_summarization", "naive_rag"]
 
 PROFILES = [
     "p1_methodical",
     "p2_thorough_reviser",
     "p3_efficient_executor",
-    "p4_structured_analyst",
     "p5_balanced_organizer",
-    "p6_quick_curator",
-    "p7_visual_reader",
     "p8_minimal_editor",
-    "p9_visual_organizer",
-    "p10_silent_auditor",
 ]
 
 # Channel attribute mapping
@@ -87,18 +84,41 @@ DIM_MAP = {
 }
 
 
-def run_single(method_name, trajectories, ground_truth, profile_dir):
-    """Run one method on given trajectories, return detailed scores."""
-    adapter = get_adapter(method_name)
-    adapter.ingest(trajectories)
+def _slice_adapter_state(adapter, method_name, n, task_ids_first_n):
+    """Slice the adapter's internal state to only include first N trajectories."""
+    if method_name == "full_context":
+        adapter._narratives = adapter._narratives[:n]
+    elif method_name == "eager_summarization":
+        adapter._summarize_prompts = adapter._summarize_prompts[:n]
+        adapter._summaries = adapter._summaries[:n]
+    elif method_name == "naive_rag":
+        kept = set(task_ids_first_n)
+        if hasattr(adapter, '_chunks') and adapter._chunks:
+            # Find indices of chunks belonging to first N tasks
+            keep_indices = [i for i, c in enumerate(adapter._chunks) if c.get("task_id") in kept]
+            adapter._chunks = [adapter._chunks[i] for i in keep_indices]
+            if adapter._embeddings is not None:
+                import numpy as np
+                adapter._embeddings = adapter._embeddings[keep_indices]
 
-    # Eager summarization pre-pass
-    if method_name == "eager_summarization":
-        prompts = adapter.get_summarize_prompts()
-        summaries = []
-        for sp in prompts:
-            summaries.append(call_llm(sp["prompt"], temperature=0.3, max_tokens=1024))
-        adapter.set_summaries(summaries)
+
+def _load_cached_adapter(method_name, profile_id):
+    """Load adapter with cached ingest state. Returns (adapter, success)."""
+    adapter = get_adapter(method_name)
+    cache_path = CACHE_DIR / profile_id / f"{method_name}.pkl"
+    if adapter.load_ingest_cache(cache_path):
+        return adapter, True
+    return adapter, False
+
+
+def run_single_cached(method_name, profile_id, n, task_ids_first_n, ground_truth, profile_dir):
+    """Run one method using cached ingest, sliced to N trajectories."""
+    adapter, cache_hit = _load_cached_adapter(method_name, profile_id)
+    if not cache_hit:
+        return {"avg_score": 0, "error": "cache miss"}
+
+    # Slice to first N trajectories
+    _slice_adapter_state(adapter, method_name, n, task_ids_first_n)
 
     result = adapter.infer_profile(PROFILE_ATTRIBUTES)
     prompt = result.get("_prompt")
@@ -147,7 +167,6 @@ def run_single(method_name, trajectories, ground_truth, profile_dir):
     return {
         "avg_score": round(avg, 3),
         "prompt_length": len(prompt),
-        "n_events": sum(len(t["events"]) for t in trajectories),
         "proc_score": chan_avg(CH_PROC),
         "sem_score": chan_avg(CH_SEM),
         "mix_score": chan_avg(CH_MIX),
@@ -166,13 +185,22 @@ def main():
     profiles = args.profiles
 
     print("=" * 70)
-    print("FileGramBench Learning Curve (Quick)")
+    print("FileGramBench Learning Curve (Quick — Cache Mode)")
     print(f"Methods: {methods}")
     print(f"Profiles: {len(profiles)} | N values: {N_VALUES}")
     print(f"Total runs: {len(methods) * len(profiles) * len(N_VALUES)}")
+    print(f"Cache dir: {CACHE_DIR}")
     print("=" * 70)
 
+    # Pre-load trajectory task_ids for each profile (needed for slicing)
+    profile_task_ids = {}
+    for profile_id in profiles:
+        trajs = load_trajectories_filtered(profile_id)
+        profile_task_ids[profile_id] = [t["task_id"] for t in trajs]
+        print(f"  [{profile_id}] {len(trajs)} trajectories available")
+
     # Load existing results
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     results = {}
     if OUTPUT_FILE.exists():
         try:
@@ -190,17 +218,17 @@ def main():
 
     def process_one(profile_id, method, n):
         """Process a single (profile, method, N) triple."""
-        all_trajs = load_trajectories_filtered(profile_id)
-        if not all_trajs or n > len(all_trajs):
+        task_ids = profile_task_ids.get(profile_id, [])
+        if n > len(task_ids):
             return profile_id, method, n, None
 
+        task_ids_first_n = task_ids[:n]
         ground_truth = load_ground_truth(profile_id)
         profile_dir = RESULTS_DIR / profile_id
         profile_dir.mkdir(parents=True, exist_ok=True)
 
-        subset = all_trajs[:n]
         t0 = time.time()
-        result = run_single(method, subset, ground_truth, profile_dir)
+        result = run_single_cached(method, profile_id, n, task_ids_first_n, ground_truth, profile_dir)
         elapsed = time.time() - t0
 
         print(

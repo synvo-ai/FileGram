@@ -1,0 +1,27 @@
+{
+  "task_id": "T-11",
+  "name": "跨文件错误检测与修正",
+  "name_en": "Multi-file error detection and correction",
+  "type": "iterate",
+  "dimensions": ["D", "A"],
+  "observable_attributes": {
+    "reading_strategy": "cross-reference checking approach: sequential file-by-file comparison vs. targeted search for specific data points vs. side-by-side comparison of related files",
+    "edit_strategy": "correction pattern: many small edits across files vs. batch corrections vs. rewrite corrected sections; number of file_edit events per file",
+    "version_strategy": "whether original files are backed up before correction or directly modified",
+    "thoroughness": "how many inconsistencies found out of total planted; whether all files cross-referenced"
+  },
+  "workspace_bundle": "pilot/workspace/t11_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一家公司（TechVista Inc）的多份业务文档：项目概述、财务摘要、团队名录、会议记录、项目时间线、客户提案和季度报告。这些文件中存在多处跨文件不一致（如数据冲突、名称拼写不同、日期矛盾等）。请：1. 仔细阅读所有文件并交叉比对 2. 找出所有不一致之处 3. 直接在原文件中修正错误（选择最可能正确的版本）4. 写一份 correction_log.md 记录你发现和修正的所有问题。",
+  "prompt_en": "This folder contains multiple business documents for a company (TechVista Inc): project overview, financial summary, team directory, meeting notes, project timeline, client proposal, and quarterly report. These files contain MULTIPLE cross-file inconsistencies (conflicting data, different name spellings, contradictory dates, etc.). Please: 1. Read all files carefully and cross-reference them 2. Identify all inconsistencies 3. Fix errors directly in the original files (choose the most likely correct version) 4. Write a correction_log.md documenting all issues found and fixes made.",
+  "behavioral_freedom": [
+    "Reading strategy: systematic file-by-file comparison vs. search for specific data points",
+    "Correction approach: fix each error as found vs. compile all errors then batch-fix",
+    "Whether to backup files before editing or edit directly",
+    "How to determine which version of conflicting data is correct",
+    "Detail level of correction log: simple list vs. detailed explanation with reasoning",
+    "Whether to add cross-references between files after correction"
+  ],
+  "expected_file_ops": 20,
+  "status": "active"
+}

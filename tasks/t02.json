@@ -1,0 +1,27 @@
+{
+  "task_id": "T-02",
+  "name": "法律案件材料梳理与时间线",
+  "name_en": "Legal case materials review and timeline",
+  "type": "understand",
+  "dimensions": ["A", "B", "E"],
+  "observable_attributes": {
+    "reading_strategy": "file_open order and coverage (chronological vs. by file type vs. by perceived importance); whether mp3/image files are examined or skipped",
+    "output_detail": "output file length and granularity; whether individual case details are extracted vs. only high-level themes",
+    "output_structure": "organization of output (narrative vs. per-case breakdown vs. timeline vs. table)",
+    "tone": "formality level in writing (legal-professional vs. casual summary)"
+  },
+  "workspace_bundle": "pilot/workspace/t02_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹包含一位法律工作者的案件相关材料，包括案件报告、法律法规、客户邮件、日历安排、聊天记录和语音备忘录。请阅读并理解这些材料，写一份案件概要文件，说明：涉及哪些案件/客户？目前进展到什么阶段？有哪些关键时间节点？保存在当前目录下。",
+  "prompt_en": "This folder contains case-related materials for a legal professional, including case reports, statutes, client emails, calendar entries, chat logs, and voice memos. Read and understand these materials, then write a case summary file covering: Which cases/clients are involved? What stage is each at? What are the key dates and deadlines? Save it in the current directory.",
+  "behavioral_freedom": [
+    "Reading order: by file type (docx first, then emails) vs. alphabetical vs. by date vs. exploratory browsing",
+    "Whether to attempt reading non-text files (mp3, png) or skip them",
+    "Output format: chronological timeline vs. per-case sections vs. client-centric grouping",
+    "Level of legal detail: cite specific statutes vs. general description",
+    "Whether to flag gaps or missing information in the materials",
+    "Whether to separate personal vs. professional materials in the summary"
+  ],
+  "expected_file_ops": 12,
+  "status": "candidate"
+}

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FileGram: Grounding Agent Personalization in File-System Behavioral Traces</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --font: "Inter", -apple-system, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+      --blue: #03ADF0;
+      --blue-dark: #0270a8;
+      --navy: #0a1628;
+      --navy-light: #0f2035;
+      --sky: #e8f6fd;
+      --sky-deep: #cceaf8;
+      --white: #ffffff;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-700: #334155;
+      --gray-900: #0f172a;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--gray-900); background: #f3f8fc; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+    /* ========== HERO ========== */
+    .hero {
+      position: relative;
+      background: linear-gradient(160deg, var(--navy) 0%, #0c2a4a 50%, #0e3560 100%);
+      padding: 64px 0 48px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 20% 30%, rgba(3,173,240,0.12), transparent),
+        radial-gradient(ellipse 500px 350px at 80% 70%, rgba(3,173,240,0.08), transparent);
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(3,173,240,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(3,173,240,0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 70%);
+    }
+    .hero .container { position: relative; z-index: 1; }
+    .hero-logo { margin-bottom: 18px; }
+    .hero-logo img { height: 26px; filter: brightness(0) invert(1); }
+    .hero h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+    }
+    .hero h1 .hl { color: var(--blue); }
+    .authors { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.9; margin-bottom: 4px; }
+    .authors a { color: rgba(255,255,255,0.85); text-decoration: none; }
+    .authors a:hover { color: var(--blue); }
+    .authors sup { font-size: 9px; color: rgba(255,255,255,0.35); }
+    .affil { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 22px; }
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(8px);
+    }
+    .btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); transform: translateY(-1px); }
+    .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .btn-primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+    .btn i, .btn .ai { font-size: 14px; }
+
+    /* ========== SECTIONS ========== */
+    section { padding: 40px 0; }
+    .sec-title {
+      font-size: 24px; font-weight: 800; text-align: center;
+      margin-bottom: 6px; letter-spacing: -0.02em; color: var(--gray-900);
+    }
+    .sec-sub {
+      font-size: 14px; color: var(--gray-500); text-align: center;
+      margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto;
+    }
+
+    /* ========== TEASER ========== */
+    .teaser img { width: 100%; border-radius: 10px; }
+
+    /* ========== ABSTRACT ========== */
+    .abstract {
+      font-size: 14px; color: var(--gray-700); line-height: 1.8;
+      text-align: justify;
+      background: var(--white); border: 1px solid rgba(3,173,240,0.12);
+      border-radius: 10px; padding: 24px 28px;
+      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
+    }
+
+    /* ========== PILLARS ========== */
+    .pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+    @media(max-width:700px){ .pillars{grid-template-columns:1fr;} }
+    .pillar {
+      background: var(--white); border: 1px solid rgba(3,173,240,0.12);
+      border-radius: 10px; padding: 20px; position: relative;
+      overflow: hidden; transition: box-shadow 0.2s;
+      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
+    }
+    .pillar:hover { box-shadow: 0 4px 20px rgba(3,173,240,0.1); }
+    .pillar::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .pillar.a::before { background: linear-gradient(90deg, #03ADF0, #38bdf8); }
+    .pillar.b::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .pillar.c::before { background: linear-gradient(90deg, #10b981, #34d399); }
+    .p-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; margin-bottom: 10px;
+    }
+    .pillar.a .p-icon { background: rgba(3,173,240,0.1); color: var(--blue); }
+    .pillar.b .p-icon { background: rgba(245,158,11,0.1); color: #d97706; }
+    .pillar.c .p-icon { background: rgba(16,185,129,0.1); color: #059669; }
+    .p-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+    .pillar.a .p-tag { color: var(--blue); }
+    .pillar.b .p-tag { color: #d97706; }
+    .pillar.c .p-tag { color: #059669; }
+    .p-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .p-desc { font-size: 13px; color: var(--gray-500); line-height: 1.55; }
+
+    /* ========== STATS ========== */
+    .stats {
+      display: flex; justify-content: center; gap: 36px; flex-wrap: wrap;
+      background: var(--white); border: 1px solid rgba(3,173,240,0.12);
+      border-radius: 10px; padding: 24px 20px; margin-bottom: 20px;
+      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
+    }
+    .stat { text-align: center; }
+    .stat-val { font-size: 32px; font-weight: 800; color: var(--blue); }
+    .stat-lbl { font-size: 12px; color: var(--gray-500); }
+
+    /* ========== FIGURES ========== */
+    .fig { text-align: center; margin: 16px auto; max-width: 100%; }
+    .fig img { max-width: 100%; border-radius: 8px; display: block; margin: 0 auto; }
+    .fig-cap {
+      font-size: 12px; color: var(--gray-400); margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* ========== TRACKS ========== */
+    .tracks { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
+    @media(max-width:700px){ .tracks{grid-template-columns:repeat(2,1fr);} }
+    .track {
+      background: var(--white); border: 1px solid rgba(3,173,240,0.12);
+      border-radius: 8px; padding: 16px 10px; text-align: center;
+      transition: box-shadow 0.2s;
+      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
+    }
+    .track:hover { box-shadow: 0 2px 12px rgba(3,173,240,0.06); }
+    .t-num { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--gray-400); margin-bottom: 2px; }
+    .t-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .t-desc { font-size: 11px; color: var(--gray-400); }
+
+    /* ========== RESULTS ========== */
+    .results { margin: 0 auto 12px; }
+    .r-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .r-lbl { width: 110px; text-align: right; font-size: 13px; color: var(--gray-500); flex-shrink: 0; }
+    .r-lbl.ours { font-weight: 700; color: var(--blue); }
+    .r-bg { flex: 1; height: 24px; background: rgba(3,173,240,0.06); border-radius: 6px; overflow: hidden; }
+    .r-bar { height: 100%; border-radius: 6px; background: rgba(3,173,240,0.15); }
+    .r-bar.ours { background: linear-gradient(90deg, var(--blue), #38bdf8); }
+    .r-v { width: 40px; font-size: 13px; font-weight: 600; color: var(--gray-500); }
+    .r-v.ours { color: var(--blue); font-weight: 800; }
+    .r-badge {
+      display: inline-block; background: var(--sky); border: 1px solid var(--sky-deep);
+      border-radius: 8px; padding: 6px 20px; font-size: 13px;
+    }
+    .r-badge b { font-size: 20px; color: var(--blue); margin-right: 4px; }
+
+    /* ========== VIDEO ========== */
+    .vid {
+      margin: 0 auto;
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--gray-200); background: var(--navy);
+      aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;
+    }
+    .vid video { width: 100%; height: 100%; object-fit: contain; }
+    .vid-ph { color: rgba(255,255,255,0.2); font-size: 14px; }
+
+    /* ========== BIBTEX ========== */
+    .bib {
+      position: relative; background: var(--white); border: 1px solid rgba(3,173,240,0.12);
+      border-radius: 8px; padding: 16px 18px;
+      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
+    }
+    .bib pre { font-family: var(--mono); font-size: 11px; line-height: 1.6; color: var(--gray-500); overflow-x: auto; white-space: pre; }
+    .bib-cp {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: 4px; padding: 3px 8px; font-size: 11px;
+      cursor: pointer; color: var(--gray-500); font-family: var(--font);
+    }
+    .bib-cp:hover { background: var(--gray-100); }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background: linear-gradient(160deg, var(--navy), #0c2a4a);
+      color: rgba(255,255,255,0.4); text-align: center;
+      padding: 28px 20px; font-size: 12px; margin-top: 20px;
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+    footer a:hover { color: #38bdf8; }
+  </style>
+</head>
+<body>
+
+<!-- ====== HERO ====== -->
+<header class="hero">
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-logo"><img src="static/images/synvo_logo.svg" alt="Synvo AI" /></div>
+    <h1><span class="hl">FileGram</span>: Grounding Agent Personalization<br/>in File-System Behavioral Traces</h1>
+    <div class="authors">
+      <a href="#">Shuai Liu</a><sup>1,2</sup>,
+      <a href="#">Shulin Tian</a><sup>1</sup>,
+      <a href="#">Kairui Hu</a><sup>1,2</sup>,
+      <a href="#">Yuhao Dong</a><sup>1</sup>,
+      <a href="#">Zhe Yang</a><sup>1</sup>,
+      <a href="#">Bo Li</a><sup>1</sup>,
+      <a href="#">Jingkang Yang</a><sup>1,2</sup>,
+      <a href="#">Chen Change Loy</a><sup>1</sup>,
+      <a href="#">Ziwei Liu</a><sup>1</sup>
+    </div>
+    <div class="affil"><sup>1</sup>S-Lab, Nanyang Technological University &nbsp; <sup>2</sup>Synvo AI</div>
+    <div class="actions">
+      <a href="#" class="btn btn-primary"><i class="ai ai-arxiv"></i> arXiv</a>
+      <a href="https://github.com/Synvo-ai/FileGram" class="btn" target="_blank"><i class="fab fa-github"></i> Code</a>
+      <a href="https://huggingface.co/datasets/Choiszt/FileGram" class="btn" target="_blank">&#129303; Dataset</a>
+      <a href="#video" class="btn"><i class="fas fa-play-circle"></i> Video</a>
+    </div>
+  </div>
+</header>
+
+<!-- ====== TEASER ====== -->
+<section>
+  <div class="container">
+    <div class="teaser"><img src="static/images/teaser.png" alt="FileGram Overview" /></div>
+  </div>
+</section>
+
+<!-- ====== ABSTRACT ====== -->
+<section>
+  <div class="container">
+    <div class="sec-title">Abstract</div>
+    <p class="abstract">
+      Coworking AI agents operating within local file systems are rapidly emerging as a paradigm in human&ndash;AI interaction.
+      Since users exhibit highly diverse workflows, personalization is essential for tight collaboration and a seamless user experience.
+      However, effective personalization is limited by severe data constraints, since strict privacy barriers and the inherent difficulty
+      of jointly collecting multimodal real-world traces preclude the creation of scalable training data and comprehensive evaluation suites.
+      Consequently, existing methods remain interaction-centric and overlook dense behavioral cues embedded in file-level activities.
+      To bridge this gap, we propose <b>FileGram</b>, a comprehensive framework that grounds agent memory and personalization in
+      file-system behavioral traces. FileGram comprises three core components:
+      <b>(1) FileGramEngine</b>, a scalable, persona-driven data engine that simulates realistic workflows;
+      <b>(2) FileGramBench</b>, a diagnostic benchmark that treats file operations as behavioral engrams;
+      <b>(3) FileGramOS</b>, a bottom-up memory architecture that builds user profiles directly from atomic file-level signals.
+      Extensive experiments show that FileGramBench remains challenging for state-of-the-art memory systems,
+      and demonstrate the effectiveness of FileGramEngine and FileGramOS.
+    </p>
+  </div>
+</section>
+
+<!-- ====== FRAMEWORK ====== -->
+<section>
+  <div class="container">
+    <div class="sec-title">Framework</div>
+    <div class="sec-sub">Three components address data scarcity, evaluation gaps, and method limitations.</div>
+    <div class="pillars">
+      <div class="pillar a">
+        <div class="p-icon"><i class="fas fa-cogs"></i></div>
+        <div class="p-tag">Data Generation</div>
+        <div class="p-name">FileGramEngine</div>
+        <p class="p-desc">Scalable persona-driven simulation producing 640 controlled trajectories with ground-truth labels across 6 behavioral dimensions and 20 user profiles.</p>
+      </div>
+      <div class="pillar b">
+        <div class="p-icon"><i class="fas fa-chart-bar"></i></div>
+        <div class="p-tag">Evaluation</div>
+        <div class="p-name">FileGramBench</div>
+        <p class="p-desc">First file-system memory benchmark. Four tracks: profile reconstruction, reasoning, anomaly detection, and multimodal visual grounding.</p>
+      </div>
+      <div class="pillar c">
+        <div class="p-icon"><i class="fas fa-brain"></i></div>
+        <div class="p-tag">Method</div>
+        <div class="p-name">FileGramOS</div>
+        <p class="p-desc">Bottom-up memory building user profiles from atomic file signals&mdash;procedural, semantic, and episodic channels&mdash;not dialogue summaries.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FILEGRAM ENGINE ====== -->
+<section>
+  <div class="container">
+    <div class="sec-title">FileGramEngine</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-val">20</div><div class="stat-lbl">User Profiles</div></div>
+      <div class="stat"><div class="stat-val">32</div><div class="stat-lbl">Tasks</div></div>
+      <div class="stat"><div class="stat-val">640</div><div class="stat-lbl">Trajectories</div></div>
+      <div class="stat"><div class="stat-val">6</div><div class="stat-lbl">Dimensions</div></div>
+    </div>
+    <div class="fig">
+      <img src="static/images/data_pipeline.png" alt="Data Pipeline" />
+      <p class="fig-cap"><b>FileGramEngine</b> simulates realistic file-system workflows via persona-driven agents. Each profile is defined by six behavioral dimensions, producing fine-grained multimodal action sequences at scale.</p>
+    </div>
+    <div class="fig">
+      <img src="static/images/profile_hex_icon.png" alt="User Profiles" style="max-height:320px;width:auto;" />
+      <p class="fig-cap">20 diverse user profiles spanning behavioral patterns from methodical deep-readers to agile pragmatists.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FILEGRAM BENCH ====== -->
+<section>
+  <div class="container">
+    <div class="sec-title">FileGramBench</div>
+    <div class="sec-sub">4,600+ QA pairs across 4 evaluation tracks and 3 memory channels.</div>
+    <div class="tracks">
+      <div class="track"><div class="t-num">TRACK I</div><div class="t-name" style="color:var(--blue)">Understanding</div><div class="t-desc">Profile reconstruction &amp; fingerprinting</div></div>
+      <div class="track"><div class="t-num">TRACK II</div><div class="t-name" style="color:#7c3aed">Reasoning</div><div class="t-desc">Pattern inference &amp; disentanglement</div></div>
+      <div class="track"><div class="t-num">TRACK III</div><div class="t-name" style="color:#e11d48">Detection</div><div class="t-desc">Anomaly &amp; behavioral drift</div></div>
+      <div class="track"><div class="t-num">TRACK IV</div><div class="t-name" style="color:#0891b2">Multimodal</div><div class="t-desc">Visual grounding from recordings</div></div>
+    </div>
+    <div class="fig">
+      <img src="static/images/qa_example.png" alt="QA Examples" />
+      <p class="fig-cap">Example questions from the four evaluation tracks, testing behavioral memory from procedural file operations to cross-modal visual reasoning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FILEGRAM OS ====== -->
+<section>
+  <div class="container">
+    <div class="sec-title">FileGramOS</div>
+    <div class="sec-sub">Per-trajectory Engram Encoding &rarr; Cross-Engram Consolidation &rarr; Query-Adaptive Retrieval.</div>
+    <div class="fig">
+      <img src="static/images/architecture.png" alt="FileGramOS Architecture" />
+      <p class="fig-cap"><b>FileGramOS</b> builds profiles from atomic file signals, preserving procedural, semantic, and episodic memory through a three-stage bottom-up pipeline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== RESULTS ====== -->
+<section>
+  <div class="container">
+    <div class="sec-title">Results</div>
+    <div class="sec-sub">FileGramOS outperforms all baselines on FileGramBench.</div>
+    <div class="results">
+      <div class="r-row"><div class="r-lbl">Mem0</div><div class="r-bg"><div class="r-bar" style="width:68.5%"></div></div><div class="r-v">44.5</div></div>
+      <div class="r-row"><div class="r-lbl">Zep</div><div class="r-bg"><div class="r-bar" style="width:72.6%"></div></div><div class="r-v">47.2</div></div>
+      <div class="r-row"><div class="r-lbl">Full Context</div><div class="r-bg"><div class="r-bar" style="width:73.8%"></div></div><div class="r-v">48.0</div></div>
+      <div class="r-row"><div class="r-lbl">EverMemos</div><div class="r-bg"><div class="r-bar" style="width:76.8%"></div></div><div class="r-v">49.9</div></div>
+      <div class="r-row"><div class="r-lbl ours">FileGramOS</div><div class="r-bg"><div class="r-bar ours" style="width:91.7%"></div></div><div class="r-v ours">59.6</div></div>
+    </div>
+    <div style="text-align:center"><div class="r-badge"><b>+9.7%</b> over best baseline</div></div>
+    <div class="fig" style="margin-top:20px">
+      <img src="static/images/qualitative.png" alt="Qualitative Results" />
+      <p class="fig-cap">FileGramOS captures fine-grained behavioral patterns that narrative-first and context-based systems miss.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== VIDEO ====== -->
+<section class="bg-sky" id="video">
+  <div class="container">
+    <div class="sec-title">Video</div>
+    <div class="vid"><span class="vid-ph"><i class="fas fa-play-circle"></i>&ensp;Demo video coming soon</span></div>
+  </div>
+</section>
+
+<!-- ====== BIBTEX ====== -->
+<section>
+  <div class="container">
+    <div class="sec-title">BibTeX</div>
+    <div class="bib">
+      <button class="bib-cp" onclick="copyBib()"><i class="fas fa-copy"></i> Copy</button>
+<pre>@article{filegram2026,
+  title  = {FileGram: Grounding Agent Personalization
+            in File-System Behavioral Traces},
+  author = {FileGram Team},
+  year   = {2026}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <a href="https://github.com/Synvo-ai/FileGram" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+  &ensp;&middot;&ensp;
+  <a href="https://huggingface.co/datasets/Choiszt/FileGram" target="_blank">&#129303; HuggingFace</a>
+  &ensp;&middot;&ensp;
+  <a href="#">arXiv</a>
+  <br/><span style="margin-top:4px;display:inline-block">S-Lab, Nanyang Technological University &amp; Synvo AI</span>
+</footer>
+
+<script>
+function copyBib(){
+  navigator.clipboard.writeText(document.querySelector('.bib pre').textContent).then(()=>{
+    const b=document.querySelector('.bib-cp');
+    b.innerHTML='<i class="fas fa-check"></i> Copied';
+    setTimeout(()=>b.innerHTML='<i class="fas fa-copy"></i> Copy',2000);
+  });
+}
+</script>
+</body>
+</html>

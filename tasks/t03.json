@@ -1,0 +1,28 @@
+{
+  "task_id": "T-03",
+  "name": "个人知识库搭建",
+  "name_en": "Personal knowledge base creation",
+  "type": "create",
+  "dimensions": ["B", "C"],
+  "observable_attributes": {
+    "output_detail": "total content volume (file count, word count per file); depth of index/cross-references",
+    "output_structure": "how content is organized across files (single file vs. multi-file; flat vs. hierarchical)",
+    "directory_style": "directory structure created (flat vs. nested by topic vs. by type); depth of nesting",
+    "naming": "file naming pattern used (descriptive_long vs. short_abbreviation vs. date_prefix vs. category_prefix)",
+    "tone": "writing style in created content (formal vs. conversational vs. telegraphic)"
+  },
+  "workspace_bundle": "pilot/workspace/t03_workspace",
+  "depends_on": null,
+  "prompt_zh": "你需要为自己搭建一个个人知识库，主题为「投资分析方法论」。请在当前目录下创建一套知识库文件，涵盖以下方面：基本面分析框架、财务指标参考（如PE/PB/ROE等）、行业分析模板、以及一份知识库使用说明（索引文件）。知识库的组织方式、文件格式和详细程度由你自行决定。",
+  "prompt_en": "You need to build a personal knowledge base on the topic of 'Investment Analysis Methodology'. Create a set of knowledge base files in the current directory covering: fundamental analysis framework, financial metrics reference (e.g., PE/PB/ROE), industry analysis template, and a knowledge base usage guide (index file). The organization, file format, and level of detail are up to you.",
+  "behavioral_freedom": [
+    "Directory structure: single folder vs. topic-based subdirectories vs. deeply nested hierarchy",
+    "File format: all markdown vs. mix of md/txt/json vs. structured templates",
+    "Content depth: brief checklists vs. comprehensive guides with examples",
+    "Index style: simple file list vs. linked table of contents vs. categorized directory",
+    "Naming convention: topic-based vs. numbered vs. date-prefixed",
+    "Whether to add README, changelog, or meta-documentation files"
+  ],
+  "expected_file_ops": 10,
+  "status": "candidate"
+}

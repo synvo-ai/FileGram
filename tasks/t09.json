@@ -1,0 +1,27 @@
+{
+  "task_id": "T-09",
+  "name": "报告修订与压缩",
+  "name_en": "Report revision and condensation",
+  "type": "iterate",
+  "dimensions": ["D", "B"],
+  "observable_attributes": {
+    "edit_strategy": "edit pattern: incremental small edits across multiple passes vs. one large rewrite; number of file_edit events and lines changed per edit",
+    "version_strategy": "whether original file is preserved (copied/renamed as backup) or directly overwritten",
+    "output_detail": "resulting document length relative to original; what content is kept vs. cut",
+    "output_structure": "structural changes made (preserved original structure vs. restructured entirely)"
+  },
+  "workspace_bundle": "pilot/workspace/t09_workspace",
+  "depends_on": null,
+  "prompt_zh": "这个文件夹中有一份之前写的详细报告（约2000字）。收到的反馈是：「报告太长了，请压缩到800字以内。保留最关键的发现和结论，删除次要细节。另外，语气需要从学术风格改为面向管理层的简洁汇报风格。」请直接在原文件上修改（不要创建新文件），按照这个反馈修订报告。如果你认为需要，可以创建一份修订说明文件记录你的修改决定。",
+  "prompt_en": "This folder contains a previously written detailed report (approximately 2000 words). The feedback received is: 'The report is too long. Please condense it to under 800 words. Keep the most critical findings and conclusions, remove secondary details. Also, change the tone from academic style to a concise executive briefing style.' Please edit the original file directly (do not create a new file). If you feel it's necessary, you may create a revision notes file documenting your editing decisions.",
+  "behavioral_freedom": [
+    "Revision approach: edit in-place vs. create new condensed version alongside original",
+    "Whether to preserve the original file as a backup before editing",
+    "Strategy: trim each section proportionally vs. restructure and rewrite entirely",
+    "Number of editing passes: one large rewrite vs. iterative refinement",
+    "Whether to create a revision log or change notes file",
+    "How aggressive the tone shift is (subtle adjustments vs. complete rewrite)"
+  ],
+  "expected_file_ops": 6,
+  "status": "candidate"
+}
