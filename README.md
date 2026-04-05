@@ -143,28 +143,11 @@ The behavioral collector captures **11 event types**: `session_start/end`, `iter
   <img src="assets/qa_example.png" width="100%" />
 </p>
 
-### Baselines (12 methods)
+### Main Results
 
-Context methods: Full Context, Naive RAG, VisRAG.
-Text memory: Eager Summarization, Mem0, Zep, MemOS, EverMemOS, SimpleMem.
-Multimodal memory: MMA, MemU.
-
-### Results
-
-| Method | Avg |
-|--------|-----|
-| **FileGramOS** | **59.6** |
-| VisRAG | 51.9 |
-| EverMemOS | 49.9 |
-| Eager Summ. | 49.5 |
-| Full Context | 48.0 |
-| MMA | 44.7 |
-| MemU | 44.4 |
-| Zep | 40.2 |
-| Naive RAG | 40.5 |
-| MemOS | 36.2 |
-| Mem0 | 33.2 |
-| SimpleMem | 32.9 |
+<p align="center">
+  <img src="assets/main_results.png" width="100%" />
+</p>
 
 ---
 
