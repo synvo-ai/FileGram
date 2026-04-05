@@ -2,7 +2,7 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-FileGram-b31b1b.svg)](#)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Dataset-yellow)](https://huggingface.co/datasets/Choiszt/FileGram)
-[![Project Page](https://img.shields.io/badge/Project-Page-blue)](#)
+[![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://filegram.choiszt.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **Grounding Agent Personalization in File-System Behavioral Traces**
@@ -12,8 +12,6 @@ FileGram is a comprehensive framework that grounds agent memory and personalizat
 - **FileGramEngine** — A scalable, persona-driven data engine that simulates realistic file-system workflows to generate fine-grained, multimodal behavioral traces.
 - **FileGramBench** — A diagnostic benchmark with 4,600+ QA pairs across four evaluation tracks: profile reconstruction, trace disentanglement, anomaly detection, and multimodal grounding.
 - **FileGramOS** — A bottom-up memory architecture that builds user profiles directly from atomic file-level signals through procedural, semantic, and episodic channels.
-
-[[Paper]](#) | [[Project Page]](#) | [[Dataset]](https://huggingface.co/datasets/Choiszt/FileGram)
 
 <p align="center">
   <img src="assets/teaser.png" width="100%" />
@@ -142,7 +140,7 @@ The behavioral collector captures **11 event types**: `session_start/end`, `iter
 | T4: Multimodal | File Grounding, Visual Grounding | 650 |
 
 <p align="center">
-  <img src="assets/architecture.png" width="100%" />
+  <img src="assets/qa_example.png" width="100%" />
 </p>
 
 ### Baselines (12 methods)
