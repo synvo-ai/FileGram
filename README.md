@@ -130,7 +130,11 @@ The behavioral collector captures **11 event types**: `session_start/end`, `iter
 
 ## Evaluation
 
-### FileGramBench (4 Tracks)
+### FileGramBench (4 Tracks, 4.6k QA)
+
+<table>
+<tr>
+<td>
 
 | Track | Sub-tasks | Questions |
 |-------|-----------|-----------|
@@ -138,6 +142,13 @@ The behavioral collector captures **11 event types**: `session_start/end`, `iter
 | T2: Reasoning | Behavioral Inference, Trace Disentanglement | 1,694 |
 | T3: Detection | Anomaly Detection, Shift Analysis | 1,103 |
 | T4: Multimodal | File Grounding, Visual Grounding | 650 |
+
+</td>
+<td>
+<img src="assets/filegram_qa.png" width="360" />
+</td>
+</tr>
+</table>
 
 <p align="center">
   <img src="assets/qa_example.png" width="100%" />
