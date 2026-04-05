@@ -103,28 +103,7 @@ FileGram/
 
 ## Data
 
-### 20 User Profiles
-
-Each profile is defined by 6 behavioral dimensions with L/M/R tiers:
-
-| Dimension | L (Left) | M (Middle) | R (Right) |
-|-----------|----------|------------|-----------|
-| A. Consumption | Sequential deep reader | Targeted searcher | Breadth-first scanner |
-| B. Production | Comprehensive | Balanced | Minimal |
-| C. Organization | Deeply nested | Adaptive | Flat |
-| D. Iteration | Incremental | Balanced | Rewrite |
-| E. Curation | Selective | Pragmatic | Preservative |
-| F. Cross-Modal | Visual-heavy | Mixed | Text-only |
-
-All 20 profiles: `p1_methodical`, `p2_thorough_reviser`, `p3_efficient_executor`, `p4_structured_analyst`, `p5_balanced_organizer`, `p6_quick_curator`, `p7_visual_reader`, `p8_minimal_editor`, `p9_visual_organizer`, `p10_silent_auditor`, `p11_meticulous_planner`, `p12_prolific_scanner`, `p13_visual_architect`, `p14_concise_organizer`, `p15_thorough_surveyor`, `p16_phased_minimalist`, `p17_creative_archivist`, `p18_decisive_scanner`, `p19_agile_pragmatist`, `p20_visual_auditor`.
-
-### 32 Tasks
-
-Tasks span five categories: understand, create, organize, synthesize, iterate, and maintain — producing ~10K multimodal output files across 640 trajectories.
-
-### Behavioral Events
-
-The behavioral collector captures **11 event types**: `session_start/end`, `iteration_start/end`, `file_read`, `file_write`, `file_edit`, `file_search`, `file_browse`, `tool_call`, `llm_response`, `context_switch`, `compaction_triggered`, and file organization events (`file_rename`, `file_move`, `file_copy`, `file_delete`, `dir_create`).
+**20 user profiles** (6 behavioral dimensions &times; L/M/R tiers) &times; **32 tasks** (6 categories) = **640 trajectories** with ~10K multimodal output files.
 
 ---
 
