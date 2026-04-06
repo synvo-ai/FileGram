@@ -22,6 +22,7 @@ dist/
 # === OS ===
 .DS_Store
 Thumbs.db
+.wrangler/
 
 # === Large data (host on HuggingFace) ===
 signal/

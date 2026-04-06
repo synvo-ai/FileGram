@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FileGram: Grounding Agent Personalization in File-System Behavioral Traces</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
@@ -266,7 +267,7 @@
       <a href="https://scholar.google.com/citations?user=kMui170AAAAJ&hl=zh-CN" target="_blank">Yuhao Dong</a><sup>1</sup>,
       <a href="https://savannah-yz.github.io/" target="_blank">Zhe Yang</a><sup>1</sup>,
       <a href="https://www.brianboli.com/" target="_blank">Bo Li</a><sup>1</sup>,
-      <a href="https://jingkangyang.com/" target="_blank">Jingkang Yang</a><sup>1,2</sup>,
+      <a href="https://jingkangyang.com/" target="_blank">Jingkang Yang</a><sup>1</sup>,
       <a href="https://www.mmlab-ntu.com/person/ccloy/" target="_blank">Chen Change Loy</a><sup>1,&dagger;</sup>,
       <a href="https://liuziwei7.github.io/" target="_blank">Ziwei Liu</a><sup>1,&dagger;</sup>
     </div>
@@ -277,7 +278,7 @@
       <a href="https://huggingface.co/datasets/Choiszt/FileGram" class="btn" target="_blank">&#129303; Dataset</a>
       <a href="https://habitus.choiszt.com/" class="btn btn-glow" target="_blank"><img src="static/images/habitus_icon.png" style="width:16px;height:16px;border-radius:3px;"> Product App</a>
     </div>
-    <div class="vid" style="margin-top:28px;position:relative;"><video id="demo-video" autoplay loop playsinline preload="auto" src="static/filegram_demo.mp4" style="cursor:pointer;" muted onclick="this.paused?this.play():this.pause()"></video><div id="sound-hint" onclick="var v=document.getElementById('demo-video');v.muted=false;this.style.display='none';" style="position:absolute;bottom:16px;right:16px;background:rgba(255,255,255,0.12);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.25);box-shadow:0 2px 12px rgba(0,0,0,0.1),inset 0 1px 0 rgba(255,255,255,0.2);color:rgba(255,255,255,0.9);padding:8px 16px;border-radius:10px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;"><i class="fas fa-volume-mute"></i> Click for sound</div></div>
+    <div class="vid" style="margin-top:28px;position:relative;"><video id="demo-video" autoplay loop playsinline preload="auto" src="static/filegram_demo.mp4" controls muted></video><div id="unmute-btn" onclick="var v=document.getElementById('demo-video');v.muted=false;this.style.display='none';" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.12);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.25);box-shadow:0 2px 12px rgba(0,0,0,0.1),inset 0 1px 0 rgba(255,255,255,0.2);color:rgba(255,255,255,0.9);padding:8px 16px;border-radius:10px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;z-index:10;"><i class="fas fa-volume-mute"></i> Click for sound</div></div>
   </div>
 </header>
 
