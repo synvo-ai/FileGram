@@ -89,6 +89,29 @@
     .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
     .btn-primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
     .btn i, .btn .ai { font-size: 14px; }
+    .btn-glow {
+      background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15), rgba(236,72,153,0.15));
+      border: 1px solid rgba(139,92,246,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-glow::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
+      background-size: 300% 300%;
+      animation: glowShift 3s ease infinite;
+      border-radius: 10px;
+      z-index: -1;
+      opacity: 0.4;
+      filter: blur(8px);
+    }
+    .btn-glow:hover::before { opacity: 0.7; }
+    @keyframes glowShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
 
     /* ========== SECTIONS ========== */
     section { padding: 16px 0; }
@@ -252,9 +275,9 @@
       <a href="#" class="btn btn-primary"><i class="ai ai-arxiv"></i> arXiv</a>
       <a href="https://github.com/Synvo-ai/FileGram" class="btn" target="_blank"><i class="fab fa-github"></i> Code</a>
       <a href="https://huggingface.co/datasets/Choiszt/FileGram" class="btn" target="_blank">&#129303; Dataset</a>
-      <a href="#video" class="btn"><i class="fas fa-play-circle"></i> Video</a>
+      <a href="https://habitus.choiszt.com/" class="btn btn-glow" target="_blank"><img src="static/images/habitus_icon.png" style="width:16px;height:16px;border-radius:3px;"> Product App</a>
     </div>
-    <div class="vid" style="margin-top:28px;position:relative;"><video id="demo-video" autoplay loop playsinline preload="auto" src="static/filegram_demo.mp4" style="cursor:pointer;" muted onclick="this.paused?this.play():this.pause()"></video><div id="sound-hint" onclick="var v=document.getElementById('demo-video');v.muted=false;this.style.display='none';" style="position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;"><i class="fas fa-volume-mute"></i> Click for sound</div></div>
+    <div class="vid" style="margin-top:28px;position:relative;"><video id="demo-video" autoplay loop playsinline preload="auto" src="static/filegram_demo.mp4" style="cursor:pointer;" muted onclick="this.paused?this.play():this.pause()"></video><div id="sound-hint" onclick="var v=document.getElementById('demo-video');v.muted=false;this.style.display='none';" style="position:absolute;bottom:16px;right:16px;background:rgba(255,255,255,0.12);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.25);box-shadow:0 2px 12px rgba(0,0,0,0.1),inset 0 1px 0 rgba(255,255,255,0.2);color:rgba(255,255,255,0.9);padding:8px 16px;border-radius:10px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;"><i class="fas fa-volume-mute"></i> Click for sound</div></div>
   </div>
 </header>
 

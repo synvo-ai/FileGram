@@ -3,6 +3,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-FileGram-b31b1b.svg)](#)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Dataset-yellow)](https://huggingface.co/datasets/Choiszt/FileGram)
 [![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://filegram.choiszt.com)
+[![Product App](https://img.shields.io/badge/Product%20App-Habitus-blueviolet)](https://habitus.choiszt.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **Grounding Agent Personalization in File-System Behavioral Traces**
