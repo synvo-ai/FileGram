@@ -30,14 +30,14 @@
       --gray-900: #0f172a;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: var(--font); color: var(--gray-900); background: #f3f8fc; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    body { font-family: var(--font); color: var(--gray-900); background: linear-gradient(180deg, #c8dced 0%, #e0eaf3 15%, #e9f0f7 40%); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 
     /* ========== HERO ========== */
     .hero {
       position: relative;
-      background: linear-gradient(160deg, var(--navy) 0%, #0c2a4a 50%, #0e3560 100%);
-      padding: 64px 0 48px;
+      background: linear-gradient(180deg, var(--navy) 0%, #0c2a4a 60%, #1a4570 100%);
+      padding: 48px 0 56px;
       text-align: center;
       overflow: hidden;
     }
@@ -72,11 +72,11 @@
       margin-bottom: 18px;
     }
     .hero h1 .hl { color: var(--blue); }
-    .authors { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.9; margin-bottom: 4px; }
+    .authors { font-size: 17px; color: rgba(255,255,255,0.65); line-height: 1.9; margin-bottom: 4px; }
     .authors a { color: rgba(255,255,255,0.85); text-decoration: none; }
     .authors a:hover { color: var(--blue); }
     .authors sup { font-size: 9px; color: rgba(255,255,255,0.35); }
-    .affil { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 22px; }
+    .affil { font-size: 15px; color: rgba(255,255,255,0.6); margin-bottom: 22px; }
     .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
@@ -91,9 +91,9 @@
     .btn i, .btn .ai { font-size: 14px; }
 
     /* ========== SECTIONS ========== */
-    section { padding: 40px 0; }
+    section { padding: 16px 0; }
     .sec-title {
-      font-size: 24px; font-weight: 800; text-align: center;
+      font-size: 28px; font-weight: 800; text-align: center;
       margin-bottom: 6px; letter-spacing: -0.02em; color: var(--gray-900);
     }
     .sec-sub {
@@ -102,27 +102,30 @@
     }
 
     /* ========== TEASER ========== */
-    .teaser img { width: 100%; border-radius: 10px; }
+    .glass {
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.5);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    .teaser img { width: 100%; border-radius: 12px; }
+    .fig img { border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 2px 16px rgba(0,0,0,0.04); }
 
     /* ========== ABSTRACT ========== */
     .abstract {
       font-size: 14px; color: var(--gray-700); line-height: 1.8;
       text-align: justify;
-      background: var(--white); border: 1px solid rgba(3,173,240,0.12);
       border-radius: 10px; padding: 24px 28px;
-      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
     }
 
     /* ========== PILLARS ========== */
     .pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
     @media(max-width:700px){ .pillars{grid-template-columns:1fr;} }
     .pillar {
-      background: var(--white); border: 1px solid rgba(3,173,240,0.12);
       border-radius: 10px; padding: 20px; position: relative;
       overflow: hidden; transition: box-shadow 0.2s;
-      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
     }
-    .pillar:hover { box-shadow: 0 4px 20px rgba(3,173,240,0.1); }
+    .pillar:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8); }
     .pillar::before {
       content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
     }
@@ -147,9 +150,7 @@
     /* ========== STATS ========== */
     .stats {
       display: flex; justify-content: center; gap: 36px; flex-wrap: wrap;
-      background: var(--white); border: 1px solid rgba(3,173,240,0.12);
       border-radius: 10px; padding: 24px 20px; margin-bottom: 20px;
-      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
     }
     .stat { text-align: center; }
     .stat-val { font-size: 32px; font-weight: 800; color: var(--blue); }
@@ -159,7 +160,7 @@
     .fig { text-align: center; margin: 16px auto; max-width: 100%; }
     .fig img { max-width: 100%; border-radius: 8px; display: block; margin: 0 auto; }
     .fig-cap {
-      font-size: 12px; color: var(--gray-400); margin-top: 6px;
+      font-size: 13.5px; color: var(--gray-700); margin-top: 6px;
       line-height: 1.5;
     }
 
@@ -167,12 +168,10 @@
     .tracks { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
     @media(max-width:700px){ .tracks{grid-template-columns:repeat(2,1fr);} }
     .track {
-      background: var(--white); border: 1px solid rgba(3,173,240,0.12);
       border-radius: 8px; padding: 16px 10px; text-align: center;
       transition: box-shadow 0.2s;
-      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
     }
-    .track:hover { box-shadow: 0 2px 12px rgba(3,173,240,0.06); }
+    .track:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8); }
     .t-num { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--gray-400); margin-bottom: 2px; }
     .t-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
     .t-desc { font-size: 11px; color: var(--gray-400); }
@@ -188,16 +187,18 @@
     .r-v { width: 40px; font-size: 13px; font-weight: 600; color: var(--gray-500); }
     .r-v.ours { color: var(--blue); font-weight: 800; }
     .r-badge {
-      display: inline-block; background: var(--sky); border: 1px solid var(--sky-deep);
-      border-radius: 8px; padding: 6px 20px; font-size: 13px;
+      display: inline-block; border-radius: 8px; padding: 6px 20px; font-size: 13px;
     }
     .r-badge b { font-size: 20px; color: var(--blue); margin-right: 4px; }
 
     /* ========== VIDEO ========== */
     .vid {
       margin: 0 auto;
-      border-radius: 10px; overflow: hidden;
-      border: 1px solid var(--gray-200); background: var(--navy);
+      border-radius: 14px; overflow: hidden;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
       aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;
     }
     .vid video { width: 100%; height: 100%; object-fit: contain; }
@@ -205,9 +206,8 @@
 
     /* ========== BIBTEX ========== */
     .bib {
-      position: relative; background: var(--white); border: 1px solid rgba(3,173,240,0.12);
+      position: relative;
       border-radius: 8px; padding: 16px 18px;
-      box-shadow: 0 1px 8px rgba(3,173,240,0.04);
     }
     .bib pre { font-family: var(--mono); font-size: 11px; line-height: 1.6; color: var(--gray-500); overflow-x: auto; white-space: pre; }
     .bib-cp {
@@ -237,38 +237,33 @@
     <div class="hero-logo"><img src="static/images/synvo_logo.svg" alt="Synvo AI" /></div>
     <h1><span class="hl">FileGram</span>: Grounding Agent Personalization<br/>in File-System Behavioral Traces</h1>
     <div class="authors">
-      <a href="#">Shuai Liu</a><sup>1,2</sup>,
-      <a href="#">Shulin Tian</a><sup>1</sup>,
-      <a href="#">Kairui Hu</a><sup>1,2</sup>,
-      <a href="#">Yuhao Dong</a><sup>1</sup>,
-      <a href="#">Zhe Yang</a><sup>1</sup>,
-      <a href="#">Bo Li</a><sup>1</sup>,
-      <a href="#">Jingkang Yang</a><sup>1,2</sup>,
-      <a href="#">Chen Change Loy</a><sup>1</sup>,
-      <a href="#">Ziwei Liu</a><sup>1</sup>
+      <a href="https://www.choiszt.com/" target="_blank">Shuai Liu</a><sup>1,2</sup>,
+      <a href="https://shulin16.github.io/" target="_blank">Shulin Tian</a><sup>1</sup>,
+      <a href="https://kairuihu.github.io/" target="_blank">Kairui Hu</a><sup>1,2</sup>,
+      <a href="https://scholar.google.com/citations?user=kMui170AAAAJ&hl=zh-CN" target="_blank">Yuhao Dong</a><sup>1</sup>,
+      <a href="https://savannah-yz.github.io/" target="_blank">Zhe Yang</a><sup>1</sup>,
+      <a href="https://www.brianboli.com/" target="_blank">Bo Li</a><sup>1</sup>,
+      <a href="https://jingkangyang.com/" target="_blank">Jingkang Yang</a><sup>1,2</sup>,
+      <a href="https://www.mmlab-ntu.com/person/ccloy/" target="_blank">Chen Change Loy</a><sup>1,&dagger;</sup>,
+      <a href="https://liuziwei7.github.io/" target="_blank">Ziwei Liu</a><sup>1,&dagger;</sup>
     </div>
-    <div class="affil"><sup>1</sup>S-Lab, Nanyang Technological University &nbsp; <sup>2</sup>Synvo AI</div>
+    <div class="affil"><sup>1</sup>S-Lab, Nanyang Technological University &nbsp; <sup>2</sup>Synvo AI &nbsp; <sup>&dagger;</sup>Corresponding authors</div>
     <div class="actions">
       <a href="#" class="btn btn-primary"><i class="ai ai-arxiv"></i> arXiv</a>
       <a href="https://github.com/Synvo-ai/FileGram" class="btn" target="_blank"><i class="fab fa-github"></i> Code</a>
       <a href="https://huggingface.co/datasets/Choiszt/FileGram" class="btn" target="_blank">&#129303; Dataset</a>
       <a href="#video" class="btn"><i class="fas fa-play-circle"></i> Video</a>
     </div>
+    <div class="vid" style="margin-top:28px;position:relative;"><video id="demo-video" autoplay loop playsinline preload="auto" src="static/filegram_demo.mp4" style="cursor:pointer;" muted onclick="this.paused?this.play():this.pause()"></video><div id="sound-hint" onclick="var v=document.getElementById('demo-video');v.muted=false;this.style.display='none';" style="position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;"><i class="fas fa-volume-mute"></i> Click for sound</div></div>
   </div>
 </header>
-
-<!-- ====== TEASER ====== -->
-<section>
-  <div class="container">
-    <div class="teaser"><img src="static/images/teaser.png" alt="FileGram Overview" /></div>
-  </div>
-</section>
 
 <!-- ====== ABSTRACT ====== -->
 <section>
   <div class="container">
     <div class="sec-title">Abstract</div>
-    <p class="abstract">
+    <div class="teaser" style="margin-bottom:2px;"><img src="static/images/teaser.png" alt="FileGram Overview" style="width:100%;border-radius:10px;" /></div>
+    <p class="abstract glass">
       Coworking AI agents operating within local file systems are rapidly emerging as a paradigm in human&ndash;AI interaction.
       Since users exhibit highly diverse workflows, personalization is essential for tight collaboration and a seamless user experience.
       However, effective personalization is limited by severe data constraints, since strict privacy barriers and the inherent difficulty
@@ -291,19 +286,19 @@
     <div class="sec-title">Framework</div>
     <div class="sec-sub">Three components address data scarcity, evaluation gaps, and method limitations.</div>
     <div class="pillars">
-      <div class="pillar a">
+      <div class="pillar glass a">
         <div class="p-icon"><i class="fas fa-cogs"></i></div>
         <div class="p-tag">Data Generation</div>
         <div class="p-name">FileGramEngine</div>
         <p class="p-desc">Scalable persona-driven simulation producing 640 controlled trajectories with ground-truth labels across 6 behavioral dimensions and 20 user profiles.</p>
       </div>
-      <div class="pillar b">
+      <div class="pillar glass b">
         <div class="p-icon"><i class="fas fa-chart-bar"></i></div>
         <div class="p-tag">Evaluation</div>
         <div class="p-name">FileGramBench</div>
         <p class="p-desc">First file-system memory benchmark. Four tracks: profile reconstruction, reasoning, anomaly detection, and multimodal visual grounding.</p>
       </div>
-      <div class="pillar c">
+      <div class="pillar glass c">
         <div class="p-icon"><i class="fas fa-brain"></i></div>
         <div class="p-tag">Method</div>
         <div class="p-name">FileGramOS</div>
@@ -317,19 +312,45 @@
 <section>
   <div class="container">
     <div class="sec-title">FileGramEngine</div>
-    <div class="stats">
+    <div class="stats glass">
       <div class="stat"><div class="stat-val">20</div><div class="stat-lbl">User Profiles</div></div>
       <div class="stat"><div class="stat-val">32</div><div class="stat-lbl">Tasks</div></div>
       <div class="stat"><div class="stat-val">640</div><div class="stat-lbl">Trajectories</div></div>
       <div class="stat"><div class="stat-val">6</div><div class="stat-lbl">Dimensions</div></div>
     </div>
     <div class="fig">
-      <img src="static/images/data_pipeline.png" alt="Data Pipeline" />
+      <object id="engine-svg" type="image/svg+xml" data="static/images/filegramengine.svg" style="width:100%;border-radius:8px;will-change:transform;">Data Pipeline</object>
       <p class="fig-cap"><b>FileGramEngine</b> simulates realistic file-system workflows via persona-driven agents. Each profile is defined by six behavioral dimensions, producing fine-grained multimodal action sequences at scale.</p>
     </div>
-    <div class="fig">
-      <img src="static/images/profile_hex_icon.png" alt="User Profiles" style="max-height:320px;width:auto;" />
-      <p class="fig-cap">20 diverse user profiles spanning behavioral patterns from methodical deep-readers to agile pragmatists.</p>
+    <!-- Data distribution charts -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px;">
+      <!-- Output Files -->
+      <div style="border-radius:10px;padding:24px 28px;" class="glass">
+        <div style="margin-bottom:16px;"><span style="font-size:32px;font-weight:800;color:var(--blue);">~10K</span> <span style="font-size:16px;font-weight:500;color:var(--gray-500);">Output Files</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:90px;font-size:12px;color:var(--gray-400);text-align:right;">PDF</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:100%;height:100%;background:linear-gradient(90deg,#ef4444,#f87171);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">3,609</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:90px;font-size:12px;color:var(--gray-400);text-align:right;">Document</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:85.7%;height:100%;background:linear-gradient(90deg,#3b82f6,#60a5fa);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">3,093</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:90px;font-size:12px;color:var(--gray-400);text-align:right;">Markdown</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:64%;height:100%;background:linear-gradient(90deg,#8b5cf6,#a78bfa);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">2,310</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:90px;font-size:12px;color:var(--gray-400);text-align:right;">Presentation</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:42.9%;height:100%;background:linear-gradient(90deg,#f97316,#fb923c);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">1,547</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:90px;font-size:12px;color:var(--gray-400);text-align:right;">Image</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:28.6%;height:100%;background:linear-gradient(90deg,#22c55e,#4ade80);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">1,031</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:90px;font-size:12px;color:var(--gray-400);text-align:right;">Audio</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:14.3%;height:100%;background:linear-gradient(90deg,#eab308,#facc15);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">516</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:90px;font-size:12px;color:var(--gray-400);text-align:right;">Spreadsheet</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:14.3%;height:100%;background:linear-gradient(90deg,#10b981,#34d399);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">516</span></div>
+        </div>
+      </div>
+      <!-- Atomic Actions -->
+      <div style="border-radius:10px;padding:24px 28px;" class="glass">
+        <div style="margin-bottom:16px;"><span style="font-size:32px;font-weight:800;color:var(--blue);">20,028</span> <span style="font-size:16px;font-weight:500;color:var(--gray-500);">Atomic Actions</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:100px;font-size:12px;color:var(--gray-400);text-align:right;">File Read</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:100%;height:100%;background:linear-gradient(90deg,#ef4444,#f87171);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">4,541</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:100px;font-size:12px;color:var(--gray-400);text-align:right;">Cross-File Ref</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:90.2%;height:100%;background:linear-gradient(90deg,#8b5cf6,#a78bfa);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">4,094</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:100px;font-size:12px;color:var(--gray-400);text-align:right;">Context Switch</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:86.1%;height:100%;background:linear-gradient(90deg,#3b82f6,#60a5fa);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">3,909</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:100px;font-size:12px;color:var(--gray-400);text-align:right;">File Write</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:66.6%;height:100%;background:linear-gradient(90deg,#22c55e,#4ade80);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">3,024</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:100px;font-size:12px;color:var(--gray-400);text-align:right;">File Browse</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:36.3%;height:100%;background:linear-gradient(90deg,#f97316,#fb923c);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">1,649</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:100px;font-size:12px;color:var(--gray-400);text-align:right;">File Edit</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:23.3%;height:100%;background:linear-gradient(90deg,#ec4899,#f472b6);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">1,057</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:100px;font-size:12px;color:var(--gray-400);text-align:right;">Dir Create</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:20.8%;height:100%;background:linear-gradient(90deg,#ef4444,#f87171);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">944</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:100px;font-size:12px;color:var(--gray-400);text-align:right;">Others</span><div style="flex:1;height:16px;background:rgba(3,173,240,0.06);border-radius:4px;overflow:hidden;"><div style="width:17.8%;height:100%;background:linear-gradient(90deg,#94a3b8,#cbd5e1);border-radius:4px;"></div></div><span style="font-size:12px;font-weight:600;color:var(--gray-700);width:40px;">810</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -338,12 +359,12 @@
 <section>
   <div class="container">
     <div class="sec-title">FileGramBench</div>
-    <div class="sec-sub">4,600+ QA pairs across 4 evaluation tracks and 3 memory channels.</div>
+    <div class="sec-sub" style="font-size:16px;"><b>4,653 QA pairs</b> across 4 evaluation tracks and 3 memory channels.</div>
     <div class="tracks">
-      <div class="track"><div class="t-num">TRACK I</div><div class="t-name" style="color:var(--blue)">Understanding</div><div class="t-desc">Profile reconstruction &amp; fingerprinting</div></div>
-      <div class="track"><div class="t-num">TRACK II</div><div class="t-name" style="color:#7c3aed">Reasoning</div><div class="t-desc">Pattern inference &amp; disentanglement</div></div>
-      <div class="track"><div class="t-num">TRACK III</div><div class="t-name" style="color:#e11d48">Detection</div><div class="t-desc">Anomaly &amp; behavioral drift</div></div>
-      <div class="track"><div class="t-num">TRACK IV</div><div class="t-name" style="color:#0891b2">Multimodal</div><div class="t-desc">Visual grounding from recordings</div></div>
+      <div class="track glass"><div class="t-num">TRACK I</div><div class="t-name" style="color:var(--blue)">Understanding</div><div class="t-desc">Profile reconstruction &amp; fingerprinting</div><div class="t-desc" style="margin-top:6px;font-weight:600;color:var(--gray-700);">886 questions</div></div>
+      <div class="track glass"><div class="t-num">TRACK II</div><div class="t-name" style="color:#7c3aed">Reasoning</div><div class="t-desc">Pattern inference &amp; disentanglement</div><div class="t-desc" style="margin-top:6px;font-weight:600;color:var(--gray-700);">1,694 questions</div></div>
+      <div class="track glass"><div class="t-num">TRACK III</div><div class="t-name" style="color:#e11d48">Detection</div><div class="t-desc">Anomaly &amp; behavioral drift</div><div class="t-desc" style="margin-top:6px;font-weight:600;color:var(--gray-700);">1,103 questions</div></div>
+      <div class="track glass"><div class="t-num">TRACK IV</div><div class="t-name" style="color:#0891b2">Multimodal</div><div class="t-desc">Visual grounding from recordings</div><div class="t-desc" style="margin-top:6px;font-weight:600;color:var(--gray-700);">650 questions</div></div>
     </div>
     <div class="fig">
       <img src="static/images/qa_example.png" alt="QA Examples" />
@@ -356,7 +377,25 @@
 <section>
   <div class="container">
     <div class="sec-title">FileGramOS</div>
-    <div class="sec-sub">Per-trajectory Engram Encoding &rarr; Cross-Engram Consolidation &rarr; Query-Adaptive Retrieval.</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;margin-bottom:20px;">
+      <div style="background:var(--white);border:1px solid rgba(3,173,240,0.15);border-top:3px solid var(--blue);border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 8px rgba(3,173,240,0.04);">
+        <div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;">Stage 1</div>
+        <div style="font-size:15px;font-weight:700;">Engram Encoding</div>
+        <div style="font-size:12px;color:var(--gray-400);margin-top:4px;">Per-trajectory atomic signal extraction</div>
+      </div>
+      <div style="font-size:24px;color:var(--gray-400);">&rarr;</div>
+      <div style="background:var(--white);border:1px solid rgba(3,173,240,0.15);border-top:3px solid #f59e0b;border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 8px rgba(3,173,240,0.04);">
+        <div style="font-size:11px;font-weight:700;color:#d97706;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;">Stage 2</div>
+        <div style="font-size:15px;font-weight:700;">Consolidation</div>
+        <div style="font-size:12px;color:var(--gray-400);margin-top:4px;">Cross-engram structured MemoryStore</div>
+      </div>
+      <div style="font-size:24px;color:var(--gray-400);">&rarr;</div>
+      <div style="background:var(--white);border:1px solid rgba(3,173,240,0.15);border-top:3px solid #10b981;border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 8px rgba(3,173,240,0.04);">
+        <div style="font-size:11px;font-weight:700;color:#059669;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;">Stage 3</div>
+        <div style="font-size:15px;font-weight:700;">Adaptive Retrieval</div>
+        <div style="font-size:12px;color:var(--gray-400);margin-top:4px;">Query-time evidence composition</div>
+      </div>
+    </div>
     <div class="fig">
       <img src="static/images/architecture.png" alt="FileGramOS Architecture" />
       <p class="fig-cap"><b>FileGramOS</b> builds profiles from atomic file signals, preserving procedural, semantic, and episodic memory through a three-stage bottom-up pipeline.</p>
@@ -369,42 +408,37 @@
   <div class="container">
     <div class="sec-title">Results</div>
     <div class="sec-sub">FileGramOS outperforms all baselines on FileGramBench.</div>
-    <div class="results">
-      <div class="r-row"><div class="r-lbl">Mem0</div><div class="r-bg"><div class="r-bar" style="width:68.5%"></div></div><div class="r-v">44.5</div></div>
-      <div class="r-row"><div class="r-lbl">Zep</div><div class="r-bg"><div class="r-bar" style="width:72.6%"></div></div><div class="r-v">47.2</div></div>
-      <div class="r-row"><div class="r-lbl">Full Context</div><div class="r-bg"><div class="r-bar" style="width:73.8%"></div></div><div class="r-v">48.0</div></div>
-      <div class="r-row"><div class="r-lbl">EverMemos</div><div class="r-bg"><div class="r-bar" style="width:76.8%"></div></div><div class="r-v">49.9</div></div>
-      <div class="r-row"><div class="r-lbl ours">FileGramOS</div><div class="r-bg"><div class="r-bar ours" style="width:91.7%"></div></div><div class="r-v ours">59.6</div></div>
+    <div class="fig" style="margin-bottom:24px">
+      <img src="static/images/main_results.png" alt="Main Results Table" />
     </div>
-    <div style="text-align:center"><div class="r-badge"><b>+9.7%</b> over best baseline</div></div>
+    <div class="results">
+      <div class="r-row"><div class="r-lbl">SimpleMem</div><div class="r-bg"><div class="r-bar" style="width:32.9%"></div></div><div class="r-v">32.9</div></div>
+      <div class="r-row"><div class="r-lbl">Mem0</div><div class="r-bg"><div class="r-bar" style="width:33.2%"></div></div><div class="r-v">33.2</div></div>
+      <div class="r-row"><div class="r-lbl">MemOS</div><div class="r-bg"><div class="r-bar" style="width:36.2%"></div></div><div class="r-v">36.2</div></div>
+      <div class="r-row"><div class="r-lbl">Zep</div><div class="r-bg"><div class="r-bar" style="width:40.2%"></div></div><div class="r-v">40.2</div></div>
+      <div class="r-row"><div class="r-lbl">Naive RAG</div><div class="r-bg"><div class="r-bar" style="width:40.5%"></div></div><div class="r-v">40.5</div></div>
+      <div class="r-row"><div class="r-lbl">MemU</div><div class="r-bg"><div class="r-bar" style="width:44.4%"></div></div><div class="r-v">44.4</div></div>
+      <div class="r-row"><div class="r-lbl">MMA</div><div class="r-bg"><div class="r-bar" style="width:44.7%"></div></div><div class="r-v">44.7</div></div>
+      <div class="r-row"><div class="r-lbl">Full Context</div><div class="r-bg"><div class="r-bar" style="width:48.0%"></div></div><div class="r-v">48.0</div></div>
+      <div class="r-row"><div class="r-lbl">Eager Summ.</div><div class="r-bg"><div class="r-bar" style="width:49.5%"></div></div><div class="r-v">49.5</div></div>
+      <div class="r-row"><div class="r-lbl">EverMemOS</div><div class="r-bg"><div class="r-bar" style="width:49.9%"></div></div><div class="r-v">49.9</div></div>
+      <div class="r-row"><div class="r-lbl">VisRAG</div><div class="r-bg"><div class="r-bar" style="width:51.9%"></div></div><div class="r-v">51.9</div></div>
+      <div class="r-row"><div class="r-lbl ours">FileGramOS</div><div class="r-bg"><div class="r-bar ours" style="width:59.6%"></div></div><div class="r-v ours">59.6</div></div>
+    </div>
+    <div style="text-align:center"><div class="r-badge glass"><b>+7.7%</b> over best baseline</div></div>
     <div class="fig" style="margin-top:20px">
       <img src="static/images/qualitative.png" alt="Qualitative Results" />
-      <p class="fig-cap">FileGramOS captures fine-grained behavioral patterns that narrative-first and context-based systems miss.</p>
+      <p class="fig-cap"><b>Qualitative comparison.</b> <em>Left:</em> A BehavFP question where FileGramOS's three-channel architecture jointly recovers the correct profile, while baselines each miss different signals. <em>Right:</em> A TraceDis question involving multimodal artifacts, where cross-format output gaps cause widespread failures.</p>
     </div>
   </div>
 </section>
 
-<!-- ====== VIDEO ====== -->
-<section class="bg-sky" id="video">
-  <div class="container">
-    <div class="sec-title">Video</div>
-    <div class="vid"><span class="vid-ph"><i class="fas fa-play-circle"></i>&ensp;Demo video coming soon</span></div>
-  </div>
-</section>
 
 <!-- ====== BIBTEX ====== -->
 <section>
   <div class="container">
     <div class="sec-title">BibTeX</div>
-    <div class="bib">
-      <button class="bib-cp" onclick="copyBib()"><i class="fas fa-copy"></i> Copy</button>
-<pre>@article{filegram2026,
-  title  = {FileGram: Grounding Agent Personalization
-            in File-System Behavioral Traces},
-  author = {FileGram Team},
-  year   = {2026}
-}</pre>
-    </div>
+    <p style="text-align:center;color:var(--gray-400);font-size:14px;">Coming soon.</p>
   </div>
 </section>
 
@@ -425,6 +459,19 @@ function copyBib(){
     b.innerHTML='<i class="fas fa-check"></i> Copied';
     setTimeout(()=>b.innerHTML='<i class="fas fa-copy"></i> Copy',2000);
   });
+}
+// Pause SVG animations when out of viewport to reduce GPU load
+const svgEl=document.getElementById('engine-svg');
+if(svgEl){
+  new IntersectionObserver(([e])=>{
+    try{
+      const doc=svgEl.contentDocument;
+      if(!doc)return;
+      doc.querySelectorAll('*').forEach(el=>{
+        el.style.animationPlayState=e.isIntersecting?'running':'paused';
+      });
+    }catch(ex){}
+  },{threshold:0.05}).observe(svgEl);
 }
 </script>
 </body>
