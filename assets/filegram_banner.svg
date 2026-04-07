@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" width="900" height="200">
+  <defs>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="6" result="offset"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.25"/></feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g font-family="'Arial Black', 'Helvetica Neue', Impact, sans-serif" font-weight="900" font-size="160" text-anchor="middle" letter-spacing="-6" filter="url(#softShadow)">
+    <text x="450" y="140" stroke="#0a0a0a" stroke-width="12" stroke-linejoin="round" paint-order="stroke">
+      <tspan fill="#000000">File</tspan><tspan fill="#03ADF0">Gram</tspan>
+    </text>
+  </g>
+</svg>

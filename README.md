@@ -1,12 +1,14 @@
-# FileGram
+<p align="center">
+  <img src="assets/filegram_banner.svg" width="720" alt="FileGram" />
+</p>
 
-[![arXiv](https://img.shields.io/badge/arXiv-2604.04901-b31b1b.svg)](https://arxiv.org/abs/2604.04901)
-[![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Dataset-yellow)](https://huggingface.co/datasets/Choiszt/FileGram)
-[![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://filegram.choiszt.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Product App](assets/badge_product_app.svg)](https://habitus.choiszt.com)
-
-**Grounding Agent Personalization in File-System Behavioral Traces**
+<p align="center">
+  <a href="https://arxiv.org/abs/2604.04901"><img src="https://img.shields.io/badge/arXiv-2604.04901-b31b1b.svg" alt="arXiv"></a>
+  <a href="https://huggingface.co/datasets/Choiszt/FileGram"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Dataset-yellow" alt="Dataset"></a>
+  <a href="https://filegram.choiszt.com"><img src="https://img.shields.io/badge/Project-Page-blue" alt="Project Page"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
+  <a href="https://habitus.choiszt.com"><img src="assets/badge_product_app.svg" alt="Product App"></a>
+</p>
 
 FileGram is a comprehensive framework that grounds agent memory and personalization in file-system behavioral traces. It comprises three core components:
 
