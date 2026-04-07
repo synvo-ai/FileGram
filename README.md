@@ -1,6 +1,6 @@
 # FileGram
 
-[![arXiv](https://img.shields.io/badge/arXiv-FileGram-b31b1b.svg)](#)
+[![arXiv](https://img.shields.io/badge/arXiv-2604.04901-b31b1b.svg)](https://arxiv.org/abs/2604.04901)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Dataset-yellow)](https://huggingface.co/datasets/Choiszt/FileGram)
 [![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://filegram.choiszt.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -148,7 +148,17 @@ See `.env.example` for the full configuration template.
 
 ## Citation
 
-Coming soon.
+```bibtex
+@misc{liu2026filegramgroundingagentpersonalization,
+      title={FileGram: Grounding Agent Personalization in File-System Behavioral Traces},
+      author={Shuai Liu and Shulin Tian and Kairui Hu and Yuhao Dong and Zhe Yang and Bo Li and Jingkang Yang and Chen Change Loy and Ziwei Liu},
+      year={2026},
+      eprint={2604.04901},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2604.04901},
+}
+```
 
 ## License
 

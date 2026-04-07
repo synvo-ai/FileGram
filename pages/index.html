@@ -231,16 +231,22 @@
     /* ========== BIBTEX ========== */
     .bib {
       position: relative;
-      border-radius: 8px; padding: 16px 18px;
+      border-radius: 12px; padding: 20px 24px;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.5);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6);
     }
-    .bib pre { font-family: var(--mono); font-size: 11px; line-height: 1.6; color: var(--gray-500); overflow-x: auto; white-space: pre; }
+    .bib pre { font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--gray-700); overflow-x: auto; white-space: pre; margin: 0; }
     .bib-cp {
-      position: absolute; top: 8px; right: 8px;
-      background: var(--white); border: 1px solid var(--gray-200);
-      border-radius: 4px; padding: 3px 8px; font-size: 11px;
-      cursor: pointer; color: var(--gray-500); font-family: var(--font);
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 6px; padding: 5px 10px; font-size: 11px;
+      cursor: pointer; color: var(--gray-600); font-family: var(--font);
+      backdrop-filter: blur(8px);
+      transition: all 0.2s;
     }
-    .bib-cp:hover { background: var(--gray-100); }
+    .bib-cp:hover { background: var(--white); color: var(--blue); border-color: var(--blue); }
 
     /* ========== FOOTER ========== */
     footer {
@@ -273,7 +279,7 @@
     </div>
     <div class="affil"><sup>1</sup>S-Lab, Nanyang Technological University &nbsp; <sup>2</sup>Synvo AI &nbsp; <sup>&dagger;</sup>Corresponding authors</div>
     <div class="actions">
-      <a href="#" class="btn btn-primary"><i class="ai ai-arxiv"></i> arXiv</a>
+      <a href="https://arxiv.org/abs/2604.04901" class="btn btn-primary" target="_blank"><i class="ai ai-arxiv"></i> arXiv</a>
       <a href="https://github.com/Synvo-ai/FileGram" class="btn" target="_blank"><i class="fab fa-github"></i> Code</a>
       <a href="https://huggingface.co/datasets/Choiszt/FileGram" class="btn" target="_blank">&#129303; Dataset</a>
       <a href="https://habitus.choiszt.com/" class="btn btn-glow" target="_blank"><img src="static/images/habitus_icon.png" style="width:16px;height:16px;border-radius:3px;"> Product App</a>
@@ -462,7 +468,18 @@
 <section>
   <div class="container">
     <div class="sec-title">BibTeX</div>
-    <p style="text-align:center;color:var(--gray-400);font-size:14px;">Coming soon.</p>
+    <div class="bib">
+      <button class="bib-cp" onclick="copyBib(this)"><i class="fas fa-copy"></i> Copy</button>
+      <pre id="bibtex">@misc{liu2026filegramgroundingagentpersonalization,
+      title={FileGram: Grounding Agent Personalization in File-System Behavioral Traces},
+      author={Shuai Liu and Shulin Tian and Kairui Hu and Yuhao Dong and Zhe Yang and Bo Li and Jingkang Yang and Chen Change Loy and Ziwei Liu},
+      year={2026},
+      eprint={2604.04901},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2604.04901},
+}</pre>
+    </div>
   </div>
 </section>
 
@@ -472,7 +489,7 @@
   &ensp;&middot;&ensp;
   <a href="https://huggingface.co/datasets/Choiszt/FileGram" target="_blank">&#129303; HuggingFace</a>
   &ensp;&middot;&ensp;
-  <a href="#">arXiv</a>
+  <a href="https://arxiv.org/abs/2604.04901" target="_blank">arXiv</a>
   <br/><span style="margin-top:4px;display:inline-block">S-Lab, Nanyang Technological University &amp; Synvo AI</span>
 </footer>
 
