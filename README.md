@@ -2,6 +2,8 @@
   <img src="assets/filegram_banner.svg" width="720" alt="FileGram" />
 </p>
 
+<h2 align="center">Grounding Agent Personalization in File-System Behavioral Traces</h2>
+
 <p align="center">
   <a href="https://arxiv.org/abs/2604.04901"><img src="https://img.shields.io/badge/arXiv-2604.04901-b31b1b.svg" alt="arXiv"></a>
   <a href="https://huggingface.co/datasets/Choiszt/FileGram"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Dataset-yellow" alt="Dataset"></a>
