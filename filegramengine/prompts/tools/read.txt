@@ -10,7 +10,13 @@ Usage:
 - You have the capability to call multiple tools in a single response. It is always better to speculatively read multiple files as a batch that are potentially useful.
 - If you read a file that exists but has empty contents you will receive a system reminder warning in place of file contents.
 
-Supported file types:
-- Text files: Returns content with line numbers
-- PDF files: Automatically extracts text from all pages (scanned/image PDFs may not have extractable text)
-- Image files: Returns file info (size, type) - image content cannot be displayed as text
+Supported file types — the workspace may contain any of the following, and ALL are readable:
+- Text files (.txt, .md, .csv, .json, .xml): Returns content with line numbers
+- PDF documents (.pdf): Returns extracted text from all pages
+- Office documents (.docx, .pptx, .xlsx): Returns extracted text and structured content
+- Email files (.eml): Returns structured email content (sender, subject, body)
+- Calendar files (.ics): Returns event details (date, time, description)
+- Audio files (.mp3, .wav, .m4a, .flac): Returns transcription of the audio content
+- Video files (.mp4, .mkv, .mov, .webm): Returns scene descriptions and extracted dialogue
+- Image files (.png, .jpg, .jpeg, .gif): Returns visual description of the image content
+- Other files (.tmp, .bak, etc.): Returns content if available, or file metadata

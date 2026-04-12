@@ -4,6 +4,8 @@ All commands run in the target directory by default. Use the `workdir` parameter
 
 IMPORTANT: This tool is for terminal operations like git, npm, docker, etc. DO NOT use it for file operations (reading, writing, editing, searching, finding files) - use the specialized tools for this instead.
 
+Note: The workspace may contain files of diverse modalities including text (.txt, .md, .csv), documents (.pdf, .docx, .pptx, .xlsx), emails (.eml), calendars (.ics), audio (.mp3, .wav), video (.mp4, .mkv), and images (.png, .jpg, .jpeg, .gif). Use the Read tool to access their content — it supports all these file types.
+
 Before executing the command, please follow these steps:
 
 1. Directory Verification:

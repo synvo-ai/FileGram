@@ -1,1 +1,3 @@
 Lists files and directories in a given path. The path parameter must be absolute; omit it to use the current workspace directory. You can optionally provide an array of glob patterns to ignore with the ignore parameter. You should generally prefer the Glob and Grep tools, if you know which directories to search.
+
+Note: The workspace may contain files of diverse modalities including text (.txt, .md, .csv), documents (.pdf, .docx, .pptx, .xlsx), emails (.eml), calendars (.ics), audio (.mp3, .wav), video (.mp4, .mkv), and images (.png, .jpg, .jpeg, .gif). All of these are readable via the Read tool.
