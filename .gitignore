@@ -30,7 +30,8 @@ signal_old/
 playground/
 workspace/
 data/
-filegramQA/
+filegramQA/questions/
+filegramQA/generators/questions/
 logs/
 logs_old/
 
@@ -38,7 +39,6 @@ logs_old/
 output/
 bench/ingest_cache*/
 bench/test_results*/
-web/
 docs/
 bench/*_results.json
 *.log

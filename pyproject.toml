@@ -22,6 +22,8 @@ dependencies = [
     "cohere>=5.0.0",     # naive_rag & mem0: Cohere embed-v4.0
     "numpy>=1.21",       # naive_rag: embedding similarity
     "azure-identity>=1.15.0",  # mem0: Azure OpenAI LLM provider
+    "google-genai>=1.0.0",     # Gemini QA backbone (filegramQA/run_qa_eval.py)
+    "pillow>=10.0.0",          # visrag adapter: render outputs as page images
 ]
 
 [project.scripts]
